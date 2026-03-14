@@ -1,0 +1,13 @@
+{
+  "name": "daddys-dictionary",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate:data": "node scripts/generate-data.mjs",
+    "check:data": "node scripts/check-data.mjs"
+  },
+  "dependencies": {
+    "pdf-parse": "^1.1.1"
+  }
+}

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f2efe7" />
+    <meta
+      name="description"
+      content="2022 개정교육과정 영어 기본 어휘 3000을 학교급별로 검색하고, 한국어 뜻과 발음, 말하기 점검을 제공하는 오프라인 우선 사전 웹앱"
+    />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>아빠의 영단어 사전</title>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">2022 개정교육과정 영어 기본 어휘 3000</p>
+          <h1>아빠의 영단어 사전</h1>
+          <p class="hero-text">
+            초등학교, 중학교, 고등학교 기본 영단어를 학교급별로 찾고 한국어 뜻과 영어 발음을 확인하세요.
+            인터넷이 끊겨도 검색과 발음 듣기는 계속 사용할 수 있게 구성했습니다.
+          </p>
+        </div>
+
+        <div class="hero-panel">
+          <div class="hero-stat">
+            <strong>3,000</strong>
+            <span>공식 기본 어휘</span>
+          </div>
+          <div class="hero-stat">
+            <strong>오프라인 우선</strong>
+            <span>캐시된 검색과 발음 듣기</span>
+          </div>
+          <div class="hero-stat">
+            <strong>말하기 점검</strong>
+            <span>브라우저 지원 시 즉시 발음 확인</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="search-panel">
+          <div class="search-row">
+            <label class="field field-wide">
+              <span>검색어</span>
+              <input
+                id="search-input"
+                type="search"
+                inputmode="search"
+                placeholder="영어 또는 한국어를 입력하세요"
+                autocomplete="off"
+              />
+            </label>
+
+            <label class="field">
+              <span>카테고리</span>
+              <select id="category-select">
+                <option value="all">전체 영단어</option>
+                <option value="elementary">초등학교 필수 영단어</option>
+                <option value="middle">중학교 필수 영단어</option>
+                <option value="high">고등학교 필수 영단어</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="search-actions">
+            <button id="clear-button" class="ghost-button" type="button">검색 초기화</button>
+            <p id="status-text" class="status-text" role="status" aria-live="polite">
+              사전 데이터를 불러오는 중입니다.
+            </p>
+          </div>
+
+          <div class="hint-grid">
+            <article class="hint-card">
+              <strong>검색 방식</strong>
+              <p>영어로 한국어 뜻을 찾고, 한국어로도 영어 단어를 찾을 수 있습니다.</p>
+            </article>
+            <article class="hint-card">
+              <strong>학교급 기준</strong>
+              <p>중학교 카테고리는 KICE 표기상 중학교와 고등 공통과목 권장군을 포함합니다.</p>
+            </article>
+            <article class="hint-card">
+              <strong>말하기 점검</strong>
+              <p>브라우저의 음성 인식이 가능한 환경에서만 동작하며, 일부 기기에서는 인터넷 연결이 필요할 수 있습니다.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="summary-bar" aria-label="어휘 통계">
+          <div class="summary-chip">
+            <span>초등</span>
+            <strong id="stat-elementary">800</strong>
+          </div>
+          <div class="summary-chip">
+            <span>중학교</span>
+            <strong id="stat-middle">1200</strong>
+          </div>
+          <div class="summary-chip">
+            <span>고등</span>
+            <strong id="stat-high">1000</strong>
+          </div>
+          <div class="summary-chip summary-chip-wide">
+            <span>현재 결과</span>
+            <strong id="result-count">0개</strong>
+          </div>
+        </section>
+
+        <section class="results-panel">
+          <div id="pronunciation-banner" class="pronunciation-banner" hidden></div>
+          <div id="results" class="results" aria-live="polite"></div>
+        </section>
+      </main>
+    </div>
+
+    <template id="result-card-template">
+      <article class="result-card">
+        <div class="card-head">
+          <div>
+            <div class="word-line">
+              <h2 class="word-title"></h2>
+              <span class="word-ipa"></span>
+            </div>
+            <p class="word-forms"></p>
+          </div>
+          <span class="category-badge"></span>
+        </div>
+
+        <div class="meaning-group">
+          <h3>한국어 뜻</h3>
+          <ul class="gloss-list"></ul>
+        </div>
+
+        <div class="meaning-group">
+          <h3>설명</h3>
+          <ul class="definition-list"></ul>
+        </div>
+
+        <div class="card-actions">
+          <button class="speak-button" type="button">발음 듣기</button>
+          <button class="check-button" type="button">말하기 점검</button>
+        </div>
+
+        <p class="feedback-text" role="status" aria-live="polite"></p>
+      </article>
+    </template>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

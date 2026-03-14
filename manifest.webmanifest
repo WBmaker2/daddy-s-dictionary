@@ -1,0 +1,24 @@
+{
+  "name": "아빠의 영단어 사전",
+  "short_name": "영단어 사전",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f2efe7",
+  "theme_color": "#f2efe7",
+  "lang": "ko",
+  "description": "2022 개정교육과정 영어 기본 어휘 3000을 학교급별로 검색하고 발음과 말하기 점검을 제공하는 오프라인 우선 웹앱",
+  "icons": [
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
