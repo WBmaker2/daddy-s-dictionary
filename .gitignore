@@ -1,4 +1,6 @@
 node_modules/
+.venv/
+.pycache/
 *.zip
 curriculum-wordbook.pdf
 kice-word-lister-guide.pdf

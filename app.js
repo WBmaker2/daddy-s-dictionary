@@ -7,12 +7,13 @@ const state = {
   audioContext: null
 };
 
-const CATEGORY_ORDER = ["elementary", "middle", "high"];
+const CATEGORY_ORDER = ["elementary", "middle", "high", "supplemental"];
 const CATEGORY_LABELS = {
   all: "전체 영단어",
   elementary: "초등학교 필수 영단어",
   middle: "중학교 필수 영단어",
-  high: "고등학교 필수 영단어"
+  high: "고등학교 필수 영단어",
+  supplemental: "확장 어휘·표현"
 };
 
 const RESULT_LIMIT = 60;
@@ -27,7 +28,8 @@ const refs = {
   stats: {
     elementary: document.querySelector("#stat-elementary"),
     middle: document.querySelector("#stat-middle"),
-    high: document.querySelector("#stat-high")
+    high: document.querySelector("#stat-high"),
+    supplemental: document.querySelector("#stat-supplemental")
   },
   banner: document.querySelector("#pronunciation-banner"),
   template: document.querySelector("#result-card-template")
@@ -201,14 +203,53 @@ function playCelebrationChime() {
   }
 }
 
-function loadDictionary() {
-  return fetch("./data/words.json").then((response) => {
-    if (!response.ok) {
-      throw new Error("사전 데이터를 불러오지 못했습니다.");
+function mergeStats(baseStats = {}, extraStats = {}) {
+  const merged = { ...baseStats };
+
+  for (const [key, value] of Object.entries(extraStats)) {
+    if (typeof value !== "number") {
+      continue;
     }
 
-    return response.json();
-  });
+    merged[key] = (merged[key] ?? 0) + value;
+  }
+
+  return merged;
+}
+
+function mergeDictionaries(baseDictionary, supplementalDictionary = null) {
+  if (!supplementalDictionary) {
+    return baseDictionary;
+  }
+
+  return {
+    generatedAt: supplementalDictionary.generatedAt ?? baseDictionary.generatedAt,
+    sources: [...(baseDictionary.sources ?? []), ...(supplementalDictionary.sources ?? [])],
+    stats: mergeStats(baseDictionary.stats, supplementalDictionary.stats),
+    words: [...baseDictionary.words, ...supplementalDictionary.words]
+  };
+}
+
+async function fetchDictionaryFile(path, { optional = false } = {}) {
+  const response = await fetch(path);
+
+  if (!response.ok) {
+    if (optional && response.status === 404) {
+      return null;
+    }
+    throw new Error("사전 데이터를 불러오지 못했습니다.");
+  }
+
+  return response.json();
+}
+
+async function loadDictionary() {
+  const [baseDictionary, supplementalDictionary] = await Promise.all([
+    fetchDictionaryFile("./data/words.json"),
+    fetchDictionaryFile("./data/supplemental-words.json", { optional: true })
+  ]);
+
+  return mergeDictionaries(baseDictionary, supplementalDictionary);
 }
 
 function scoreMatch(word, query) {
@@ -344,7 +385,8 @@ function speakWord(word, feedbackNode) {
     return;
   }
 
-  const utterance = new SpeechSynthesisUtterance(word.word);
+  const speakText = word.speakText || word.word;
+  const utterance = new SpeechSynthesisUtterance(speakText);
   utterance.lang = "en-US";
   utterance.rate = 0.92;
   utterance.pitch = 1.02;
@@ -490,9 +532,13 @@ async function bootstrap() {
     state.dictionary = dictionary;
     state.words = dictionary.words;
 
-    refs.stats.elementary.textContent = String(dictionary.stats.elementary);
-    refs.stats.middle.textContent = String(dictionary.stats.middle);
-    refs.stats.high.textContent = String(dictionary.stats.high);
+    for (const category of CATEGORY_ORDER) {
+      const statNode = refs.stats[category];
+      if (!statNode) {
+        continue;
+      }
+      statNode.textContent = String(dictionary.stats[category] ?? 0);
+    }
 
     bindEvents();
     render();
