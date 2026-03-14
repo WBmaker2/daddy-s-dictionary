@@ -1,4 +1,4 @@
-const CACHE_NAME = "daddys-dictionary-v9";
+const CACHE_NAME = "daddys-dictionary-v10";
 const ASSETS = [
   "./",
   "./index.html",
