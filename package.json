@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build:pages": "node scripts/build-pages.mjs",
     "generate:data": "node scripts/generate-data.mjs",
     "check:data": "node scripts/check-data.mjs"
   },

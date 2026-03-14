@@ -3,7 +3,8 @@ const state = {
   words: [],
   filteredWords: [],
   activeRecognition: null,
-  activeFeedbackId: null
+  activeFeedbackId: null,
+  audioContext: null
 };
 
 const CATEGORY_ORDER = ["elementary", "middle", "high"];
@@ -125,17 +126,79 @@ function updateStatus(text) {
   refs.statusText.textContent = text;
 }
 
-function updateBanner(text, tone = "default") {
+function updateBanner(text, tone = "default", source = "system") {
   if (!text) {
     refs.banner.hidden = true;
     refs.banner.textContent = "";
     refs.banner.dataset.tone = "";
+    refs.banner.dataset.source = "";
     return;
   }
 
   refs.banner.hidden = false;
   refs.banner.textContent = text;
   refs.banner.dataset.tone = tone;
+  refs.banner.dataset.source = source;
+}
+
+function clearPronunciationBanner() {
+  if (refs.banner.dataset.source === "pronunciation") {
+    updateBanner("");
+  }
+}
+
+function getAudioContext() {
+  const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+
+  if (!AudioContextCtor) {
+    return null;
+  }
+
+  if (!state.audioContext) {
+    state.audioContext = new AudioContextCtor();
+  }
+
+  if (state.audioContext.state === "suspended") {
+    state.audioContext.resume().catch((error) => {
+      console.error(error);
+    });
+  }
+
+  return state.audioContext;
+}
+
+function playCelebrationChime() {
+  const audioContext = getAudioContext();
+
+  if (!audioContext) {
+    return;
+  }
+
+  const notes = [
+    { frequency: 523.25, duration: 0.12, delay: 0 },
+    { frequency: 659.25, duration: 0.14, delay: 0.08 },
+    { frequency: 783.99, duration: 0.18, delay: 0.16 }
+  ];
+
+  const now = audioContext.currentTime;
+
+  for (const note of notes) {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(note.frequency, now + note.delay);
+
+    gainNode.gain.setValueAtTime(0.0001, now + note.delay);
+    gainNode.gain.exponentialRampToValueAtTime(0.14, now + note.delay + 0.02);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + note.delay + note.duration);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.start(now + note.delay);
+    oscillator.stop(now + note.delay + note.duration + 0.02);
+  }
 }
 
 function loadDictionary() {
@@ -324,14 +387,18 @@ function startPronunciationCheck(word, feedbackNode) {
   state.activeRecognition = recognition;
   state.activeFeedbackId = word.id;
 
-  updateBanner(`"${word.word}"를 또박또박 말해 보세요.`, "listening");
+  updateBanner(`"${word.word}"를 또박또박 말해 보세요.`, "listening", "pronunciation");
   feedbackNode.textContent = "듣는 중입니다...";
 
   recognition.onresult = (event) => {
     const transcript = event.results?.[0]?.[0]?.transcript?.trim() ?? "";
     const result = comparePronunciation(word.forms, transcript);
     feedbackNode.textContent = result.text;
-    updateBanner(`말하기 점검 완료: ${result.text}`, result.status);
+    updateBanner(`말하기 점검 완료: ${result.text}`, result.status, "pronunciation");
+
+    if (result.status === "excellent") {
+      playCelebrationChime();
+    }
   };
 
   recognition.onerror = (event) => {
@@ -342,7 +409,7 @@ function startPronunciationCheck(word, feedbackNode) {
           ? "음성 인식에 네트워크 연결이 필요할 수 있습니다."
           : "음성 인식을 완료하지 못했습니다.";
     feedbackNode.textContent = message;
-    updateBanner(message, "warning");
+    updateBanner(message, "warning", "pronunciation");
   };
 
   recognition.onend = () => {
@@ -353,7 +420,7 @@ function startPronunciationCheck(word, feedbackNode) {
     recognition.start();
   } catch (error) {
     feedbackNode.textContent = "마이크를 시작하지 못했습니다. 잠시 후 다시 시도해 주세요.";
-    updateBanner("말하기 점검을 시작하지 못했습니다.", "warning");
+    updateBanner("말하기 점검을 시작하지 못했습니다.", "warning", "pronunciation");
     console.error(error);
   }
 }
@@ -375,18 +442,22 @@ function render() {
 
 function bindEvents() {
   refs.input.addEventListener("input", () => {
+    stopRecognition();
+    clearPronunciationBanner();
     render();
   });
 
   refs.category.addEventListener("change", () => {
+    stopRecognition();
+    clearPronunciationBanner();
     render();
   });
 
   refs.clearButton.addEventListener("click", () => {
     refs.input.value = "";
     refs.category.value = "all";
-    updateBanner("");
     stopRecognition();
+    clearPronunciationBanner();
     render();
     refs.input.focus();
   });
