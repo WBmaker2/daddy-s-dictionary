@@ -39,7 +39,7 @@ select {
 }
 
 .page-shell {
-  width: min(1180px, calc(100% - 24px));
+  width: min(1320px, calc(100% - 24px));
   margin: 0 auto;
   padding: 20px 0 40px;
 }
@@ -484,7 +484,8 @@ select {
 @media (min-width: 1100px) {
   .hero-text {
     white-space: nowrap;
-    font-size: 0.98rem;
+    font-size: 0.9rem;
+    letter-spacing: -0.01em;
   }
 }
 
