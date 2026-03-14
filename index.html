@@ -19,35 +19,18 @@
         <div class="hero-copy">
           <p class="eyebrow">2022 개정교육과정 영어 기본 어휘 3000</p>
           <div class="title-row">
-            <h1>아빠의 영단어 사전</h1>
-            <span class="app-version" aria-label="앱 버전">v1.0.1</span>
+            <h1>
+              아빠의 영단어
+              <span class="title-tail">사전 <span class="app-version" aria-label="앱 버전">v1.0.3</span></span>
+            </h1>
           </div>
-          <p class="hero-text">
-            학교급별 영단어와 교과서형 표현을 빠르게 찾고, 뜻과 발음, 말하기 점검까지 한 번에 확인하세요.
-          </p>
-          <p class="hero-subtext">영어·한국어 양방향 검색 · 오프라인 검색 지원 · 표현/숙어 확장 데이터 포함</p>
+          <p class="hero-text">학교급별 영단어와 교과서형 표현을 빠르게 찾고, 뜻과 발음, 말하기 점검까지 한 번에 확인하세요.</p>
+          <div class="hero-chip-row" aria-label="핵심 특징">
+            <span class="hero-chip" id="hero-total-chip">3,489 단어·표현</span>
+            <span class="hero-chip">영·한 양방향 검색</span>
+            <span class="hero-chip">오프라인 우선</span>
+          </div>
         </div>
-
-        <details class="mobile-fold hero-fold" data-mobile-collapse open>
-          <summary class="mobile-fold-summary">
-            <span>핵심 특징</span>
-            <strong>3,000+ · 영·한 검색 · 오프라인</strong>
-          </summary>
-          <div class="hero-panel">
-            <div class="hero-stat">
-              <strong>3,000+</strong>
-              <span>공식 어휘와 교과서형 표현</span>
-            </div>
-            <div class="hero-stat">
-              <strong>영·한 검색</strong>
-              <span>단어와 표현을 함께 탐색</span>
-            </div>
-            <div class="hero-stat">
-              <strong>오프라인 우선</strong>
-              <span>저장된 데이터로 계속 사용</span>
-            </div>
-          </div>
-        </details>
       </header>
 
       <main class="content">
@@ -85,64 +68,60 @@
             </p>
           </div>
 
-          <details class="mobile-fold hint-fold" data-mobile-collapse open>
-            <summary class="mobile-fold-summary">
-              <span>사용 팁</span>
-              <strong>검색 방식 · 표현 묶음 · 음성 기능</strong>
+          <details class="info-details">
+            <summary class="info-summary">
+              <span>사전 정보 보기</span>
+              <strong id="info-summary-text">검색 방식 · 표현 묶음 · 음성 기능 · 통계</strong>
             </summary>
-            <div class="hint-grid">
-              <article class="hint-card">
-                <strong>검색 방식</strong>
-                <p>영어로 뜻을 찾고, 한국어로도 단어와 표현을 찾을 수 있습니다.</p>
-              </article>
-              <article class="hint-card">
-                <strong>표현 묶음</strong>
-                <p>초등·중학 교과서에서 자주 나오는 표현과 숙어를 따로 골라 볼 수 있습니다.</p>
-              </article>
-              <article class="hint-card">
-                <strong>음성 기능</strong>
-                <p>발음 듣기는 오프라인에서도 유용하고, 말하기 점검은 브라우저 지원 여부에 따라 동작합니다.</p>
-              </article>
+            <div class="info-panel">
+              <div class="hint-grid">
+                <article class="hint-card">
+                  <strong>검색 방식</strong>
+                  <p>영어로 뜻을 찾고, 한국어로도 단어와 표현을 찾을 수 있습니다.</p>
+                </article>
+                <article class="hint-card">
+                  <strong>표현 묶음</strong>
+                  <p>초등·중학 교과서에서 자주 나오는 표현과 숙어를 따로 골라 볼 수 있습니다.</p>
+                </article>
+                <article class="hint-card">
+                  <strong>음성 기능</strong>
+                  <p>발음 듣기는 오프라인에서도 유용하고, 말하기 점검은 브라우저 지원 여부에 따라 동작합니다.</p>
+                </article>
+              </div>
+
+              <section class="summary-bar info-stats" aria-label="어휘 통계">
+                <div class="summary-chip">
+                  <span>초등</span>
+                  <strong id="stat-elementary">800</strong>
+                </div>
+                <div class="summary-chip">
+                  <span>중학교</span>
+                  <strong id="stat-middle">1200</strong>
+                </div>
+                <div class="summary-chip">
+                  <span>고등</span>
+                  <strong id="stat-high">1000</strong>
+                </div>
+                <div class="summary-chip">
+                  <span>초등 표현</span>
+                  <strong id="stat-elementary-expressions">0</strong>
+                </div>
+                <div class="summary-chip">
+                  <span>중학 표현</span>
+                  <strong id="stat-middle-expressions">0</strong>
+                </div>
+                <div class="summary-chip">
+                  <span>확장</span>
+                  <strong id="stat-supplemental">0</strong>
+                </div>
+                <div class="summary-chip">
+                  <span>현재 결과</span>
+                  <strong id="result-count">0개</strong>
+                </div>
+              </section>
             </div>
           </details>
         </section>
-
-        <details class="mobile-fold stats-fold" data-mobile-collapse open>
-          <summary class="mobile-fold-summary">
-            <span>어휘 통계</span>
-            <strong id="mobile-stats-summary">전체 통계 보기</strong>
-          </summary>
-          <section class="summary-bar" aria-label="어휘 통계">
-            <div class="summary-chip">
-              <span>초등</span>
-              <strong id="stat-elementary">800</strong>
-            </div>
-            <div class="summary-chip">
-              <span>중학교</span>
-              <strong id="stat-middle">1200</strong>
-            </div>
-            <div class="summary-chip">
-              <span>고등</span>
-              <strong id="stat-high">1000</strong>
-            </div>
-            <div class="summary-chip">
-              <span>초등 표현</span>
-              <strong id="stat-elementary-expressions">0</strong>
-            </div>
-            <div class="summary-chip">
-              <span>중학 표현</span>
-              <strong id="stat-middle-expressions">0</strong>
-            </div>
-            <div class="summary-chip">
-              <span>확장</span>
-              <strong id="stat-supplemental">0</strong>
-            </div>
-            <div class="summary-chip">
-              <span>현재 결과</span>
-              <strong id="result-count">0개</strong>
-            </div>
-          </section>
-        </details>
 
         <section class="results-panel">
           <div id="pronunciation-banner" class="pronunciation-banner" hidden></div>

@@ -26,7 +26,6 @@ const CATEGORY_LABELS = {
 };
 
 const RESULT_LIMIT = 60;
-const portraitFoldMediaQuery = window.matchMedia("(max-width: 540px) and (orientation: portrait)");
 
 const refs = {
   input: document.querySelector("#search-input"),
@@ -35,7 +34,8 @@ const refs = {
   clearButton: document.querySelector("#clear-button"),
   statusText: document.querySelector("#status-text"),
   resultCount: document.querySelector("#result-count"),
-  mobileStatsSummary: document.querySelector("#mobile-stats-summary"),
+  heroTotalChip: document.querySelector("#hero-total-chip"),
+  infoSummaryText: document.querySelector("#info-summary-text"),
   stats: {
     elementary: document.querySelector("#stat-elementary"),
     middle: document.querySelector("#stat-middle"),
@@ -45,8 +45,7 @@ const refs = {
     supplemental: document.querySelector("#stat-supplemental")
   },
   banner: document.querySelector("#pronunciation-banner"),
-  template: document.querySelector("#result-card-template"),
-  mobileFolds: Array.from(document.querySelectorAll("[data-mobile-collapse]"))
+  template: document.querySelector("#result-card-template")
 };
 
 function normalizeEnglish(value) {
@@ -524,7 +523,7 @@ function render() {
   const rawQuery = refs.input.value.trim();
   state.filteredWords = filterWords();
   renderList(state.filteredWords, rawQuery);
-  updateMobileStatsSummary();
+  updateInfoSummary();
 
   if (!rawQuery) {
     updateStatus(`데이터가 준비되었습니다. ${CATEGORY_LABELS[refs.category.value]} 기준으로 둘러볼 수 있습니다.`);
@@ -536,20 +535,24 @@ function render() {
   );
 }
 
-function updateMobileStatsSummary() {
-  if (!refs.mobileStatsSummary || !state.dictionary) {
+function updateInfoSummary() {
+  if (!state.dictionary) {
     return;
   }
 
-  refs.mobileStatsSummary.textContent =
-    `초 ${state.dictionary.stats.elementary} · 중 ${state.dictionary.stats.middle} · 결과 ${state.filteredWords.length}개`;
-}
+  if (refs.heroTotalChip) {
+    const total =
+      (state.dictionary.stats.elementary ?? 0) +
+      (state.dictionary.stats.middle ?? 0) +
+      (state.dictionary.stats.high ?? 0) +
+      (state.dictionary.stats["elementary-expressions"] ?? 0) +
+      (state.dictionary.stats["middle-expressions"] ?? 0) +
+      (state.dictionary.stats.supplemental ?? 0);
+    refs.heroTotalChip.textContent = `${total.toLocaleString("ko-KR")} 단어·표현`;
+  }
 
-function syncMobileFolds() {
-  const shouldCollapse = portraitFoldMediaQuery.matches;
-
-  for (const fold of refs.mobileFolds) {
-    fold.open = !shouldCollapse;
+  if (refs.infoSummaryText) {
+    refs.infoSummaryText.textContent = `검색 방식 · 음성 기능 · 결과 ${state.filteredWords.length}개`;
   }
 }
 
@@ -582,8 +585,6 @@ function bindEvents() {
   window.addEventListener("offline", () => {
     updateBanner("오프라인 상태입니다. 검색과 발음 듣기는 계속 사용할 수 있습니다.", "warning");
   });
-
-  portraitFoldMediaQuery.addEventListener("change", syncMobileFolds);
 }
 
 async function registerServiceWorker() {
@@ -614,7 +615,6 @@ async function bootstrap() {
     }
 
     bindEvents();
-    syncMobileFolds();
     render();
 
     if (!navigator.onLine) {
