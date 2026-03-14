@@ -66,10 +66,20 @@ select {
   display: block;
 }
 
+.title-row h1 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.title-text {
+  display: inline;
+}
+
 .title-tail {
   display: inline-flex;
   align-items: baseline;
-  gap: 10px;
   white-space: nowrap;
 }
 
@@ -104,7 +114,7 @@ select {
 
 .hero-text {
   margin: 0;
-  max-width: 52ch;
+  max-width: none;
   font-size: 1.02rem;
   color: var(--muted);
   line-height: 1.5;
@@ -467,6 +477,14 @@ select {
 @media (max-width: 1080px) {
   .hero-text {
     max-width: 44ch;
+    white-space: normal;
+  }
+}
+
+@media (min-width: 1100px) {
+  .hero-text {
+    white-space: nowrap;
+    font-size: 0.98rem;
   }
 }
 
@@ -530,9 +548,17 @@ select {
     font-size: clamp(2rem, 12vw, 2.9rem);
   }
 
+  .title-row h1 {
+    display: block;
+  }
+
   .app-version {
     font-size: 0.68rem;
     padding: 3px 7px;
+  }
+
+  .title-tail {
+    margin-left: 8px;
   }
 
   .hero-text {
