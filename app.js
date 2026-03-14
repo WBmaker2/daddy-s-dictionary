@@ -26,6 +26,7 @@ const CATEGORY_LABELS = {
 };
 
 const RESULT_LIMIT = 60;
+const portraitFoldMediaQuery = window.matchMedia("(max-width: 540px) and (orientation: portrait)");
 
 const refs = {
   input: document.querySelector("#search-input"),
@@ -34,6 +35,7 @@ const refs = {
   clearButton: document.querySelector("#clear-button"),
   statusText: document.querySelector("#status-text"),
   resultCount: document.querySelector("#result-count"),
+  mobileStatsSummary: document.querySelector("#mobile-stats-summary"),
   stats: {
     elementary: document.querySelector("#stat-elementary"),
     middle: document.querySelector("#stat-middle"),
@@ -43,7 +45,8 @@ const refs = {
     supplemental: document.querySelector("#stat-supplemental")
   },
   banner: document.querySelector("#pronunciation-banner"),
-  template: document.querySelector("#result-card-template")
+  template: document.querySelector("#result-card-template"),
+  mobileFolds: Array.from(document.querySelectorAll("[data-mobile-collapse]"))
 };
 
 function normalizeEnglish(value) {
@@ -245,6 +248,22 @@ function mergeDictionaries(baseDictionary, extraDictionary = null) {
   };
 }
 
+function mergeExampleSentences(dictionary, examplePayload = null) {
+  if (!examplePayload) {
+    return dictionary;
+  }
+
+  const exampleMap = new Map(examplePayload.items.map((item) => [item.id, item.exampleSentence]));
+
+  return {
+    ...dictionary,
+    words: dictionary.words.map((word) => ({
+      ...word,
+      exampleSentence: exampleMap.get(word.id) ?? ""
+    }))
+  };
+}
+
 async function fetchDictionaryFile(path, { optional = false } = {}) {
   const response = await fetch(path);
 
@@ -259,13 +278,23 @@ async function fetchDictionaryFile(path, { optional = false } = {}) {
 }
 
 async function loadDictionary() {
-  const dictionaries = await Promise.all([
+  const [baseDictionary, supplementalDictionary, textbookExpressionsDictionary, examplePayload] =
+    await Promise.all([
     fetchDictionaryFile("./data/words.json"),
     fetchDictionaryFile("./data/supplemental-words.json", { optional: true }),
-    fetchDictionaryFile("./data/textbook-expressions.json", { optional: true })
-  ]);
+    fetchDictionaryFile("./data/textbook-expressions.json", { optional: true }),
+    fetchDictionaryFile("./data/example-sentences.json", { optional: true })
+    ]);
 
-  return dictionaries.filter(Boolean).reduce((merged, current) => mergeDictionaries(merged, current));
+  const mergedDictionary = [baseDictionary, supplementalDictionary, textbookExpressionsDictionary]
+    .filter(Boolean)
+    .reduce((merged, current) => mergeDictionaries(merged, current));
+
+  return mergeExampleSentences(mergedDictionary, examplePayload);
+}
+
+function isExpressionEntry(word) {
+  return word.category.endsWith("expressions") || !/^[A-Za-z-]+$/.test(word.word);
 }
 
 function scoreMatch(word, query) {
@@ -353,6 +382,7 @@ function renderList(items, rawQuery) {
     const forms = fragment.querySelector(".word-forms");
     const badge = fragment.querySelector(".category-badge");
     const glossList = fragment.querySelector(".gloss-list");
+    const detailHeading = fragment.querySelector(".detail-heading");
     const definitionList = fragment.querySelector(".definition-list");
     const speakButton = fragment.querySelector(".speak-button");
     const checkButton = fragment.querySelector(".check-button");
@@ -360,12 +390,14 @@ function renderList(items, rawQuery) {
     const alternativeForms = word.forms.filter(
       (form) => normalizeDisplayForm(form) !== normalizeDisplayForm(word.word)
     );
+    const showExampleSentence = Boolean(word.exampleSentence) && !isExpressionEntry(word);
 
     title.textContent = word.word;
     ipa.textContent = word.pronunciationIpa ? `/${word.pronunciationIpa}/` : "브라우저 음성으로 발음 듣기";
     forms.textContent =
       alternativeForms.length > 0 ? `같이 찾기: ${alternativeForms.join(", ")}` : word.categoryDescription;
     badge.textContent = word.categoryLabel;
+    detailHeading.textContent = showExampleSentence ? "예시 문장" : "설명";
 
     for (const gloss of word.koreanGlosses.slice(0, 6)) {
       const item = document.createElement("li");
@@ -373,13 +405,15 @@ function renderList(items, rawQuery) {
       glossList.append(item);
     }
 
-    for (const definition of word.koreanDefinitions.slice(0, 3)) {
+    const detailItems = showExampleSentence ? [word.exampleSentence] : word.koreanDefinitions.slice(0, 3);
+
+    for (const definition of detailItems) {
       const item = document.createElement("li");
       item.textContent = definition;
       definitionList.append(item);
     }
 
-    if (word.koreanDefinitions.length === 0) {
+    if (detailItems.length === 0) {
       const item = document.createElement("li");
       item.textContent = "간단한 한국어 뜻 위주로 먼저 확인할 수 있습니다.";
       definitionList.append(item);
@@ -490,6 +524,7 @@ function render() {
   const rawQuery = refs.input.value.trim();
   state.filteredWords = filterWords();
   renderList(state.filteredWords, rawQuery);
+  updateMobileStatsSummary();
 
   if (!rawQuery) {
     updateStatus(`데이터가 준비되었습니다. ${CATEGORY_LABELS[refs.category.value]} 기준으로 둘러볼 수 있습니다.`);
@@ -499,6 +534,23 @@ function render() {
   updateStatus(
     `"${rawQuery}" 검색 결과 ${state.filteredWords.length}개를 표시합니다.`
   );
+}
+
+function updateMobileStatsSummary() {
+  if (!refs.mobileStatsSummary || !state.dictionary) {
+    return;
+  }
+
+  refs.mobileStatsSummary.textContent =
+    `초 ${state.dictionary.stats.elementary} · 중 ${state.dictionary.stats.middle} · 결과 ${state.filteredWords.length}개`;
+}
+
+function syncMobileFolds() {
+  const shouldCollapse = portraitFoldMediaQuery.matches;
+
+  for (const fold of refs.mobileFolds) {
+    fold.open = !shouldCollapse;
+  }
 }
 
 function bindEvents() {
@@ -530,6 +582,8 @@ function bindEvents() {
   window.addEventListener("offline", () => {
     updateBanner("오프라인 상태입니다. 검색과 발음 듣기는 계속 사용할 수 있습니다.", "warning");
   });
+
+  portraitFoldMediaQuery.addEventListener("change", syncMobileFolds);
 }
 
 async function registerServiceWorker() {
@@ -560,6 +614,7 @@ async function bootstrap() {
     }
 
     bindEvents();
+    syncMobileFolds();
     render();
 
     if (!navigator.onLine) {

@@ -5,6 +5,7 @@ const ROOT = process.cwd();
 const BASE_DATA_FILE = path.join(ROOT, "data", "words.json");
 const SUPPLEMENTAL_DATA_FILE = path.join(ROOT, "data", "supplemental-words.json");
 const TEXTBOOK_EXPRESSIONS_FILE = path.join(ROOT, "data", "textbook-expressions.json");
+const EXAMPLE_SENTENCES_FILE = path.join(ROOT, "data", "example-sentences.json");
 
 function loadJson(filePath) {
   if (!fs.existsSync(filePath)) {
@@ -35,6 +36,7 @@ const supplementalPayload = fs.existsSync(SUPPLEMENTAL_DATA_FILE) ? loadJson(SUP
 const textbookExpressionsPayload = fs.existsSync(TEXTBOOK_EXPRESSIONS_FILE)
   ? loadJson(TEXTBOOK_EXPRESSIONS_FILE)
   : null;
+const exampleSentencesPayload = fs.existsSync(EXAMPLE_SENTENCES_FILE) ? loadJson(EXAMPLE_SENTENCES_FILE) : null;
 const errors = [];
 
 if (basePayload.stats.total !== 3000) {
@@ -106,6 +108,23 @@ if (textbookExpressionsPayload) {
   validateWords(textbookExpressionsPayload.words, errors, "textbook-expressions");
 }
 
+if (exampleSentencesPayload) {
+  if (exampleSentencesPayload.stats.total !== exampleSentencesPayload.items.length) {
+    errors.push(
+      `Example sentence stats total ${exampleSentencesPayload.stats.total} does not match items length ${exampleSentencesPayload.items.length}`
+    );
+  }
+
+  for (const item of exampleSentencesPayload.items) {
+    if (typeof item.id !== "number") {
+      errors.push("Example sentence item is missing a numeric id");
+    }
+    if (!item.exampleSentence || typeof item.exampleSentence !== "string") {
+      errors.push(`Example sentence item ${item.id} is missing a sentence`);
+    }
+  }
+}
+
 if (errors.length > 0) {
   console.error(errors.join("\n"));
   process.exitCode = 1;
@@ -117,6 +136,7 @@ if (errors.length > 0) {
         base: basePayload.stats,
         supplemental: supplementalPayload?.stats ?? null,
         textbookExpressions: textbookExpressionsPayload?.stats ?? null,
+        exampleSentences: exampleSentencesPayload?.stats ?? null,
         mergedTotal:
           basePayload.stats.total +
           (supplementalPayload?.stats.total ?? 0) +
