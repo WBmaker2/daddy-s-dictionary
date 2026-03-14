@@ -4,6 +4,7 @@ import path from "node:path";
 const ROOT = process.cwd();
 const BASE_DATA_FILE = path.join(ROOT, "data", "words.json");
 const SUPPLEMENTAL_DATA_FILE = path.join(ROOT, "data", "supplemental-words.json");
+const TEXTBOOK_EXPRESSIONS_FILE = path.join(ROOT, "data", "textbook-expressions.json");
 
 function loadJson(filePath) {
   if (!fs.existsSync(filePath)) {
@@ -31,6 +32,9 @@ function validateWords(words, errors, label) {
 
 const basePayload = loadJson(BASE_DATA_FILE);
 const supplementalPayload = fs.existsSync(SUPPLEMENTAL_DATA_FILE) ? loadJson(SUPPLEMENTAL_DATA_FILE) : null;
+const textbookExpressionsPayload = fs.existsSync(TEXTBOOK_EXPRESSIONS_FILE)
+  ? loadJson(TEXTBOOK_EXPRESSIONS_FILE)
+  : null;
 const errors = [];
 
 if (basePayload.stats.total !== 3000) {
@@ -73,6 +77,35 @@ if (supplementalPayload) {
   validateWords(supplementalPayload.words, errors, "supplemental");
 }
 
+if (textbookExpressionsPayload) {
+  if (textbookExpressionsPayload.stats.total !== textbookExpressionsPayload.words.length) {
+    errors.push(
+      `Textbook expressions stats total ${textbookExpressionsPayload.stats.total} does not match words length ${textbookExpressionsPayload.words.length}`
+    );
+  }
+
+  const categoryCounts = textbookExpressionsPayload.words.reduce((acc, word) => {
+    acc[word.category] = (acc[word.category] ?? 0) + 1;
+    return acc;
+  }, {});
+
+  for (const [category, count] of Object.entries(categoryCounts)) {
+    if (textbookExpressionsPayload.stats[category] !== count) {
+      errors.push(
+        `Textbook expressions category count ${category} expected ${count}, got ${textbookExpressionsPayload.stats[category]}`
+      );
+    }
+  }
+
+  for (const word of textbookExpressionsPayload.words) {
+    if (!["elementary-expressions", "middle-expressions"].includes(word.category)) {
+      errors.push(`Textbook expression entry ${word.id} has unexpected category ${word.category}`);
+    }
+  }
+
+  validateWords(textbookExpressionsPayload.words, errors, "textbook-expressions");
+}
+
 if (errors.length > 0) {
   console.error(errors.join("\n"));
   process.exitCode = 1;
@@ -83,7 +116,11 @@ if (errors.length > 0) {
       {
         base: basePayload.stats,
         supplemental: supplementalPayload?.stats ?? null,
-        mergedTotal: basePayload.stats.total + (supplementalPayload?.stats.total ?? 0)
+        textbookExpressions: textbookExpressionsPayload?.stats ?? null,
+        mergedTotal:
+          basePayload.stats.total +
+          (supplementalPayload?.stats.total ?? 0) +
+          (textbookExpressionsPayload?.stats.total ?? 0)
       },
       null,
       2

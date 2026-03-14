@@ -1,4 +1,4 @@
-const CACHE_NAME = "daddys-dictionary-v4";
+const CACHE_NAME = "daddys-dictionary-v5";
 const ASSETS = [
   "./",
   "./index.html",
@@ -9,7 +9,8 @@ const ASSETS = [
   "./assets/icon-192.png",
   "./assets/icon-512.png",
   "./data/words.json",
-  "./data/supplemental-words.json"
+  "./data/supplemental-words.json",
+  "./data/textbook-expressions.json"
 ];
 
 self.addEventListener("install", (event) => {

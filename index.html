@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#f2efe7" />
     <meta
       name="description"
-      content="2022 개정교육과정 영어 기본 어휘 3000을 학교급별로 검색하고, 한국어 뜻과 발음, 말하기 점검을 제공하는 오프라인 우선 사전 웹앱"
+      content="2022 개정교육과정 영어 기본 어휘와 교과서형 표현을 학교급별로 검색하고, 한국어 뜻과 발음, 말하기 점검을 제공하는 오프라인 우선 사전 웹앱"
     />
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
@@ -20,23 +20,23 @@
           <p class="eyebrow">2022 개정교육과정 영어 기본 어휘 3000</p>
           <h1>아빠의 영단어 사전</h1>
           <p class="hero-text">
-            초등학교, 중학교, 고등학교 기본 영단어를 학교급별로 찾고 한국어 뜻과 영어 발음을 확인하세요.
-            인터넷이 끊겨도 검색과 발음 듣기는 계속 사용할 수 있게 구성했습니다.
+            학교급별 영단어와 교과서형 표현을 빠르게 찾고, 뜻과 발음, 말하기 점검까지 한 번에 확인하세요.
           </p>
+          <p class="hero-subtext">영어·한국어 양방향 검색 · 오프라인 검색 지원 · 표현/숙어 확장 데이터 포함</p>
         </div>
 
         <div class="hero-panel">
           <div class="hero-stat">
-            <strong>3,000</strong>
-            <span>공식 기본 어휘</span>
+            <strong>3,000+</strong>
+            <span>공식 어휘와 교과서형 표현</span>
+          </div>
+          <div class="hero-stat">
+            <strong>영·한 검색</strong>
+            <span>단어와 표현을 함께 탐색</span>
           </div>
           <div class="hero-stat">
             <strong>오프라인 우선</strong>
-            <span>캐시된 검색과 발음 듣기</span>
-          </div>
-          <div class="hero-stat">
-            <strong>말하기 점검</strong>
-            <span>브라우저 지원 시 즉시 발음 확인</span>
+            <span>저장된 데이터로 계속 사용</span>
           </div>
         </div>
       </header>
@@ -62,6 +62,8 @@
                 <option value="elementary">초등학교 필수 영단어</option>
                 <option value="middle">중학교 필수 영단어</option>
                 <option value="high">고등학교 필수 영단어</option>
+                <option value="elementary-expressions">초등 표현·숙어</option>
+                <option value="middle-expressions">중학 표현·숙어</option>
                 <option value="supplemental">확장 어휘·표현</option>
               </select>
             </label>
@@ -77,19 +79,15 @@
           <div class="hint-grid">
             <article class="hint-card">
               <strong>검색 방식</strong>
-              <p>영어로 한국어 뜻을 찾고, 한국어로도 영어 단어를 찾을 수 있습니다.</p>
+              <p>영어로 뜻을 찾고, 한국어로도 단어와 표현을 찾을 수 있습니다.</p>
             </article>
             <article class="hint-card">
-              <strong>학교급 기준</strong>
-              <p>중학교 카테고리는 KICE 표기상 중학교와 고등 공통과목 권장군을 포함합니다.</p>
+              <strong>표현 묶음</strong>
+              <p>초등·중학 교과서에서 자주 나오는 표현과 숙어를 따로 골라 볼 수 있습니다.</p>
             </article>
             <article class="hint-card">
-              <strong>확장 카테고리</strong>
-              <p>확장 어휘·표현은 별도 단어장에 있던 구동사, 숙어, 보충 어휘를 모아 둔 묶음입니다.</p>
-            </article>
-            <article class="hint-card">
-              <strong>말하기 점검</strong>
-              <p>브라우저의 음성 인식이 가능한 환경에서만 동작하며, 일부 기기에서는 인터넷 연결이 필요할 수 있습니다.</p>
+              <strong>음성 기능</strong>
+              <p>발음 듣기는 오프라인에서도 유용하고, 말하기 점검은 브라우저 지원 여부에 따라 동작합니다.</p>
             </article>
           </div>
         </section>
@@ -108,10 +106,18 @@
             <strong id="stat-high">1000</strong>
           </div>
           <div class="summary-chip">
+            <span>초등 표현</span>
+            <strong id="stat-elementary-expressions">0</strong>
+          </div>
+          <div class="summary-chip">
+            <span>중학 표현</span>
+            <strong id="stat-middle-expressions">0</strong>
+          </div>
+          <div class="summary-chip">
             <span>확장</span>
             <strong id="stat-supplemental">0</strong>
           </div>
-          <div class="summary-chip summary-chip-wide">
+          <div class="summary-chip">
             <span>현재 결과</span>
             <strong id="result-count">0개</strong>
           </div>

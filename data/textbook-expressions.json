@@ -1,0 +1,2692 @@
+{
+  "generatedAt": "2026-03-14T08:26:35.707Z",
+  "sources": [
+    {
+      "name": "바빠 초등 영어 교과서 필수 표현",
+      "url": "https://m.yes24.com/goods/detail/122496892"
+    },
+    {
+      "name": "중1 영어 교과서 대화문 자료",
+      "url": "https://mi.englishtutortv.com/middle-school-english-1-ybm-song-mira-unit-5-workbook-lesson-2-listening-speaking-11-12-13-14-15-16/"
+    },
+    {
+      "name": "중3 영어 교과서 대화문 자료",
+      "url": "https://mi.englishtutortv.com/middle-school-english-3-daekyo-im-jeonghwa-unit-8-lesson-1-actual-speaking-and-listening-1-2/"
+    },
+    {
+      "name": "중학교 영어 수행평가 기능 표현 자료",
+      "url": "https://www.djschool.net/_common/do.php?a=full&b=12&bidx=449122&aidx=652164"
+    }
+  ],
+  "stats": {
+    "total": 82,
+    "elementary-expressions": 50,
+    "middle-expressions": 32
+  },
+  "words": [
+    {
+      "id": 3408,
+      "word": "Hello, I'm ...",
+      "forms": [
+        "Hello, I'm ...",
+        "Hello I'm",
+        "Hello, I am ...",
+        "Hello I am"
+      ],
+      "speakText": "Hello I'm",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "안녕, 나는 ...이야",
+        "처음 만나서 자기소개할 때 쓰는 인사"
+      ],
+      "koreanDefinitions": [
+        "처음 만났을 때 이름이나 자기소개를 시작하는 초등 기본 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "hello, i'm ...",
+          "hello i'm",
+          "hello, i am ...",
+          "hello i am"
+        ],
+        "korean": [
+          "안녕, 나는 ...이야",
+          "처음 만나서 자기소개할 때 쓰는 인사",
+          "처음 만났을 때 이름이나 자기소개를 시작하는 초등 기본 표현"
+        ]
+      }
+    },
+    {
+      "id": 3409,
+      "word": "How are you?",
+      "forms": [
+        "How are you?",
+        "How are you"
+      ],
+      "speakText": "How are you",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "어떻게 지내?",
+        "잘 지내니?"
+      ],
+      "koreanDefinitions": [
+        "상대의 안부를 묻는 대표적인 인사 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "how are you?",
+          "how are you"
+        ],
+        "korean": [
+          "어떻게 지내?",
+          "잘 지내니?",
+          "상대의 안부를 묻는 대표적인 인사 표현"
+        ]
+      }
+    },
+    {
+      "id": 3410,
+      "word": "How old are you?",
+      "forms": [
+        "How old are you?",
+        "How old are you"
+      ],
+      "speakText": "How old are you",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "몇 살이니?"
+      ],
+      "koreanDefinitions": [
+        "나이를 물을 때 쓰는 초등 기본 질문 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "how old are you?",
+          "how old are you"
+        ],
+        "korean": [
+          "몇 살이니?",
+          "나이를 물을 때 쓰는 초등 기본 질문 표현"
+        ]
+      }
+    },
+    {
+      "id": 3411,
+      "word": "What's this?",
+      "forms": [
+        "What's this?",
+        "What's this",
+        "What is this?",
+        "What is this"
+      ],
+      "speakText": "What's this",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "이것은 무엇이니?"
+      ],
+      "koreanDefinitions": [
+        "사물의 이름을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what's this?",
+          "what's this",
+          "what is this?",
+          "what is this"
+        ],
+        "korean": [
+          "이것은 무엇이니?",
+          "사물의 이름을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3412,
+      "word": "What color is this?",
+      "forms": [
+        "What color is this?",
+        "What color is this"
+      ],
+      "speakText": "What color is this",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "이것은 무슨 색이니?"
+      ],
+      "koreanDefinitions": [
+        "색깔을 묻는 초등 기본 질문 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what color is this?",
+          "what color is this"
+        ],
+        "korean": [
+          "이것은 무슨 색이니?",
+          "색깔을 묻는 초등 기본 질문 표현"
+        ]
+      }
+    },
+    {
+      "id": 3413,
+      "word": "How's the weather?",
+      "forms": [
+        "How's the weather?",
+        "How's the weather",
+        "How is the weather?",
+        "How is the weather"
+      ],
+      "speakText": "How's the weather",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "날씨가 어때?"
+      ],
+      "koreanDefinitions": [
+        "날씨 상태를 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "how's the weather?",
+          "how's the weather",
+          "how is the weather?",
+          "how is the weather"
+        ],
+        "korean": [
+          "날씨가 어때?",
+          "날씨 상태를 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3414,
+      "word": "What day is it today?",
+      "forms": [
+        "What day is it today?",
+        "What day is it today"
+      ],
+      "speakText": "What day is it today",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "오늘은 무슨 요일이니?"
+      ],
+      "koreanDefinitions": [
+        "요일을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what day is it today?",
+          "what day is it today"
+        ],
+        "korean": [
+          "오늘은 무슨 요일이니?",
+          "요일을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3415,
+      "word": "What time is it now?",
+      "forms": [
+        "What time is it now?",
+        "What time is it now"
+      ],
+      "speakText": "What time is it now",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "지금 몇 시니?"
+      ],
+      "koreanDefinitions": [
+        "시각을 묻는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what time is it now?",
+          "what time is it now"
+        ],
+        "korean": [
+          "지금 몇 시니?",
+          "시각을 묻는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3416,
+      "word": "Stand up, please.",
+      "forms": [
+        "Stand up, please.",
+        "Stand up please"
+      ],
+      "speakText": "Stand up please",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "일어나 주세요."
+      ],
+      "koreanDefinitions": [
+        "교실 활동에서 자주 쓰는 간단한 요청 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "stand up, please.",
+          "stand up please"
+        ],
+        "korean": [
+          "일어나 주세요.",
+          "교실 활동에서 자주 쓰는 간단한 요청 표현"
+        ]
+      }
+    },
+    {
+      "id": 3417,
+      "word": "Don't run.",
+      "forms": [
+        "Don't run.",
+        "Don't run",
+        "Do not run.",
+        "Do not run"
+      ],
+      "speakText": "Don't run",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "뛰지 마."
+      ],
+      "koreanDefinitions": [
+        "금지를 말할 때 쓰는 짧은 명령 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "don't run.",
+          "don't run",
+          "do not run.",
+          "do not run"
+        ],
+        "korean": [
+          "뛰지 마.",
+          "금지를 말할 때 쓰는 짧은 명령 표현"
+        ]
+      }
+    },
+    {
+      "id": 3418,
+      "word": "How many apples?",
+      "forms": [
+        "How many apples?",
+        "How many apples"
+      ],
+      "speakText": "How many apples",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "사과가 몇 개니?"
+      ],
+      "koreanDefinitions": [
+        "개수를 셀 때 쓰는 의문 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "how many apples?",
+          "how many apples"
+        ],
+        "korean": [
+          "사과가 몇 개니?",
+          "개수를 셀 때 쓰는 의문 표현"
+        ]
+      }
+    },
+    {
+      "id": 3419,
+      "word": "I can swim.",
+      "forms": [
+        "I can swim.",
+        "I can swim"
+      ],
+      "speakText": "I can swim",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "나는 수영할 수 있어."
+      ],
+      "koreanDefinitions": [
+        "할 수 있는 능력을 말하는 초등 기본 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i can swim.",
+          "i can swim"
+        ],
+        "korean": [
+          "나는 수영할 수 있어.",
+          "할 수 있는 능력을 말하는 초등 기본 표현"
+        ]
+      }
+    },
+    {
+      "id": 3420,
+      "word": "I can't dance.",
+      "forms": [
+        "I can't dance.",
+        "I can't dance",
+        "I cannot dance.",
+        "I cannot dance"
+      ],
+      "speakText": "I can't dance",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "나는 춤을 출 수 없어."
+      ],
+      "koreanDefinitions": [
+        "할 수 없는 능력을 말하는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i can't dance.",
+          "i can't dance",
+          "i cannot dance.",
+          "i cannot dance"
+        ],
+        "korean": [
+          "나는 춤을 출 수 없어.",
+          "할 수 없는 능력을 말하는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3421,
+      "word": "I like pizza.",
+      "forms": [
+        "I like pizza.",
+        "I like pizza"
+      ],
+      "speakText": "I like pizza",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "나는 피자를 좋아해."
+      ],
+      "koreanDefinitions": [
+        "좋아하는 것을 말할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i like pizza.",
+          "i like pizza"
+        ],
+        "korean": [
+          "나는 피자를 좋아해.",
+          "좋아하는 것을 말할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3422,
+      "word": "I don't like fishing.",
+      "forms": [
+        "I don't like fishing.",
+        "I don't like fishing",
+        "I Do not like fishing.",
+        "I Do not like fishing",
+        "I do not like fishing."
+      ],
+      "speakText": "I don't like fishing",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "나는 낚시를 좋아하지 않아."
+      ],
+      "koreanDefinitions": [
+        "싫어하는 것을 말할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i don't like fishing.",
+          "i don't like fishing",
+          "i do not like fishing.",
+          "i do not like fishing",
+          "i do not like fishing."
+        ],
+        "korean": [
+          "나는 낚시를 좋아하지 않아.",
+          "싫어하는 것을 말할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3423,
+      "word": "I'm happy.",
+      "forms": [
+        "I'm happy.",
+        "I'm happy",
+        "I am happy.",
+        "I am happy"
+      ],
+      "speakText": "I'm happy",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "나는 기뻐."
+      ],
+      "koreanDefinitions": [
+        "감정 상태를 말하는 기본 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i'm happy.",
+          "i'm happy",
+          "i am happy.",
+          "i am happy"
+        ],
+        "korean": [
+          "나는 기뻐.",
+          "감정 상태를 말하는 기본 표현"
+        ]
+      }
+    },
+    {
+      "id": 3424,
+      "word": "Who is she?",
+      "forms": [
+        "Who is she?",
+        "Who is she"
+      ],
+      "speakText": "Who is she",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "그녀는 누구니?"
+      ],
+      "koreanDefinitions": [
+        "사람을 소개하거나 신원을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "who is she?",
+          "who is she"
+        ],
+        "korean": [
+          "그녀는 누구니?",
+          "사람을 소개하거나 신원을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3425,
+      "word": "What are you doing?",
+      "forms": [
+        "What are you doing?",
+        "What are you doing"
+      ],
+      "speakText": "What are you doing",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "무엇을 하고 있니?"
+      ],
+      "koreanDefinitions": [
+        "현재 하고 있는 행동을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what are you doing?",
+          "what are you doing"
+        ],
+        "korean": [
+          "무엇을 하고 있니?",
+          "현재 하고 있는 행동을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3426,
+      "word": "What do you want?",
+      "forms": [
+        "What do you want?",
+        "What do you want"
+      ],
+      "speakText": "What do you want",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "무엇을 원하니?"
+      ],
+      "koreanDefinitions": [
+        "원하는 것을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what do you want?",
+          "what do you want"
+        ],
+        "korean": [
+          "무엇을 원하니?",
+          "원하는 것을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3427,
+      "word": "Let's play soccer.",
+      "forms": [
+        "Let's play soccer.",
+        "Let's play soccer",
+        "Let us play soccer.",
+        "Let us play soccer"
+      ],
+      "speakText": "Let's play soccer",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "축구하자."
+      ],
+      "koreanDefinitions": [
+        "함께 무엇을 하자고 제안하는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "let's play soccer.",
+          "let's play soccer",
+          "let us play soccer.",
+          "let us play soccer"
+        ],
+        "korean": [
+          "축구하자.",
+          "함께 무엇을 하자고 제안하는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3428,
+      "word": "Where is my watch?",
+      "forms": [
+        "Where is my watch?",
+        "Where is my watch"
+      ],
+      "speakText": "Where is my watch",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "내 시계는 어디 있니?"
+      ],
+      "koreanDefinitions": [
+        "사물의 위치를 묻는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "where is my watch?",
+          "where is my watch"
+        ],
+        "korean": [
+          "내 시계는 어디 있니?",
+          "사물의 위치를 묻는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3429,
+      "word": "They're on the table.",
+      "forms": [
+        "They're on the table.",
+        "They're on the table",
+        "They are on the table.",
+        "They are on the table"
+      ],
+      "speakText": "They're on the table",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "그것들은 탁자 위에 있어."
+      ],
+      "koreanDefinitions": [
+        "사물의 위치를 알려 줄 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "they're on the table.",
+          "they're on the table",
+          "they are on the table.",
+          "they are on the table"
+        ],
+        "korean": [
+          "그것들은 탁자 위에 있어.",
+          "사물의 위치를 알려 줄 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3430,
+      "word": "How much is it?",
+      "forms": [
+        "How much is it?",
+        "How much is it"
+      ],
+      "speakText": "How much is it",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "이것은 얼마니?"
+      ],
+      "koreanDefinitions": [
+        "가격을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "how much is it?",
+          "how much is it"
+        ],
+        "korean": [
+          "이것은 얼마니?",
+          "가격을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3431,
+      "word": "Is this your bag?",
+      "forms": [
+        "Is this your bag?",
+        "Is this your bag"
+      ],
+      "speakText": "Is this your bag",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "이것은 네 가방이니?"
+      ],
+      "koreanDefinitions": [
+        "물건의 주인을 확인할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "is this your bag?",
+          "is this your bag"
+        ],
+        "korean": [
+          "이것은 네 가방이니?",
+          "물건의 주인을 확인할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3432,
+      "word": "It's not mine.",
+      "forms": [
+        "It's not mine.",
+        "It's not mine",
+        "It is not mine.",
+        "It is not mine"
+      ],
+      "speakText": "It's not mine",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "그것은 내 것이 아니야."
+      ],
+      "koreanDefinitions": [
+        "소유를 부정할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "it's not mine.",
+          "it's not mine",
+          "it is not mine.",
+          "it is not mine"
+        ],
+        "korean": [
+          "그것은 내 것이 아니야.",
+          "소유를 부정할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3433,
+      "word": "Where are you from?",
+      "forms": [
+        "Where are you from?",
+        "Where are you from"
+      ],
+      "speakText": "Where are you from",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "어디에서 왔니?",
+        "어느 나라 사람이니?"
+      ],
+      "koreanDefinitions": [
+        "출신 지역이나 나라를 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "where are you from?",
+          "where are you from"
+        ],
+        "korean": [
+          "어디에서 왔니?",
+          "어느 나라 사람이니?",
+          "출신 지역이나 나라를 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3434,
+      "word": "What grade are you in?",
+      "forms": [
+        "What grade are you in?",
+        "What grade are you in"
+      ],
+      "speakText": "What grade are you in",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "몇 학년이니?"
+      ],
+      "koreanDefinitions": [
+        "학년을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what grade are you in?",
+          "what grade are you in"
+        ],
+        "korean": [
+          "몇 학년이니?",
+          "학년을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3435,
+      "word": "What's your favorite subject?",
+      "forms": [
+        "What's your favorite subject?",
+        "What's your favorite subject",
+        "What is your favorite subject?",
+        "What is your favorite subject"
+      ],
+      "speakText": "What's your favorite subject",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "가장 좋아하는 과목이 무엇이니?"
+      ],
+      "koreanDefinitions": [
+        "선호하는 과목을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what's your favorite subject?",
+          "what's your favorite subject",
+          "what is your favorite subject?",
+          "what is your favorite subject"
+        ],
+        "korean": [
+          "가장 좋아하는 과목이 무엇이니?",
+          "선호하는 과목을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3436,
+      "word": "She has long curly hair.",
+      "forms": [
+        "She has long curly hair.",
+        "She has long curly hair"
+      ],
+      "speakText": "She has long curly hair",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "그녀는 길고 곱슬곱슬한 머리를 가졌어."
+      ],
+      "koreanDefinitions": [
+        "사람의 외모를 설명할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "she has long curly hair.",
+          "she has long curly hair"
+        ],
+        "korean": [
+          "그녀는 길고 곱슬곱슬한 머리를 가졌어.",
+          "사람의 외모를 설명할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3437,
+      "word": "It's in front of the restaurant.",
+      "forms": [
+        "It's in front of the restaurant.",
+        "It's in front of the restaurant",
+        "It is in front of the restaurant.",
+        "It is in front of the restaurant"
+      ],
+      "speakText": "It's in front of the restaurant",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "그것은 식당 앞에 있어."
+      ],
+      "koreanDefinitions": [
+        "장소의 위치를 자세히 설명할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "it's in front of the restaurant.",
+          "it's in front of the restaurant",
+          "it is in front of the restaurant.",
+          "it is in front of the restaurant"
+        ],
+        "korean": [
+          "그것은 식당 앞에 있어.",
+          "장소의 위치를 자세히 설명할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3438,
+      "word": "What do you do in your free time?",
+      "forms": [
+        "What do you do in your free time?",
+        "What do you do in your free time"
+      ],
+      "speakText": "What do you do in your free time",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "자유 시간에 무엇을 하니?"
+      ],
+      "koreanDefinitions": [
+        "취미나 여가 활동을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what do you do in your free time?",
+          "what do you do in your free time"
+        ],
+        "korean": [
+          "자유 시간에 무엇을 하니?",
+          "취미나 여가 활동을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3439,
+      "word": "What will you do this summer?",
+      "forms": [
+        "What will you do this summer?",
+        "What will you do this summer"
+      ],
+      "speakText": "What will you do this summer",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "이번 여름에 무엇을 할 거니?"
+      ],
+      "koreanDefinitions": [
+        "앞으로의 계획을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what will you do this summer?",
+          "what will you do this summer"
+        ],
+        "korean": [
+          "이번 여름에 무엇을 할 거니?",
+          "앞으로의 계획을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3440,
+      "word": "What did you do yesterday?",
+      "forms": [
+        "What did you do yesterday?",
+        "What did you do yesterday"
+      ],
+      "speakText": "What did you do yesterday",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "어제 무엇을 했니?"
+      ],
+      "koreanDefinitions": [
+        "과거에 한 일을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what did you do yesterday?",
+          "what did you do yesterday"
+        ],
+        "korean": [
+          "어제 무엇을 했니?",
+          "과거에 한 일을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3441,
+      "word": "Why are you happy?",
+      "forms": [
+        "Why are you happy?",
+        "Why are you happy"
+      ],
+      "speakText": "Why are you happy",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "왜 기쁘니?"
+      ],
+      "koreanDefinitions": [
+        "이유를 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "why are you happy?",
+          "why are you happy"
+        ],
+        "korean": [
+          "왜 기쁘니?",
+          "이유를 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3442,
+      "word": "Can I take a picture?",
+      "forms": [
+        "Can I take a picture?",
+        "Can I take a picture"
+      ],
+      "speakText": "Can I take a picture",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "사진을 찍어도 될까요?"
+      ],
+      "koreanDefinitions": [
+        "허락을 구할 때 쓰는 공손한 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "can i take a picture?",
+          "can i take a picture"
+        ],
+        "korean": [
+          "사진을 찍어도 될까요?",
+          "허락을 구할 때 쓰는 공손한 표현"
+        ]
+      }
+    },
+    {
+      "id": 3443,
+      "word": "Whose ball is this?",
+      "forms": [
+        "Whose ball is this?",
+        "Whose ball is this"
+      ],
+      "speakText": "Whose ball is this",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "이 공은 누구의 것이니?"
+      ],
+      "koreanDefinitions": [
+        "소유자를 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "whose ball is this?",
+          "whose ball is this"
+        ],
+        "korean": [
+          "이 공은 누구의 것이니?",
+          "소유자를 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3444,
+      "word": "I have a stomachache.",
+      "forms": [
+        "I have a stomachache.",
+        "I have a stomachache"
+      ],
+      "speakText": "I have a stomachache",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "배가 아파."
+      ],
+      "koreanDefinitions": [
+        "아픈 증상을 말할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i have a stomachache.",
+          "i have a stomachache"
+        ],
+        "korean": [
+          "배가 아파.",
+          "아픈 증상을 말할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3445,
+      "word": "Drink lemon tea.",
+      "forms": [
+        "Drink lemon tea.",
+        "Drink lemon tea"
+      ],
+      "speakText": "Drink lemon tea",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "레몬차를 마셔."
+      ],
+      "koreanDefinitions": [
+        "간단한 조언이나 권유를 할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "drink lemon tea.",
+          "drink lemon tea"
+        ],
+        "korean": [
+          "레몬차를 마셔.",
+          "간단한 조언이나 권유를 할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3446,
+      "word": "It's March 7th.",
+      "forms": [
+        "It's March 7th.",
+        "It's March 7th",
+        "It is March 7th.",
+        "It is March 7th"
+      ],
+      "speakText": "It's March 7th",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "3월 7일이야."
+      ],
+      "koreanDefinitions": [
+        "날짜를 말할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "it's march 7th.",
+          "it's march 7th",
+          "it is march 7th.",
+          "it is march 7th"
+        ],
+        "korean": [
+          "3월 7일이야.",
+          "날짜를 말할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3447,
+      "word": "I'm going to plant trees.",
+      "forms": [
+        "I'm going to plant trees.",
+        "I'm going to plant trees",
+        "I am going to plant trees.",
+        "I am going to plant trees"
+      ],
+      "speakText": "I'm going to plant trees",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "나는 나무를 심을 거야."
+      ],
+      "koreanDefinitions": [
+        "가까운 미래의 계획을 말할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i'm going to plant trees.",
+          "i'm going to plant trees",
+          "i am going to plant trees.",
+          "i am going to plant trees"
+        ],
+        "korean": [
+          "나는 나무를 심을 거야.",
+          "가까운 미래의 계획을 말할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3448,
+      "word": "I'm taller than you.",
+      "forms": [
+        "I'm taller than you.",
+        "I'm taller than you",
+        "I am taller than you.",
+        "I am taller than you"
+      ],
+      "speakText": "I'm taller than you",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "나는 너보다 키가 더 커."
+      ],
+      "koreanDefinitions": [
+        "비교를 말할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i'm taller than you.",
+          "i'm taller than you",
+          "i am taller than you.",
+          "i am taller than you"
+        ],
+        "korean": [
+          "나는 너보다 키가 더 커.",
+          "비교를 말할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3449,
+      "word": "What would you like?",
+      "forms": [
+        "What would you like?",
+        "What would you like"
+      ],
+      "speakText": "What would you like",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "무엇을 원하니?",
+        "무엇을 드릴까?"
+      ],
+      "koreanDefinitions": [
+        "주문이나 선택을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what would you like?",
+          "what would you like"
+        ],
+        "korean": [
+          "무엇을 원하니?",
+          "무엇을 드릴까?",
+          "주문이나 선택을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3450,
+      "word": "How often do you exercise?",
+      "forms": [
+        "How often do you exercise?",
+        "How often do you exercise"
+      ],
+      "speakText": "How often do you exercise",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "얼마나 자주 운동하니?"
+      ],
+      "koreanDefinitions": [
+        "빈도를 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "how often do you exercise?",
+          "how often do you exercise"
+        ],
+        "korean": [
+          "얼마나 자주 운동하니?",
+          "빈도를 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3451,
+      "word": "You should wear a helmet.",
+      "forms": [
+        "You should wear a helmet.",
+        "You should wear a helmet"
+      ],
+      "speakText": "You should wear a helmet",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "너는 헬멧을 써야 해."
+      ],
+      "koreanDefinitions": [
+        "조언이나 안전 수칙을 말할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "you should wear a helmet.",
+          "you should wear a helmet"
+        ],
+        "korean": [
+          "너는 헬멧을 써야 해.",
+          "조언이나 안전 수칙을 말할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3452,
+      "word": "I want to be a painter.",
+      "forms": [
+        "I want to be a painter.",
+        "I want to be a painter"
+      ],
+      "speakText": "I want to be a painter",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "나는 화가가 되고 싶어."
+      ],
+      "koreanDefinitions": [
+        "장래희망을 말할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i want to be a painter.",
+          "i want to be a painter"
+        ],
+        "korean": [
+          "나는 화가가 되고 싶어.",
+          "장래희망을 말할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3453,
+      "word": "What a nice room!",
+      "forms": [
+        "What a nice room!",
+        "What a nice room"
+      ],
+      "speakText": "What a nice room",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "정말 멋진 방이다!"
+      ],
+      "koreanDefinitions": [
+        "감탄할 때 쓰는 초등 기본 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what a nice room!",
+          "what a nice room"
+        ],
+        "korean": [
+          "정말 멋진 방이다!",
+          "감탄할 때 쓰는 초등 기본 표현"
+        ]
+      }
+    },
+    {
+      "id": 3454,
+      "word": "How can I get to the museum?",
+      "forms": [
+        "How can I get to the museum?",
+        "How can I get to the museum"
+      ],
+      "speakText": "How can I get to the museum",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "박물관에 어떻게 가나요?"
+      ],
+      "koreanDefinitions": [
+        "길을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "how can i get to the museum?",
+          "how can i get to the museum"
+        ],
+        "korean": [
+          "박물관에 어떻게 가나요?",
+          "길을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3455,
+      "word": "How about turning off the water?",
+      "forms": [
+        "How about turning off the water?",
+        "How about turning off the water"
+      ],
+      "speakText": "How about turning off the water",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "물을 끄는 건 어때?"
+      ],
+      "koreanDefinitions": [
+        "환경 보호나 제안을 말할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "how about turning off the water?",
+          "how about turning off the water"
+        ],
+        "korean": [
+          "물을 끄는 건 어때?",
+          "환경 보호나 제안을 말할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3456,
+      "word": "What time do you get up?",
+      "forms": [
+        "What time do you get up?",
+        "What time do you get up"
+      ],
+      "speakText": "What time do you get up",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "몇 시에 일어나니?"
+      ],
+      "koreanDefinitions": [
+        "일상 습관을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what time do you get up?",
+          "what time do you get up"
+        ],
+        "korean": [
+          "몇 시에 일어나니?",
+          "일상 습관을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3457,
+      "word": "Do you know anything about hanok?",
+      "forms": [
+        "Do you know anything about hanok?",
+        "Do you know anything about hanok"
+      ],
+      "speakText": "Do you know anything about hanok",
+      "category": "elementary-expressions",
+      "categoryLabel": "초등 표현·숙어",
+      "categoryDescription": "초등 영어 교과서에서 반복되는 기본 회화 표현",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "한옥에 대해 뭐라도 아니?"
+      ],
+      "koreanDefinitions": [
+        "어떤 주제에 대한 지식을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "do you know anything about hanok?",
+          "do you know anything about hanok"
+        ],
+        "korean": [
+          "한옥에 대해 뭐라도 아니?",
+          "어떤 주제에 대한 지식을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3458,
+      "word": "How often do you ...?",
+      "forms": [
+        "How often do you ...?",
+        "How often do you"
+      ],
+      "speakText": "How often do you",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "얼마나 자주 ...하니?"
+      ],
+      "koreanDefinitions": [
+        "습관이나 빈도를 묻는 중학 기본 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "how often do you ...?",
+          "how often do you"
+        ],
+        "korean": [
+          "얼마나 자주 ...하니?",
+          "습관이나 빈도를 묻는 중학 기본 표현"
+        ]
+      }
+    },
+    {
+      "id": 3459,
+      "word": "Why don't you ...?",
+      "forms": [
+        "Why don't you ...?",
+        "Why don't you",
+        "Why Do not you ...?",
+        "Why Do not you"
+      ],
+      "speakText": "Why don't you",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "...하는 게 어때?",
+        "...해 보는 건 어때?"
+      ],
+      "koreanDefinitions": [
+        "부드럽게 제안할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "why don't you ...?",
+          "why don't you",
+          "why do not you ...?",
+          "why do not you"
+        ],
+        "korean": [
+          "...하는 게 어때?",
+          "...해 보는 건 어때?",
+          "부드럽게 제안할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3460,
+      "word": "Can I help you?",
+      "forms": [
+        "Can I help you?",
+        "Can I help you"
+      ],
+      "speakText": "Can I help you",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "도와드릴까요?"
+      ],
+      "koreanDefinitions": [
+        "가게나 안내 상황에서 도움을 제안하는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "can i help you?",
+          "can i help you"
+        ],
+        "korean": [
+          "도와드릴까요?",
+          "가게나 안내 상황에서 도움을 제안하는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3461,
+      "word": "I'd like to ...",
+      "forms": [
+        "I'd like to ...",
+        "I'd like to",
+        "I would like to ...",
+        "I would like to"
+      ],
+      "speakText": "I'd like to",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "...하고 싶어요"
+      ],
+      "koreanDefinitions": [
+        "원하는 것을 공손하게 말하는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i'd like to ...",
+          "i'd like to",
+          "i would like to ...",
+          "i would like to"
+        ],
+        "korean": [
+          "...하고 싶어요",
+          "원하는 것을 공손하게 말하는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3462,
+      "word": "Are you a beginner?",
+      "forms": [
+        "Are you a beginner?",
+        "Are you a beginner"
+      ],
+      "speakText": "Are you a beginner",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "당신은 초보자인가요?"
+      ],
+      "koreanDefinitions": [
+        "상대의 수준이나 경험을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "are you a beginner?",
+          "are you a beginner"
+        ],
+        "korean": [
+          "당신은 초보자인가요?",
+          "상대의 수준이나 경험을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3463,
+      "word": "What do you want to read about?",
+      "forms": [
+        "What do you want to read about?",
+        "What do you want to read about"
+      ],
+      "speakText": "What do you want to read about",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "무엇에 대해 읽고 싶니?"
+      ],
+      "koreanDefinitions": [
+        "읽고 싶은 주제를 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what do you want to read about?",
+          "what do you want to read about"
+        ],
+        "korean": [
+          "무엇에 대해 읽고 싶니?",
+          "읽고 싶은 주제를 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3464,
+      "word": "I'm curious about ...",
+      "forms": [
+        "I'm curious about ...",
+        "I'm curious about",
+        "I am curious about ...",
+        "I am curious about"
+      ],
+      "speakText": "I'm curious about",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "나는 ...이 궁금해."
+      ],
+      "koreanDefinitions": [
+        "궁금한 주제를 말할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i'm curious about ...",
+          "i'm curious about",
+          "i am curious about ...",
+          "i am curious about"
+        ],
+        "korean": [
+          "나는 ...이 궁금해.",
+          "궁금한 주제를 말할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3465,
+      "word": "Can you tell me about it?",
+      "forms": [
+        "Can you tell me about it?",
+        "Can you tell me about it"
+      ],
+      "speakText": "Can you tell me about it",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "그것에 대해 말해 줄 수 있니?"
+      ],
+      "koreanDefinitions": [
+        "설명이나 정보를 부탁할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "can you tell me about it?",
+          "can you tell me about it"
+        ],
+        "korean": [
+          "그것에 대해 말해 줄 수 있니?",
+          "설명이나 정보를 부탁할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3466,
+      "word": "What kind of book are you looking for?",
+      "forms": [
+        "What kind of book are you looking for?",
+        "What kind of book are you looking for"
+      ],
+      "speakText": "What kind of book are you looking for",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "어떤 종류의 책을 찾고 있니?"
+      ],
+      "koreanDefinitions": [
+        "원하는 종류를 자세히 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what kind of book are you looking for?",
+          "what kind of book are you looking for"
+        ],
+        "korean": [
+          "어떤 종류의 책을 찾고 있니?",
+          "원하는 종류를 자세히 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3467,
+      "word": "I'm looking for ...",
+      "forms": [
+        "I'm looking for ...",
+        "I'm looking for",
+        "I am looking for ...",
+        "I am looking for"
+      ],
+      "speakText": "I'm looking for",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "...을 찾고 있어."
+      ],
+      "koreanDefinitions": [
+        "원하는 물건이나 정보를 찾고 있다고 말하는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i'm looking for ...",
+          "i'm looking for",
+          "i am looking for ...",
+          "i am looking for"
+        ],
+        "korean": [
+          "...을 찾고 있어.",
+          "원하는 물건이나 정보를 찾고 있다고 말하는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3468,
+      "word": "What are you going to do ...?",
+      "forms": [
+        "What are you going to do ...?",
+        "What are you going to do"
+      ],
+      "speakText": "What are you going to do",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "...에 무엇을 할 거니?"
+      ],
+      "koreanDefinitions": [
+        "가까운 계획을 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what are you going to do ...?",
+          "what are you going to do"
+        ],
+        "korean": [
+          "...에 무엇을 할 거니?",
+          "가까운 계획을 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3469,
+      "word": "Do you have any plans for ...?",
+      "forms": [
+        "Do you have any plans for ...?",
+        "Do you have any plans for"
+      ],
+      "speakText": "Do you have any plans for",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "...에 대한 계획이 있니?"
+      ],
+      "koreanDefinitions": [
+        "일정이나 계획 유무를 묻는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "do you have any plans for ...?",
+          "do you have any plans for"
+        ],
+        "korean": [
+          "...에 대한 계획이 있니?",
+          "일정이나 계획 유무를 묻는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3470,
+      "word": "I'm looking forward to it.",
+      "forms": [
+        "I'm looking forward to it.",
+        "I'm looking forward to it",
+        "I am looking forward to it.",
+        "I am looking forward to it"
+      ],
+      "speakText": "I'm looking forward to it",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "그것을 기대하고 있어."
+      ],
+      "koreanDefinitions": [
+        "기대감을 표현할 때 자주 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i'm looking forward to it.",
+          "i'm looking forward to it",
+          "i am looking forward to it.",
+          "i am looking forward to it"
+        ],
+        "korean": [
+          "그것을 기대하고 있어.",
+          "기대감을 표현할 때 자주 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3471,
+      "word": "Can I join you?",
+      "forms": [
+        "Can I join you?",
+        "Can I join you"
+      ],
+      "speakText": "Can I join you",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "같이해도 될까?"
+      ],
+      "koreanDefinitions": [
+        "함께 참여해도 되는지 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "can i join you?",
+          "can i join you"
+        ],
+        "korean": [
+          "같이해도 될까?",
+          "함께 참여해도 되는지 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3472,
+      "word": "How about you?",
+      "forms": [
+        "How about you?",
+        "How about you"
+      ],
+      "speakText": "How about you",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "너는 어때?",
+        "당신은 어떤가요?"
+      ],
+      "koreanDefinitions": [
+        "상대의 생각이나 상황을 되묻는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "how about you?",
+          "how about you"
+        ],
+        "korean": [
+          "너는 어때?",
+          "당신은 어떤가요?",
+          "상대의 생각이나 상황을 되묻는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3473,
+      "word": "I'd like to buy ...",
+      "forms": [
+        "I'd like to buy ...",
+        "I'd like to buy",
+        "I would like to buy ...",
+        "I would like to buy"
+      ],
+      "speakText": "I'd like to buy",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "...을 사고 싶어요."
+      ],
+      "koreanDefinitions": [
+        "물건을 사려고 할 때 공손하게 말하는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i'd like to buy ...",
+          "i'd like to buy",
+          "i would like to buy ...",
+          "i would like to buy"
+        ],
+        "korean": [
+          "...을 사고 싶어요.",
+          "물건을 사려고 할 때 공손하게 말하는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3474,
+      "word": "That's a good idea.",
+      "forms": [
+        "That's a good idea.",
+        "That's a good idea",
+        "That is a good idea.",
+        "That is a good idea"
+      ],
+      "speakText": "That's a good idea",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "좋은 생각이야."
+      ],
+      "koreanDefinitions": [
+        "상대의 제안에 동의할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "that's a good idea.",
+          "that's a good idea",
+          "that is a good idea.",
+          "that is a good idea"
+        ],
+        "korean": [
+          "좋은 생각이야.",
+          "상대의 제안에 동의할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3475,
+      "word": "I'm going to have ...",
+      "forms": [
+        "I'm going to have ...",
+        "I'm going to have",
+        "I am going to have ...",
+        "I am going to have"
+      ],
+      "speakText": "I'm going to have",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "...을 먹을 거예요",
+        "...을 가질 거예요"
+      ],
+      "koreanDefinitions": [
+        "선택한 음식이나 계획을 말할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i'm going to have ...",
+          "i'm going to have",
+          "i am going to have ...",
+          "i am going to have"
+        ],
+        "korean": [
+          "...을 먹을 거예요",
+          "...을 가질 거예요",
+          "선택한 음식이나 계획을 말할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3476,
+      "word": "What would you like to read?",
+      "forms": [
+        "What would you like to read?",
+        "What would you like to read"
+      ],
+      "speakText": "What would you like to read",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "무엇을 읽고 싶니?"
+      ],
+      "koreanDefinitions": [
+        "원하는 읽기 자료를 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what would you like to read?",
+          "what would you like to read"
+        ],
+        "korean": [
+          "무엇을 읽고 싶니?",
+          "원하는 읽기 자료를 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3477,
+      "word": "I'm interested in ...",
+      "forms": [
+        "I'm interested in ...",
+        "I'm interested in",
+        "I am interested in ...",
+        "I am interested in"
+      ],
+      "speakText": "I'm interested in",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "나는 ...에 관심이 있어."
+      ],
+      "koreanDefinitions": [
+        "관심 있는 분야를 말하는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i'm interested in ...",
+          "i'm interested in",
+          "i am interested in ...",
+          "i am interested in"
+        ],
+        "korean": [
+          "나는 ...에 관심이 있어.",
+          "관심 있는 분야를 말하는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3478,
+      "word": "What do you think?",
+      "forms": [
+        "What do you think?",
+        "What do you think"
+      ],
+      "speakText": "What do you think",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "어떻게 생각하니?"
+      ],
+      "koreanDefinitions": [
+        "의견을 물을 때 가장 자주 쓰이는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what do you think?",
+          "what do you think"
+        ],
+        "korean": [
+          "어떻게 생각하니?",
+          "의견을 물을 때 가장 자주 쓰이는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3479,
+      "word": "I agree.",
+      "forms": [
+        "I agree.",
+        "I agree"
+      ],
+      "speakText": "I agree",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "동의해."
+      ],
+      "koreanDefinitions": [
+        "상대 의견에 찬성할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i agree.",
+          "i agree"
+        ],
+        "korean": [
+          "동의해.",
+          "상대 의견에 찬성할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3480,
+      "word": "What do you mean?",
+      "forms": [
+        "What do you mean?",
+        "What do you mean"
+      ],
+      "speakText": "What do you mean",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "무슨 뜻이니?"
+      ],
+      "koreanDefinitions": [
+        "상대의 말을 다시 확인할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "what do you mean?",
+          "what do you mean"
+        ],
+        "korean": [
+          "무슨 뜻이니?",
+          "상대의 말을 다시 확인할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3481,
+      "word": "You should believe in yourself.",
+      "forms": [
+        "You should believe in yourself.",
+        "You should believe in yourself"
+      ],
+      "speakText": "You should believe in yourself",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "너 자신을 믿어야 해."
+      ],
+      "koreanDefinitions": [
+        "격려나 조언을 할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "you should believe in yourself.",
+          "you should believe in yourself"
+        ],
+        "korean": [
+          "너 자신을 믿어야 해.",
+          "격려나 조언을 할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3482,
+      "word": "Can I borrow it?",
+      "forms": [
+        "Can I borrow it?",
+        "Can I borrow it"
+      ],
+      "speakText": "Can I borrow it",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "그것을 빌려도 될까?"
+      ],
+      "koreanDefinitions": [
+        "물건을 빌려도 되는지 물을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "can i borrow it?",
+          "can i borrow it"
+        ],
+        "korean": [
+          "그것을 빌려도 될까?",
+          "물건을 빌려도 되는지 물을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3483,
+      "word": "Could you explain how it works?",
+      "forms": [
+        "Could you explain how it works?",
+        "Could you explain how it works"
+      ],
+      "speakText": "Could you explain how it works",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "어떻게 작동하는지 설명해 줄래?"
+      ],
+      "koreanDefinitions": [
+        "사용법이나 원리를 묻는 공손한 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "could you explain how it works?",
+          "could you explain how it works"
+        ],
+        "korean": [
+          "어떻게 작동하는지 설명해 줄래?",
+          "사용법이나 원리를 묻는 공손한 표현"
+        ]
+      }
+    },
+    {
+      "id": 3484,
+      "word": "It is likely that ...",
+      "forms": [
+        "It is likely that ...",
+        "It is likely that"
+      ],
+      "speakText": "It is likely that",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "...일 가능성이 크다."
+      ],
+      "koreanDefinitions": [
+        "가능성을 설명할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "it is likely that ...",
+          "it is likely that"
+        ],
+        "korean": [
+          "...일 가능성이 크다.",
+          "가능성을 설명할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3485,
+      "word": "I'd like to exchange ...",
+      "forms": [
+        "I'd like to exchange ...",
+        "I'd like to exchange",
+        "I would like to exchange ...",
+        "I would like to exchange"
+      ],
+      "speakText": "I'd like to exchange",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "...을 교환하고 싶어요."
+      ],
+      "koreanDefinitions": [
+        "물건을 교환하고 싶을 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i'd like to exchange ...",
+          "i'd like to exchange",
+          "i would like to exchange ...",
+          "i would like to exchange"
+        ],
+        "korean": [
+          "...을 교환하고 싶어요.",
+          "물건을 교환하고 싶을 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3486,
+      "word": "I'd like to get a refund ...",
+      "forms": [
+        "I'd like to get a refund ...",
+        "I'd like to get a refund",
+        "I would like to get a refund ...",
+        "I would like to get a refund"
+      ],
+      "speakText": "I'd like to get a refund",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "환불받고 싶어요."
+      ],
+      "koreanDefinitions": [
+        "환불을 요청할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i'd like to get a refund ...",
+          "i'd like to get a refund",
+          "i would like to get a refund ...",
+          "i would like to get a refund"
+        ],
+        "korean": [
+          "환불받고 싶어요.",
+          "환불을 요청할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3487,
+      "word": "I suggest you ...",
+      "forms": [
+        "I suggest you ...",
+        "I suggest you"
+      ],
+      "speakText": "I suggest you",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "나는 네가 ...하길 제안해."
+      ],
+      "koreanDefinitions": [
+        "조심스럽게 조언이나 제안을 할 때 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "i suggest you ...",
+          "i suggest you"
+        ],
+        "korean": [
+          "나는 네가 ...하길 제안해.",
+          "조심스럽게 조언이나 제안을 할 때 쓰는 표현"
+        ]
+      }
+    },
+    {
+      "id": 3488,
+      "word": "for sure",
+      "forms": [
+        "for sure"
+      ],
+      "speakText": "for sure",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "확실히",
+        "물론"
+      ],
+      "koreanDefinitions": [
+        "강한 확신이나 동의를 나타내는 짧은 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "for sure"
+        ],
+        "korean": [
+          "확실히",
+          "물론",
+          "강한 확신이나 동의를 나타내는 짧은 표현"
+        ]
+      }
+    },
+    {
+      "id": 3489,
+      "word": "go with ...",
+      "forms": [
+        "go with ...",
+        "go with"
+      ],
+      "speakText": "go with",
+      "category": "middle-expressions",
+      "categoryLabel": "중학 표현·숙어",
+      "categoryDescription": "중학교 영어 교과서 대화문과 활동에서 자주 쓰이는 표현·숙어",
+      "pronunciationIpa": "",
+      "koreanGlosses": [
+        "...와 잘 어울리다",
+        "...와 함께 가다"
+      ],
+      "koreanDefinitions": [
+        "옷이나 사물이 잘 어울린다고 말할 때 자주 쓰는 표현"
+      ],
+      "englishHints": [],
+      "matchedDictionaryForms": [],
+      "searchKeywords": {
+        "english": [
+          "go with ...",
+          "go with"
+        ],
+        "korean": [
+          "...와 잘 어울리다",
+          "...와 함께 가다",
+          "옷이나 사물이 잘 어울린다고 말할 때 자주 쓰는 표현"
+        ]
+      }
+    }
+  ]
+}

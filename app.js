@@ -7,12 +7,21 @@ const state = {
   audioContext: null
 };
 
-const CATEGORY_ORDER = ["elementary", "middle", "high", "supplemental"];
+const CATEGORY_ORDER = [
+  "elementary",
+  "middle",
+  "high",
+  "elementary-expressions",
+  "middle-expressions",
+  "supplemental"
+];
 const CATEGORY_LABELS = {
   all: "전체 영단어",
   elementary: "초등학교 필수 영단어",
   middle: "중학교 필수 영단어",
   high: "고등학교 필수 영단어",
+  "elementary-expressions": "초등 표현·숙어",
+  "middle-expressions": "중학 표현·숙어",
   supplemental: "확장 어휘·표현"
 };
 
@@ -29,6 +38,8 @@ const refs = {
     elementary: document.querySelector("#stat-elementary"),
     middle: document.querySelector("#stat-middle"),
     high: document.querySelector("#stat-high"),
+    "elementary-expressions": document.querySelector("#stat-elementary-expressions"),
+    "middle-expressions": document.querySelector("#stat-middle-expressions"),
     supplemental: document.querySelector("#stat-supplemental")
   },
   banner: document.querySelector("#pronunciation-banner"),
@@ -45,6 +56,10 @@ function normalizeEnglish(value) {
 
 function normalizeKorean(value) {
   return value.replace(/\s+/g, " ").trim();
+}
+
+function normalizeDisplayForm(value) {
+  return normalizeEnglish(value.replace(/[?!.,]/g, " "));
 }
 
 function escapeHtml(value) {
@@ -217,16 +232,16 @@ function mergeStats(baseStats = {}, extraStats = {}) {
   return merged;
 }
 
-function mergeDictionaries(baseDictionary, supplementalDictionary = null) {
-  if (!supplementalDictionary) {
+function mergeDictionaries(baseDictionary, extraDictionary = null) {
+  if (!extraDictionary) {
     return baseDictionary;
   }
 
   return {
-    generatedAt: supplementalDictionary.generatedAt ?? baseDictionary.generatedAt,
-    sources: [...(baseDictionary.sources ?? []), ...(supplementalDictionary.sources ?? [])],
-    stats: mergeStats(baseDictionary.stats, supplementalDictionary.stats),
-    words: [...baseDictionary.words, ...supplementalDictionary.words]
+    generatedAt: extraDictionary.generatedAt ?? baseDictionary.generatedAt,
+    sources: [...(baseDictionary.sources ?? []), ...(extraDictionary.sources ?? [])],
+    stats: mergeStats(baseDictionary.stats, extraDictionary.stats),
+    words: [...baseDictionary.words, ...extraDictionary.words]
   };
 }
 
@@ -244,12 +259,13 @@ async function fetchDictionaryFile(path, { optional = false } = {}) {
 }
 
 async function loadDictionary() {
-  const [baseDictionary, supplementalDictionary] = await Promise.all([
+  const dictionaries = await Promise.all([
     fetchDictionaryFile("./data/words.json"),
-    fetchDictionaryFile("./data/supplemental-words.json", { optional: true })
+    fetchDictionaryFile("./data/supplemental-words.json", { optional: true }),
+    fetchDictionaryFile("./data/textbook-expressions.json", { optional: true })
   ]);
 
-  return mergeDictionaries(baseDictionary, supplementalDictionary);
+  return dictionaries.filter(Boolean).reduce((merged, current) => mergeDictionaries(merged, current));
 }
 
 function scoreMatch(word, query) {
@@ -341,11 +357,14 @@ function renderList(items, rawQuery) {
     const speakButton = fragment.querySelector(".speak-button");
     const checkButton = fragment.querySelector(".check-button");
     const feedback = fragment.querySelector(".feedback-text");
+    const alternativeForms = word.forms.filter(
+      (form) => normalizeDisplayForm(form) !== normalizeDisplayForm(word.word)
+    );
 
     title.textContent = word.word;
     ipa.textContent = word.pronunciationIpa ? `/${word.pronunciationIpa}/` : "브라우저 음성으로 발음 듣기";
     forms.textContent =
-      word.forms.length > 1 ? `같이 찾기: ${word.forms.slice(1).join(", ")}` : word.categoryDescription;
+      alternativeForms.length > 0 ? `같이 찾기: ${alternativeForms.join(", ")}` : word.categoryDescription;
     badge.textContent = word.categoryLabel;
 
     for (const gloss of word.koreanGlosses.slice(0, 6)) {
