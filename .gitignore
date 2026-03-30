@@ -1,6 +1,7 @@
 node_modules/
 .venv/
 .pycache/
+.DS_Store
 *.zip
 curriculum-wordbook.pdf
 kice-word-lister-guide.pdf
