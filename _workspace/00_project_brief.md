@@ -1,10 +1,10 @@
 # Project Brief
 
 ## 1. Project Snapshot
-- Project name: 아빠의 영단어 사전
+- Project name: 선생님의 영단어 사전
 - One-line summary: 2022 개정교육과정 기준 영단어와 교과서형 표현을 학교급별로 검색하고, 발음 듣기와 말하기 점검까지 제공하는 오프라인 우선 학습용 사전 웹앱
 - Delivery type: Hybrid educational PWA
-- Current stage: `v1.0.6`가 Cloudflare Pages에서 운영 중인 단일 페이지 웹앱
+- Current stage: `v1.0.7` 기준 Cloudflare Pages에서 운영 중인 단일 페이지 웹앱
 - Next milestone: 하네스 기반으로 디자인, 데이터 품질, QA, 배포 문서를 정렬한 `v1.1` 준비
 - Primary contact / decision owner: 저장소 소유자 / 제품 결정권자
 
@@ -152,7 +152,7 @@
 
 ## Kickoff Prompt
 ```markdown
-현재 `_workspace/00_project_brief.md`를 기준으로 아빠의 영단어 사전 하네스를 가동해줘.
+현재 `_workspace/00_project_brief.md`를 기준으로 선생님의 영단어 사전 하네스를 가동해줘.
 먼저 `_workspace/01_lead_delivery_plan.md`와 `_workspace/02_interface_contracts.md`를 확정하고,
 그 다음 디자인, 프론트엔드, 데이터/백엔드, QA 워커를 순서대로 조율해줘.
 이번 마일스톤은 "검색 중심의 오프라인 우선 학습 UX 유지"가 핵심이며,

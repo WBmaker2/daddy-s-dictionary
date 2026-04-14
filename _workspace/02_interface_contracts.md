@@ -92,7 +92,7 @@
 
 ## 6. Content and SEO
 - Metadata requirements:
-  - 제목: `아빠의 영단어 사전`
+  - 제목: `선생님의 영단어 사전`
   - 설명: 교육과정 영단어/표현 검색과 발음/말하기 점검을 설명하는 한국어 메타 설명
 - Open Graph requirements:
   - 현재는 선택 사항

@@ -1,7 +1,7 @@
 # Lead Delivery Plan
 
 ## Project Summary
-- Project name: 아빠의 영단어 사전
+- Project name: 선생님의 영단어 사전
 - Delivery goal: 현재 운영 중인 오프라인 우선 영단어 사전 웹앱을 하네스 기반 실행 문서로 정리하고, 다음 마일스톤의 디자인/데이터/QA 작업을 병렬로 돌릴 수 있는 상태로 만든다.
 - Launch target: `v1.1` 준비용 문서/구현 정렬, 현재 운영 배포는 Cloudflare Pages 유지
 - Decision owner: 저장소 소유자 / 제품 책임자
