@@ -6,7 +6,13 @@
   "scripts": {
     "build:pages": "node scripts/build-pages.mjs",
     "generate:data": "node scripts/generate-data.mjs",
-    "check:data": "node scripts/check-data.mjs"
+    "generate:data:textbook-expressions": "node scripts/generate-textbook-expressions.mjs",
+    "generate:data:example-sentences": "node scripts/generate-example-sentences.mjs",
+    "import:data:supplemental": "python3 scripts/import-wordbook-xls.py",
+    "check:data": "node scripts/check-data.mjs",
+    "check:data:strict": "node scripts/check-data.mjs --strict",
+    "check:data:partial": "node scripts/check-data.mjs --partial",
+    "test:data": "node --test"
   },
   "dependencies": {
     "pdf-parse": "^1.1.1"

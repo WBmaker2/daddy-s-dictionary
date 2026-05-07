@@ -1,10 +1,16 @@
+import {
+  comparePronunciation,
+  filterWords as filterDictionaryWords,
+  loadDictionaryData,
+  normalizeDisplayForm
+} from "./lib/dictionary-logic.js";
+import { createPronunciationController } from "./lib/pronunciation-controls.js";
+import { createDomRefs } from "./lib/dom-contract.js";
+
 const state = {
   dictionary: null,
   words: [],
-  filteredWords: [],
-  activeRecognition: null,
-  activeFeedbackId: null,
-  audioContext: null
+  filteredWords: []
 };
 
 const CATEGORY_ORDER = [
@@ -24,45 +30,15 @@ const CATEGORY_LABELS = {
   "middle-expressions": "중학 표현·숙어",
   supplemental: "확장 어휘·표현"
 };
-
-const RESULT_LIMIT = 60;
-
-const refs = {
-  input: document.querySelector("#search-input"),
-  category: document.querySelector("#category-select"),
-  results: document.querySelector("#results"),
-  clearButton: document.querySelector("#clear-button"),
-  statusText: document.querySelector("#status-text"),
-  resultCount: document.querySelector("#result-count"),
-  heroTotalChip: document.querySelector("#hero-total-chip"),
-  infoSummaryText: document.querySelector("#info-summary-text"),
-  stats: {
-    elementary: document.querySelector("#stat-elementary"),
-    middle: document.querySelector("#stat-middle"),
-    high: document.querySelector("#stat-high"),
-    "elementary-expressions": document.querySelector("#stat-elementary-expressions"),
-    "middle-expressions": document.querySelector("#stat-middle-expressions"),
-    supplemental: document.querySelector("#stat-supplemental")
-  },
-  banner: document.querySelector("#pronunciation-banner"),
-  template: document.querySelector("#result-card-template")
+const DICTIONARY_FILES = {
+  base: { path: "./data/words.json" },
+  supplemental: { path: "./data/supplemental-words.json", optional: true },
+  textbookExpressions: { path: "./data/textbook-expressions.json", optional: true },
+  exampleSentences: { path: "./data/example-sentences.json", optional: true }
 };
+const MOBILE_COMPACT_MEDIA = "(max-width: 540px)";
 
-function normalizeEnglish(value) {
-  return value
-    .toLowerCase()
-    .replace(/[’`]/g, "'")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function normalizeKorean(value) {
-  return value.replace(/\s+/g, " ").trim();
-}
-
-function normalizeDisplayForm(value) {
-  return normalizeEnglish(value.replace(/[?!.,]/g, " "));
-}
+const refs = createDomRefs();
 
 function escapeHtml(value) {
   return value
@@ -70,75 +46,6 @@ function escapeHtml(value) {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
-}
-
-function levenshtein(a, b) {
-  const rows = Array.from({ length: a.length + 1 }, () => new Array(b.length + 1).fill(0));
-
-  for (let i = 0; i <= a.length; i += 1) {
-    rows[i][0] = i;
-  }
-
-  for (let j = 0; j <= b.length; j += 1) {
-    rows[0][j] = j;
-  }
-
-  for (let i = 1; i <= a.length; i += 1) {
-    for (let j = 1; j <= b.length; j += 1) {
-      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-      rows[i][j] = Math.min(
-        rows[i - 1][j] + 1,
-        rows[i][j - 1] + 1,
-        rows[i - 1][j - 1] + cost
-      );
-    }
-  }
-
-  return rows[a.length][b.length];
-}
-
-function comparePronunciation(targetForms, transcript) {
-  const normalizedTranscript = normalizeEnglish(transcript.replace(/[^\w\s'-]/g, " "));
-  const normalizedTargets = targetForms.map((value) => normalizeEnglish(value));
-
-  let bestScore = 0;
-  let bestTarget = normalizedTargets[0] ?? "";
-
-  for (const target of normalizedTargets) {
-    if (!target) {
-      continue;
-    }
-
-    const distance = levenshtein(target, normalizedTranscript);
-    const score = Math.max(
-      0,
-      Math.round((1 - distance / Math.max(target.length, normalizedTranscript.length || 1)) * 100)
-    );
-
-    if (score > bestScore) {
-      bestScore = score;
-      bestTarget = target;
-    }
-  }
-
-  if (bestScore >= 92 || normalizedTargets.includes(normalizedTranscript)) {
-    return {
-      status: "excellent",
-      text: `잘했어요. "${transcript}" 발음이 ${bestTarget}와 매우 가깝습니다.`
-    };
-  }
-
-  if (bestScore >= 72) {
-    return {
-      status: "good",
-      text: `거의 맞았어요. "${transcript}"로 들렸습니다. 한 번 더 또박또박 말해 보세요.`
-    };
-  }
-
-  return {
-    status: "retry",
-    text: `지금은 "${transcript}"로 인식됐습니다. 입 모양과 강세를 조금 더 크게 말해 보세요.`
-  };
 }
 
 function updateStatus(text) {
@@ -166,102 +73,13 @@ function clearPronunciationBanner() {
   }
 }
 
-function getAudioContext() {
-  const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
-
-  if (!AudioContextCtor) {
-    return null;
-  }
-
-  if (!state.audioContext) {
-    state.audioContext = new AudioContextCtor();
-  }
-
-  if (state.audioContext.state === "suspended") {
-    state.audioContext.resume().catch((error) => {
-      console.error(error);
-    });
-  }
-
-  return state.audioContext;
-}
-
-function playCelebrationChime() {
-  const audioContext = getAudioContext();
-
-  if (!audioContext) {
-    return;
-  }
-
-  const notes = [
-    { frequency: 523.25, duration: 0.12, delay: 0 },
-    { frequency: 659.25, duration: 0.14, delay: 0.08 },
-    { frequency: 783.99, duration: 0.18, delay: 0.16 }
-  ];
-
-  const now = audioContext.currentTime;
-
-  for (const note of notes) {
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(note.frequency, now + note.delay);
-
-    gainNode.gain.setValueAtTime(0.0001, now + note.delay);
-    gainNode.gain.exponentialRampToValueAtTime(0.14, now + note.delay + 0.02);
-    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + note.delay + note.duration);
-
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-
-    oscillator.start(now + note.delay);
-    oscillator.stop(now + note.delay + note.duration + 0.02);
-  }
-}
-
-function mergeStats(baseStats = {}, extraStats = {}) {
-  const merged = { ...baseStats };
-
-  for (const [key, value] of Object.entries(extraStats)) {
-    if (typeof value !== "number") {
-      continue;
-    }
-
-    merged[key] = (merged[key] ?? 0) + value;
-  }
-
-  return merged;
-}
-
-function mergeDictionaries(baseDictionary, extraDictionary = null) {
-  if (!extraDictionary) {
-    return baseDictionary;
-  }
-
-  return {
-    generatedAt: extraDictionary.generatedAt ?? baseDictionary.generatedAt,
-    sources: [...(baseDictionary.sources ?? []), ...(extraDictionary.sources ?? [])],
-    stats: mergeStats(baseDictionary.stats, extraDictionary.stats),
-    words: [...baseDictionary.words, ...extraDictionary.words]
-  };
-}
-
-function mergeExampleSentences(dictionary, examplePayload = null) {
-  if (!examplePayload) {
-    return dictionary;
-  }
-
-  const exampleMap = new Map(examplePayload.items.map((item) => [item.id, item.exampleSentence]));
-
-  return {
-    ...dictionary,
-    words: dictionary.words.map((word) => ({
-      ...word,
-      exampleSentence: exampleMap.get(word.id) ?? ""
-    }))
-  };
-}
+const pronunciationController = createPronunciationController({
+  browserWindow: window,
+  comparePronunciation,
+  createUtterance: (text) => new SpeechSynthesisUtterance(text),
+  updateBanner,
+  logError: console.error
+});
 
 async function fetchDictionaryFile(path, { optional = false } = {}) {
   const response = await fetch(path);
@@ -277,86 +95,18 @@ async function fetchDictionaryFile(path, { optional = false } = {}) {
 }
 
 async function loadDictionary() {
-  const [baseDictionary, supplementalDictionary, textbookExpressionsDictionary, examplePayload] =
-    await Promise.all([
-    fetchDictionaryFile("./data/words.json"),
-    fetchDictionaryFile("./data/supplemental-words.json", { optional: true }),
-    fetchDictionaryFile("./data/textbook-expressions.json", { optional: true }),
-    fetchDictionaryFile("./data/example-sentences.json", { optional: true })
-    ]);
-
-  const mergedDictionary = [baseDictionary, supplementalDictionary, textbookExpressionsDictionary]
-    .filter(Boolean)
-    .reduce((merged, current) => mergeDictionaries(merged, current));
-
-  return mergeExampleSentences(mergedDictionary, examplePayload);
+  return loadDictionaryData({
+    files: DICTIONARY_FILES,
+    loadFile: fetchDictionaryFile
+  });
 }
 
 function isExpressionEntry(word) {
   return word.category.endsWith("expressions") || !/^[A-Za-z-]+$/.test(word.word);
 }
 
-function scoreMatch(word, query) {
-  if (!query) {
-    return 0;
-  }
-
-  const englishPool = word.searchKeywords.english.join(" ");
-  const koreanPool = word.searchKeywords.korean.join(" ");
-
-  if (englishPool === query || koreanPool === query) {
-    return 400;
-  }
-
-  if (word.word.toLowerCase() === query) {
-    return 350;
-  }
-
-  if (word.searchKeywords.english.some((value) => value.startsWith(query))) {
-    return 220;
-  }
-
-  if (word.searchKeywords.korean.some((value) => value.startsWith(query))) {
-    return 200;
-  }
-
-  if (englishPool.includes(query)) {
-    return 140;
-  }
-
-  if (koreanPool.includes(query)) {
-    return 130;
-  }
-
-  return 0;
-}
-
-function filterWords() {
-  const rawQuery = refs.input.value.trim();
-  const category = refs.category.value;
-  const englishQuery = normalizeEnglish(rawQuery);
-  const koreanQuery = normalizeKorean(rawQuery);
-
-  let words = state.words;
-
-  if (category !== "all") {
-    words = words.filter((word) => word.category === category);
-  }
-
-  if (!rawQuery) {
-    const ordered = [...words].sort((left, right) => left.id - right.id);
-    return ordered.slice(0, RESULT_LIMIT);
-  }
-
-  return words
-    .map((word) => ({
-      word,
-      score: Math.max(scoreMatch(word, englishQuery), scoreMatch(word, koreanQuery))
-    }))
-    .filter((item) => item.score > 0)
-    .sort((left, right) => right.score - left.score || left.word.id - right.word.id)
-    .slice(0, RESULT_LIMIT)
-    .map((item) => item.word);
+function prefersCompactResultLayout() {
+  return window.matchMedia?.(MOBILE_COMPACT_MEDIA).matches ?? false;
 }
 
 function renderList(items, rawQuery) {
@@ -374,6 +124,7 @@ function renderList(items, rawQuery) {
   }
 
   for (const word of items) {
+    const compactLayout = prefersCompactResultLayout();
     const fragment = refs.template.content.cloneNode(true);
     const card = fragment.querySelector(".result-card");
     const title = fragment.querySelector(".word-title");
@@ -390,6 +141,10 @@ function renderList(items, rawQuery) {
       (form) => normalizeDisplayForm(form) !== normalizeDisplayForm(word.word)
     );
     const showExampleSentence = Boolean(word.exampleSentence) && !isExpressionEntry(word);
+    const glossLimit = compactLayout ? 4 : 6;
+    const detailItems = showExampleSentence
+      ? [word.exampleSentence]
+      : word.koreanDefinitions.slice(0, compactLayout ? 2 : 3);
 
     title.textContent = word.word;
     ipa.textContent = word.pronunciationIpa ? `/${word.pronunciationIpa}/` : "브라우저 음성으로 발음 듣기";
@@ -398,13 +153,11 @@ function renderList(items, rawQuery) {
     badge.textContent = word.categoryLabel;
     detailHeading.textContent = showExampleSentence ? "예시 문장" : "설명";
 
-    for (const gloss of word.koreanGlosses.slice(0, 6)) {
+    for (const gloss of word.koreanGlosses.slice(0, glossLimit)) {
       const item = document.createElement("li");
       item.textContent = gloss;
       glossList.append(item);
     }
-
-    const detailItems = showExampleSentence ? [word.exampleSentence] : word.koreanDefinitions.slice(0, 3);
 
     for (const definition of detailItems) {
       const item = document.createElement("li");
@@ -419,11 +172,11 @@ function renderList(items, rawQuery) {
     }
 
     speakButton.addEventListener("click", () => {
-      speakWord(word, feedback);
+      pronunciationController.speakWord(word, feedback);
     });
 
     checkButton.addEventListener("click", () => {
-      startPronunciationCheck(word, feedback);
+      pronunciationController.startPronunciationCheck(word, feedback);
     });
 
     card.dataset.wordId = String(word.id);
@@ -431,97 +184,13 @@ function renderList(items, rawQuery) {
   }
 }
 
-function speakWord(word, feedbackNode) {
-  if (!("speechSynthesis" in window)) {
-    feedbackNode.textContent = "이 브라우저에서는 음성 합성을 지원하지 않습니다.";
-    return;
-  }
-
-  const speakText = word.speakText || word.word;
-  const utterance = new SpeechSynthesisUtterance(speakText);
-  utterance.lang = "en-US";
-  utterance.rate = 0.92;
-  utterance.pitch = 1.02;
-
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
-  feedbackNode.textContent = `"${word.word}" 발음을 들려주고 있습니다.`;
-}
-
-function stopRecognition() {
-  if (state.activeRecognition) {
-    state.activeRecognition.onresult = null;
-    state.activeRecognition.onerror = null;
-    state.activeRecognition.onend = null;
-    try {
-      state.activeRecognition.stop();
-    } catch (error) {
-      console.error(error);
-    }
-    state.activeRecognition = null;
-  }
-}
-
-function startPronunciationCheck(word, feedbackNode) {
-  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if (!Recognition) {
-    feedbackNode.textContent = "이 브라우저에서는 말하기 점검을 지원하지 않습니다.";
-    return;
-  }
-
-  stopRecognition();
-
-  const recognition = new Recognition();
-  recognition.lang = "en-US";
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 3;
-  recognition.continuous = false;
-
-  state.activeRecognition = recognition;
-  state.activeFeedbackId = word.id;
-
-  updateBanner(`"${word.word}"를 또박또박 말해 보세요.`, "listening", "pronunciation");
-  feedbackNode.textContent = "듣는 중입니다...";
-
-  recognition.onresult = (event) => {
-    const transcript = event.results?.[0]?.[0]?.transcript?.trim() ?? "";
-    const result = comparePronunciation(word.forms, transcript);
-    feedbackNode.textContent = result.text;
-    updateBanner(`말하기 점검 완료: ${result.text}`, result.status, "pronunciation");
-
-    if (result.status === "excellent") {
-      playCelebrationChime();
-    }
-  };
-
-  recognition.onerror = (event) => {
-    const message =
-      event.error === "not-allowed"
-        ? "마이크 권한이 필요합니다."
-        : event.error === "network"
-          ? "음성 인식에 네트워크 연결이 필요할 수 있습니다."
-          : "음성 인식을 완료하지 못했습니다.";
-    feedbackNode.textContent = message;
-    updateBanner(message, "warning", "pronunciation");
-  };
-
-  recognition.onend = () => {
-    state.activeRecognition = null;
-  };
-
-  try {
-    recognition.start();
-  } catch (error) {
-    feedbackNode.textContent = "마이크를 시작하지 못했습니다. 잠시 후 다시 시도해 주세요.";
-    updateBanner("말하기 점검을 시작하지 못했습니다.", "warning", "pronunciation");
-    console.error(error);
-  }
-}
-
 function render() {
   const rawQuery = refs.input.value.trim();
-  state.filteredWords = filterWords();
+  state.filteredWords = filterDictionaryWords({
+    words: state.words,
+    rawQuery,
+    category: refs.category.value
+  });
   renderList(state.filteredWords, rawQuery);
   updateInfoSummary();
 
@@ -558,13 +227,13 @@ function updateInfoSummary() {
 
 function bindEvents() {
   refs.input.addEventListener("input", () => {
-    stopRecognition();
+    pronunciationController.stopPronunciationCheck();
     clearPronunciationBanner();
     render();
   });
 
   refs.category.addEventListener("change", () => {
-    stopRecognition();
+    pronunciationController.stopPronunciationCheck();
     clearPronunciationBanner();
     render();
   });
@@ -572,7 +241,7 @@ function bindEvents() {
   refs.clearButton.addEventListener("click", () => {
     refs.input.value = "";
     refs.category.value = "all";
-    stopRecognition();
+    pronunciationController.stopPronunciationCheck();
     clearPronunciationBanner();
     render();
     refs.input.focus();
@@ -585,6 +254,16 @@ function bindEvents() {
   window.addEventListener("offline", () => {
     updateBanner("오프라인 상태입니다. 검색과 발음 듣기는 계속 사용할 수 있습니다.", "warning");
   });
+
+  const compactLayoutMedia = window.matchMedia?.(MOBILE_COMPACT_MEDIA);
+  if (compactLayoutMedia) {
+    const rerenderForCompactLayout = () => render();
+    if (typeof compactLayoutMedia.addEventListener === "function") {
+      compactLayoutMedia.addEventListener("change", rerenderForCompactLayout);
+    } else if (typeof compactLayoutMedia.addListener === "function") {
+      compactLayoutMedia.addListener(rerenderForCompactLayout);
+    }
+  }
 }
 
 async function registerServiceWorker() {

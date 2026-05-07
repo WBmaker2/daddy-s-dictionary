@@ -14,8 +14,6 @@
 
 1. 데이터 생성
 
-이미 생성된 `data/words.json`을 그대로 쓸 경우 이 단계는 건너뛸 수 있습니다.
-
 ```bash
 npm install
 npm run generate:data
@@ -29,6 +27,26 @@ python3 -m http.server 4173
 
 3. 브라우저에서 `http://127.0.0.1:4173` 열기
 
+4. 데이터 검증
+
+- `npm run check:data:strict`
+- strict 모드에서는 예문 커버리지를 `base: 1.0`, `supplemental: 0.5`, `textbookExpressions: 0`으로 강제합니다.
+- `npm run check:data:partial`
+- partial 모드에서는 optional 파일이 없어도 `summary.exampleCoverage`를 보고하고 실패하지 않습니다.
+- `npm run test:data`는 CLI 검증과 단위 테스트를 함께 실행합니다.
+
+## 릴리스 게이트
+
+```bash
+npm run test:data
+npm run check:data
+npm run build:pages
+node --check app.js
+node --check sw.js
+```
+
+이미 생성된 `data/words.json`을 그대로 쓸 경우 1단계를 건너뛸 수 있습니다.
+
 ## 데이터 출처
 
 - `kice-word-lister-guide.pdf`
@@ -40,7 +58,8 @@ python3 -m http.server 4173
 - `curriculum-wordbook.pdf`
   - 한국어 간단 뜻과 IPA 보강용 보조 자료
 
-위 원본 파일들은 데이터 재생성용 로컬 소스로 사용하며, 앱 실행 자체에는 생성된 `data/words.json`만 있으면 됩니다.
+생성 결과는 `data/words.json`, `data/supplemental-words.json`, `data/textbook-expressions.json`, `data/example-sentences.json`입니다.
+앱 실행 자체에는 `data/words.json`만 있으면 되지만, `supplemental`, `textbook-expressions`, `example-sentences` 파일이 있으면 카테고리 확장과 예문 검색이 완성됩니다.
 
 ## 오프라인 관련 메모
 

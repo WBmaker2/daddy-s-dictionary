@@ -63,7 +63,7 @@
 
           <div class="search-actions">
             <button id="clear-button" class="ghost-button" type="button">검색 초기화</button>
-            <p id="status-text" class="status-text" role="status" aria-live="polite">
+            <p id="status-text" class="status-text" role="status" aria-live="polite" aria-atomic="true">
               사전 데이터를 불러오는 중입니다.
             </p>
           </div>
@@ -124,8 +124,15 @@
         </section>
 
         <section class="results-panel">
-          <div id="pronunciation-banner" class="pronunciation-banner" hidden></div>
-          <div id="results" class="results" aria-live="polite"></div>
+          <div
+            id="pronunciation-banner"
+            class="pronunciation-banner"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            hidden
+          ></div>
+          <div id="results" class="results" aria-label="검색 결과"></div>
         </section>
       </main>
     </div>
@@ -158,7 +165,7 @@
           <button class="check-button" type="button">말하기 점검</button>
         </div>
 
-        <p class="feedback-text" role="status" aria-live="polite"></p>
+        <p class="feedback-text"></p>
       </article>
     </template>
 

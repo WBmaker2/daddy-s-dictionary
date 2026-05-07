@@ -1,8 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
+import { generateCacheVersion } from "./generate-cache-version.mjs";
 
 const ROOT = process.cwd();
 const OUTPUT_DIR = path.join(ROOT, "dist-pages");
+const CACHE_VERSION_PLACEHOLDER = "__CACHE_VERSION__";
 
 const ROOT_FILES = [
   "index.html",
@@ -13,7 +15,7 @@ const ROOT_FILES = [
   "README.md"
 ];
 
-const DIRECTORIES = ["assets", "data"];
+const DIRECTORIES = ["assets", "data", "lib"];
 
 function copyFile(from, to) {
   fs.mkdirSync(path.dirname(to), { recursive: true });
@@ -42,6 +44,19 @@ function emptyDirectory(directory) {
   fs.mkdirSync(directory, { recursive: true });
 }
 
+function replaceServiceWorkerCacheVersion(outputDirectory) {
+  const serviceWorkerPath = path.join(outputDirectory, "sw.js");
+  const source = fs.readFileSync(serviceWorkerPath, "utf8");
+  const version = generateCacheVersion(ROOT);
+  const replacement = `${CACHE_VERSION_PLACEHOLDER}`;
+  if (!source.includes(replacement)) {
+    throw new Error("Cache version placeholder not found in built service worker");
+  }
+
+  const replaced = source.replaceAll(replacement, version);
+  fs.writeFileSync(serviceWorkerPath, replaced, "utf8");
+}
+
 function main() {
   emptyDirectory(OUTPUT_DIR);
 
@@ -52,6 +67,8 @@ function main() {
   for (const directory of DIRECTORIES) {
     copyDirectory(path.join(ROOT, directory), path.join(OUTPUT_DIR, directory));
   }
+
+  replaceServiceWorkerCacheVersion(OUTPUT_DIR);
 
   console.log(`Built Cloudflare Pages output in ${path.relative(ROOT, OUTPUT_DIR)}`);
 }

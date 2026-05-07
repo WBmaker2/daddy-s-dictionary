@@ -1,0 +1,193 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import vm from "node:vm";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import { generateCacheVersion } from "../scripts/generate-cache-version.mjs";
+
+const TEST_DIR = fileURLToPath(new URL(".", import.meta.url));
+const ROOT = path.resolve(TEST_DIR, "..");
+const BUILD_SCRIPT_SOURCE = fs.readFileSync(path.join(ROOT, "scripts", "build-pages.mjs"), "utf8");
+const SERVICE_WORKER_SOURCE = fs.readFileSync(path.join(ROOT, "sw.js"), "utf8");
+const REQUIRED_RUNTIME_MODULES = [
+  "lib/dom-contract.js",
+  "lib/dictionary-logic.js",
+  "lib/pronunciation-controls.js",
+  "lib/service-worker-routing.js"
+];
+
+function writeFile(rootDir, relativePath, contents) {
+  const filePath = path.join(rootDir, relativePath);
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, contents);
+}
+
+function createFixtureProject(rootDir) {
+  writeFile(rootDir, "scripts/build-pages.mjs", BUILD_SCRIPT_SOURCE);
+  writeFile(
+    rootDir,
+    "scripts/generate-cache-version.mjs",
+    fs.readFileSync(path.join(ROOT, "scripts", "generate-cache-version.mjs"), "utf8")
+  );
+  writeFile(rootDir, "package.json", JSON.stringify({ name: "fixture", version: "1.0.7" }));
+  writeFile(rootDir, "index.html", "<!doctype html><title>fixture</title>");
+  writeFile(rootDir, "app.js", "console.log('app');");
+  writeFile(rootDir, "styles.css", "body{}");
+  writeFile(rootDir, "sw.js", SERVICE_WORKER_SOURCE);
+  writeFile(rootDir, "manifest.webmanifest", "{}");
+  writeFile(rootDir, "README.md", "# fixture");
+  writeFile(rootDir, "assets/icon.svg", "<svg></svg>");
+  writeFile(rootDir, "assets/icon-192.png", "icon");
+  writeFile(rootDir, "assets/icon-512.png", "icon");
+  writeFile(rootDir, "data/words.json", '{"words":[]}');
+  writeFile(rootDir, "data/supplemental-words.json", '{"words":[]}');
+  writeFile(rootDir, "data/textbook-expressions.json", '{"words":[]}');
+  writeFile(rootDir, "data/example-sentences.json", '{"items":[]}');
+  writeFile(
+    rootDir,
+    "lib/service-worker-routing.js",
+    fs.readFileSync(path.join(ROOT, "lib", "service-worker-routing.js"), "utf8")
+  );
+  writeFile(rootDir, "lib/dom-contract.js", "export const fixtureDomContract = true;");
+  writeFile(rootDir, "lib/dictionary-logic.js", "export const fixtureDictionaryLogic = true;");
+  writeFile(rootDir, "lib/pronunciation-controls.js", "export const fixturePronunciationControls = true;");
+}
+
+function evaluateBuiltServiceWorker(entryPath) {
+  const listeners = new Map();
+  const openedCaches = [];
+  const context = {
+    URL,
+    caches: {
+      async match() {
+        return null;
+      },
+      async open(name) {
+        openedCaches.push(name);
+        return {
+          async add() {},
+          async addAll() {},
+          async put() {}
+        };
+      },
+      async keys() {
+        return [];
+      },
+      async delete() {
+        return true;
+      }
+    },
+    fetch: async () => new Response("", { status: 200 }),
+    Response,
+    console,
+    globalThis: {},
+    self: {
+      location: { href: "https://example.com/", origin: "https://example.com" },
+      registration: { scope: "https://example.com/" },
+      addEventListener(type, handler) {
+        listeners.set(type, handler);
+      },
+      skipWaiting() {},
+      clients: {
+        claim() {}
+      }
+    }
+  };
+
+  context.globalThis = context;
+  context.self.globalThis = context;
+  context.importScripts = (...scriptPaths) => {
+    for (const scriptPath of scriptPaths) {
+      const importedPath = path.resolve(path.dirname(entryPath), scriptPath);
+      const importedSource = fs.readFileSync(importedPath, "utf8");
+      vm.runInNewContext(importedSource, context, { filename: importedPath });
+    }
+  };
+
+  const entrySource = fs.readFileSync(entryPath, "utf8");
+  vm.runInNewContext(entrySource, context, { filename: entryPath });
+
+  return {
+    listeners,
+    openedCaches
+  };
+}
+
+async function dispatchInstall(evaluatedServiceWorker) {
+  const installHandler = evaluatedServiceWorker.listeners.get("install");
+  assert.equal(typeof installHandler, "function");
+
+  let installPromise = null;
+  installHandler({
+    waitUntil(value) {
+      installPromise = Promise.resolve(value);
+    }
+  });
+
+  assert.ok(installPromise);
+  await installPromise;
+}
+
+test("build-pages copies the service worker helper and built sw.js can import it", () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "build-pages-"));
+  createFixtureProject(tempRoot);
+
+  execFileSync("node", ["scripts/build-pages.mjs"], {
+    cwd: tempRoot,
+    encoding: "utf8"
+  });
+
+  const builtHelperPath = path.join(tempRoot, "dist-pages", "lib", "service-worker-routing.js");
+  const builtSwPath = path.join(tempRoot, "dist-pages", "sw.js");
+
+  assert.equal(fs.existsSync(builtHelperPath), true);
+  assert.equal(fs.existsSync(builtSwPath), true);
+
+  for (const modulePath of REQUIRED_RUNTIME_MODULES) {
+    assert.equal(fs.existsSync(path.join(tempRoot, "dist-pages", modulePath)), true);
+    assert.match(fs.readFileSync(builtSwPath, "utf8"), new RegExp(JSON.stringify(`./${modulePath}`)));
+  }
+
+  const evaluatedServiceWorker = evaluateBuiltServiceWorker(builtSwPath);
+  assert.equal(typeof evaluatedServiceWorker.listeners.get("fetch"), "function");
+});
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+test("build-pages injects deterministic cache version into dist service worker", async () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "build-pages-"));
+  createFixtureProject(tempRoot);
+
+  execFileSync("node", ["scripts/build-pages.mjs"], {
+    cwd: tempRoot,
+    encoding: "utf8"
+  });
+
+  const builtSwPath = path.join(tempRoot, "dist-pages", "sw.js");
+  const builtSwSource = fs.readFileSync(builtSwPath, "utf8");
+  const expectedVersion = generateCacheVersion(tempRoot);
+
+  assert.equal(builtSwSource.includes("__CACHE_VERSION__"), false);
+  assert.match(builtSwSource, new RegExp(escapeRegExp(`const CACHE_VERSION = "${expectedVersion}";`)));
+  assert.equal(builtSwSource.includes("daddys-dictionary-dev"), false);
+
+  const evaluatedServiceWorker = evaluateBuiltServiceWorker(builtSwPath);
+  await dispatchInstall(evaluatedServiceWorker);
+
+  assert.equal(evaluatedServiceWorker.openedCaches.includes(`daddys-dictionary-${expectedVersion}`), true);
+});
+
+test("cache version changes when a precached static asset changes", () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "cache-version-"));
+  createFixtureProject(tempRoot);
+
+  const initialVersion = generateCacheVersion(tempRoot);
+  writeFile(tempRoot, "assets/icon.svg", "<svg><title>updated</title></svg>");
+
+  assert.notEqual(generateCacheVersion(tempRoot), initialVersion);
+});

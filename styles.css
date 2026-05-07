@@ -38,6 +38,11 @@ select {
   font: inherit;
 }
 
+:where(input, select, button, summary):focus-visible {
+  outline: 3px solid rgba(15, 124, 115, 0.32);
+  outline-offset: 3px;
+}
+
 .page-shell {
   width: min(1600px, calc(100% - 24px));
   margin: 0 auto;
@@ -242,14 +247,20 @@ select {
   background: rgba(255, 255, 255, 0.78);
   padding: 15px 16px;
   color: var(--ink);
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .field input:focus,
 .field select:focus {
   outline: none;
   border-color: rgba(15, 124, 115, 0.48);
-  transform: translateY(-1px);
+}
+
+.field input:focus-visible,
+.field select:focus-visible {
+  outline: 3px solid rgba(15, 124, 115, 0.32);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(15, 124, 115, 0.14);
 }
 
 .search-actions {
@@ -291,6 +302,13 @@ select {
 .speak-button:hover,
 .check-button:hover {
   transform: translateY(-1px);
+}
+
+.ghost-button:focus-visible,
+.speak-button:focus-visible,
+.check-button:focus-visible,
+.info-summary:focus-visible {
+  box-shadow: 0 0 0 4px rgba(15, 124, 115, 0.16);
 }
 
 .status-text {
@@ -575,6 +593,11 @@ select {
     font-size: 0.82rem;
   }
 
+  .hint-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
   .search-panel,
   .result-card {
     padding: 16px;
@@ -586,15 +609,47 @@ select {
   }
 
   .summary-chip {
-    min-height: 92px;
+    min-height: 84px;
+    padding: 13px 14px;
   }
 
-  .summary-bar {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .info-stats {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(128px, 1fr);
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px 10px 14px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+
+  .info-stats::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .info-stats::-webkit-scrollbar-thumb {
+    background: rgba(32, 49, 53, 0.2);
+    border-radius: 999px;
+  }
+
+  .summary-chip {
+    scroll-snap-align: start;
   }
 
   .word-title {
     font-size: 1.45rem;
+  }
+
+  .word-forms,
+  .gloss-list,
+  .definition-list {
+    font-size: 0.94rem;
+    line-height: 1.6;
+  }
+
+  .meaning-group {
+    margin-top: 14px;
   }
 
   .card-actions {
