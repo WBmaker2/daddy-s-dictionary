@@ -68,7 +68,8 @@
 - Server validation: 없음
 - Success behavior:
   - 검색 결과는 최초 6개를 표시하고, `결과 12개 더 보기`로 12개씩 전체 결과가 소진될 때까지 표시
-  - 60개 결과 상한은 없으며, `result-count`에는 전체 수와 현재 표시 수를 함께 표시
+  - UI는 명시적 페이지 제한을 사용하므로 60개에서 멈추지 않으며, `result-count`에는 전체 수와 현재 표시 수를 함께 표시
+  - 호환성 helper `filterWords()`는 호출자가 제한을 전달하지 않으면 기존처럼 최대 60개를 반환
   - `result-count`와 상태 텍스트 갱신
 - Failure behavior:
   - 결과 없음 안내 또는 bootstrap 오류 상태 표시
