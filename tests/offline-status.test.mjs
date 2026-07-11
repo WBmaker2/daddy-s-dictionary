@@ -61,3 +61,49 @@ test("trackOfflineReadiness absorbs registration failures and reports failed", a
   });
   assert.deepEqual(statuses, ["preparing", "failed"]);
 });
+
+test("trackOfflineReadiness absorbs asynchronously rejected registrations and reports failed", async () => {
+  const statuses = [];
+  const navigatorObject = {
+    serviceWorker: {
+      register() {
+        return Promise.reject(new Error("registration rejected"));
+      },
+      ready: Promise.resolve()
+    }
+  };
+
+  await assert.doesNotReject(async () => {
+    assert.equal(
+      await trackOfflineReadiness({
+        navigatorObject,
+        onStatus: (status) => statuses.push(status)
+      }),
+      "failed"
+    );
+  });
+  assert.deepEqual(statuses, ["preparing", "failed"]);
+});
+
+test("trackOfflineReadiness ignores asynchronously rejected status callbacks", async () => {
+  const navigatorObject = {
+    serviceWorker: {
+      register() {
+        return Promise.resolve({ scope: "./" });
+      },
+      ready: Promise.resolve()
+    }
+  };
+
+  await assert.doesNotReject(async () => {
+    assert.equal(
+      await trackOfflineReadiness({
+        navigatorObject,
+        onStatus: async () => {
+          throw new Error("status UI failed");
+        }
+      }),
+      "ready"
+    );
+  });
+});

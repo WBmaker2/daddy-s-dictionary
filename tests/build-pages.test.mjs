@@ -49,7 +49,9 @@ function createFixtureProject(rootDir) {
   writeFile(rootDir, "data/supplemental-words.json", '{\n  "words": []\n}\n');
   writeFile(rootDir, "data/textbook-expressions.json", '{\n  "words": []\n}\n');
   writeFile(rootDir, "data/example-sentences.json", '{\n  "items": []\n}\n');
+  writeFile(rootDir, "data/nested/extra.json", '{\n  "nested": true\n}\n');
   writeFile(rootDir, "data/notes.txt", "keep this asset byte-for-byte\n");
+  writeFile(rootDir, "lib/fixture.json", '{\n  "keepFormatting": true\n}\n');
   for (const modulePath of RUNTIME_MODULES) {
     if (modulePath === "app.js" || modulePath === "sw.js") {
       continue;
@@ -74,7 +76,8 @@ test("build-pages minifies deployment data JSON without changing payloads or oth
     "data/words.json",
     "data/supplemental-words.json",
     "data/textbook-expressions.json",
-    "data/example-sentences.json"
+    "data/example-sentences.json",
+    "data/nested/extra.json"
   ]) {
     const source = fs.readFileSync(path.join(tempRoot, relativePath), "utf8");
     const built = fs.readFileSync(path.join(tempRoot, "dist-pages", relativePath), "utf8");
@@ -89,6 +92,24 @@ test("build-pages minifies deployment data JSON without changing payloads or oth
     fs.readFileSync(path.join(tempRoot, "dist-pages", "data", "notes.txt")),
     fs.readFileSync(path.join(tempRoot, "data", "notes.txt"))
   );
+  assert.deepEqual(
+    fs.readFileSync(path.join(tempRoot, "dist-pages", "lib", "fixture.json")),
+    fs.readFileSync(path.join(tempRoot, "lib", "fixture.json"))
+  );
+});
+
+test("build-pages fails instead of emitting malformed deployment data JSON", () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "build-pages-"));
+  createFixtureProject(tempRoot);
+  writeFile(tempRoot, "data/nested/malformed.json", "{ not valid JSON");
+
+  assert.throws(() => {
+    execFileSync("node", ["scripts/build-pages.mjs"], {
+      cwd: tempRoot,
+      encoding: "utf8",
+      stdio: "pipe"
+    });
+  });
 });
 
 function evaluateBuiltServiceWorker(entryPath) {
@@ -247,6 +268,17 @@ test("cache version tracks the offline readiness module through the runtime clos
   createFixtureProject(tempRoot);
   const initialVersion = generateCacheVersion(tempRoot);
   writeFile(tempRoot, "lib/offline-status.js", "export const status = 'updated';");
+
+  assert.notEqual(generateCacheVersion(tempRoot), initialVersion);
+});
+
+test("cache version tracks the startup coordinator through the runtime closure", () => {
+  assert.equal(RUNTIME_MODULES.includes("lib/app-startup.js"), true);
+
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "cache-version-"));
+  createFixtureProject(tempRoot);
+  const initialVersion = generateCacheVersion(tempRoot);
+  writeFile(tempRoot, "lib/app-startup.js", "export const startup = 'updated';");
 
   assert.notEqual(generateCacheVersion(tempRoot), initialVersion);
 });

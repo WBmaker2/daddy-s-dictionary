@@ -13,6 +13,7 @@ const REQUIRED_ASSETS = [
   "./assets/icon.svg",
   "./assets/icon-192.png",
   "./assets/icon-512.png",
+  "./lib/app-startup.js",
   "./lib/dom-contract.js",
   "./lib/dictionary-logic.js",
   "./lib/load-recovery.js",

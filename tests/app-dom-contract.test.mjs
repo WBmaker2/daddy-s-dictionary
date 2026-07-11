@@ -35,17 +35,12 @@ test("offline readiness chip announces status changes with the expected Korean l
   );
 });
 
-test("app starts one offline readiness registration before dictionary loading without awaiting it", () => {
+test("app wires bootstrap through the injected startup coordinator", () => {
   const appSource = fs.readFileSync(path.join(ROOT, "app.js"), "utf8");
-  const trackingCall = "trackOfflineReadiness({";
-  const dictionaryLoad = "const { dictionary, optionalErrors } = await loadDictionary();";
 
-  assert.match(appSource, /import\s+\{\s*trackOfflineReadiness\s*\}\s+from\s+"\.\/lib\/offline-status\.js";/);
-  assert.equal((appSource.match(/trackOfflineReadiness\(\{/g) ?? []).length, 1);
-  assert.equal(appSource.includes("navigator.serviceWorker.register"), false);
-  assert.ok(appSource.indexOf(trackingCall) >= 0);
-  assert.ok(appSource.indexOf(trackingCall) < appSource.indexOf(dictionaryLoad));
-  assert.doesNotMatch(appSource, /await\s+trackOfflineReadiness/);
+  assert.match(appSource, /import\s+\{\s*createAppStartup\s*\}\s+from\s+"\.\/lib\/app-startup\.js";/);
+  assert.match(appSource, /const\s+appStartup\s*=\s*createAppStartup\s*\(/);
+  assert.match(appSource, /await\s+appStartup\.loadDictionary\s*\(\s*\)/);
 });
 
 function createNode(label) {

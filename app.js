@@ -11,6 +11,7 @@ import { createSearchViewState } from "./lib/search-view-state.js";
 import { renderLoadFailure } from "./lib/load-recovery.js";
 import { renderDataWarning, updateBanner } from "./lib/status-regions.js";
 import { trackOfflineReadiness } from "./lib/offline-status.js";
+import { createAppStartup } from "./lib/app-startup.js";
 
 const state = {
   dictionary: null,
@@ -55,7 +56,6 @@ const searchViewState = createSearchViewState({ initialLimit: 6, pageSize: 12 })
 const refs = createDomRefs();
 let eventsBound = false;
 let isRetrying = false;
-let offlineReadinessStarted = false;
 
 function escapeHtml(value) {
   return value
@@ -329,11 +329,6 @@ function bindEvents() {
 }
 
 function startOfflineReadiness() {
-  if (offlineReadinessStarted) {
-    return;
-  }
-
-  offlineReadinessStarted = true;
   void trackOfflineReadiness({
     navigatorObject: navigator,
     onStatus: (status) => {
@@ -342,11 +337,12 @@ function startOfflineReadiness() {
   });
 }
 
+const appStartup = createAppStartup({ startOfflineReadiness, loadDictionary });
+
 async function bootstrap() {
   try {
-    startOfflineReadiness();
     updateStatus("사전 데이터를 불러오는 중입니다.");
-    const { dictionary, optionalErrors } = await loadDictionary();
+    const { dictionary, optionalErrors } = await appStartup.loadDictionary();
     state.dictionary = dictionary;
     state.words = dictionary.words;
 
