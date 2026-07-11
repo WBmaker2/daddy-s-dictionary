@@ -110,6 +110,23 @@ test("searchWords counts all matches before limiting results", () => {
   assert.equal(result.items.length, 6);
 });
 
+test("searchWords has no implicit 60-result cap when the caller does not limit it", () => {
+  const words = Array.from({ length: 61 }, (_, index) => ({
+    id: index + 1,
+    word: `match-${index + 1}`,
+    category: "elementary",
+    forms: [`match-${index + 1}`],
+    searchKeywords: { english: ["match"], korean: [] }
+  }));
+
+  const result = searchWords({ words, rawQuery: "match", category: "all" });
+
+  assert.equal(result.total, 61);
+  assert.equal(result.items.length, 61);
+  assert.equal(result.shown, 61);
+  assert.equal(result.hasMore, false);
+});
+
 test("searchWords ranks exact alternate English forms above prefix-only matches", () => {
   for (const [query, expectedWord] of [
     ["data", "datum"],

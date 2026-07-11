@@ -467,6 +467,12 @@ select {
   box-shadow: 0 12px 32px rgba(21, 52, 47, 0.08);
 }
 
+.result-card:focus {
+  outline: 3px solid #0b665e;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(15, 124, 115, 0.16), 0 12px 32px rgba(21, 52, 47, 0.08);
+}
+
 .card-head {
   display: flex;
   justify-content: space-between;

@@ -23,6 +23,10 @@ function createWord(overrides = {}) {
     word,
     category: overrides.category ?? "elementary",
     forms: overrides.forms ?? [word],
+    categoryLabel: overrides.categoryLabel ?? "초등학교 필수 영단어",
+    pronunciationIpa: overrides.pronunciationIpa ?? "",
+    koreanGlosses: overrides.koreanGlosses ?? [`뜻-${id}`],
+    koreanDefinitions: overrides.koreanDefinitions ?? [`뜻-${id}`],
     searchKeywords: overrides.searchKeywords ?? {
       english: [word.toLowerCase()],
       korean: [`뜻-${id}`]
@@ -36,6 +40,15 @@ const DICTIONARY_FILES = {
   textbookExpressions: { path: "./data/textbook-expressions.json", optional: true },
   exampleSentences: { path: "./data/example-sentences.json", optional: true }
 };
+
+function createBaseDictionary() {
+  return {
+    generatedAt: "2026-01-01T00:00:00Z",
+    sources: ["base"],
+    stats: { elementary: 1 },
+    words: [createWord({ id: 1, word: "Apple" })]
+  };
+}
 
 test("normalization helpers keep search inputs consistent", () => {
   assert.equal(normalizeEnglish("  HeLLo  ’World`  "), "hello 'world'");
@@ -193,6 +206,103 @@ test("loadDictionaryData tolerates optional files returning null", async () => {
   assert.deepEqual(dictionary.words.map((word) => word.id), [1]);
 });
 
+test("loadDictionaryData reports optional null payloads while preserving the base dictionary", async () => {
+  const baseDictionary = createBaseDictionary();
+  const reports = [];
+
+  const dictionary = await loadDictionaryData({
+    files: DICTIONARY_FILES,
+    loadFile: async (path) => (path === "./data/words.json" ? baseDictionary : null),
+    onOptionalError: (report) => reports.push(report)
+  });
+
+  assert.equal(dictionary, baseDictionary);
+  assert.deepEqual(
+    reports.map((report) => report.path),
+    [
+      "./data/supplemental-words.json",
+      "./data/textbook-expressions.json",
+      "./data/example-sentences.json"
+    ]
+  );
+  assert(reports.every((report) => report.error instanceof Error));
+});
+
+test("loadDictionaryData ignores malformed optional dictionary and example payloads", async () => {
+  const baseDictionary = createBaseDictionary();
+  const reports = [];
+  const malformedPayloads = new Map([
+    ["./data/supplemental-words.json", { stats: {}, words: null }],
+    ["./data/textbook-expressions.json", { stats: {}, words: null }],
+    ["./data/example-sentences.json", { items: null }]
+  ]);
+
+  const dictionary = await loadDictionaryData({
+    files: DICTIONARY_FILES,
+    loadFile: async (path) => (path === "./data/words.json" ? baseDictionary : malformedPayloads.get(path)),
+    onOptionalError: (report) => reports.push(report)
+  });
+
+  assert.equal(dictionary, baseDictionary);
+  assert.deepEqual(
+    reports.map((report) => report.path),
+    [
+      "./data/supplemental-words.json",
+      "./data/textbook-expressions.json",
+      "./data/example-sentences.json"
+    ]
+  );
+  assert(reports.every((report) => report.error instanceof Error));
+});
+
+test("loadDictionaryData rejects a malformed required base payload", async () => {
+  await assert.rejects(
+    loadDictionaryData({
+      files: DICTIONARY_FILES,
+      loadFile: async (path) => (path === "./data/words.json" ? { stats: {}, words: null } : null)
+    }),
+    /words|payload|data/i
+  );
+});
+
+test("loadDictionaryData isolates an optional merge exception from the base dictionary", async () => {
+  const baseDictionary = createBaseDictionary();
+  const mergeError = new Error("optional merge failed");
+  const reports = [];
+  const optionalWords = new Proxy([], {
+    get(target, property, receiver) {
+      if (property === Symbol.iterator) {
+        throw mergeError;
+      }
+
+      return Reflect.get(target, property, receiver);
+    }
+  });
+
+  const dictionary = await loadDictionaryData({
+    files: DICTIONARY_FILES,
+    loadFile: async (path) => {
+      if (path === "./data/words.json") {
+        return baseDictionary;
+      }
+
+      if (path === "./data/supplemental-words.json") {
+        return { stats: { supplemental: 1 }, words: optionalWords };
+      }
+
+      if (path === "./data/textbook-expressions.json") {
+        return { stats: {}, words: [] };
+      }
+
+      return { items: [] };
+    },
+    onOptionalError: (report) => reports.push(report)
+  });
+
+  assert.equal(dictionary, baseDictionary);
+  assert.deepEqual(reports, [{ path: "./data/supplemental-words.json", error: mergeError }]);
+});
+
 test("loadDictionaryData ignores loader exceptions for optional source files", async () => {
   const baseDictionary = {
     generatedAt: "2026-01-01T00:00:00Z",
@@ -241,7 +351,11 @@ test("loadDictionaryData reports optional loader exceptions while returning the 
         throw supplementalError;
       }
 
-      return null;
+      if (path === "./data/textbook-expressions.json") {
+        return { stats: {}, words: [] };
+      }
+
+      return { items: [] };
     },
     onOptionalError: (report) => reportedErrors.push(report)
   });

@@ -25,8 +25,18 @@ function readJson(filePath) {
   return JSON.parse(contents);
 }
 
-function readString(filePath) {
-  return fs.readFileSync(filePath, "utf8");
+function updateFrame(hash, value) {
+  const buffer = Buffer.isBuffer(value) ? value : Buffer.from(value, "utf8");
+  hash.update(String(buffer.length));
+  hash.update(":");
+  hash.update(buffer);
+}
+
+function updateFileEntry(hash, type, relativePath, filePath) {
+  hash.update("entry:");
+  updateFrame(hash, type);
+  updateFrame(hash, relativePath);
+  updateFrame(hash, fs.readFileSync(filePath));
 }
 
 function collectJsonDataFiles(dataDirectoryPath) {
@@ -56,41 +66,34 @@ export function generateCacheVersion(rootDirectory = process.cwd()) {
     : { version: "0.0.0" };
   const packageVersion = packageJson.version || "0.0.0";
   const runtimeModulePaths = collectRuntimeModulePaths({ rootDirectory: rootPath });
+  const hash = createHash("sha256");
 
-  const payload = [
-    `package-version:${packageVersion}`,
-    ...BUILD_VERSION_INPUTS.map((relativePath) => {
+  updateFrame(hash, "cache-version-v2");
+  updateFrame(hash, packageVersion);
+
+  for (const [type, relativePaths] of [
+    ["build", BUILD_VERSION_INPUTS],
+    ["runtime", CORE_STATIC_FILES],
+    ["runtime", runtimeModulePaths]
+  ]) {
+    for (const relativePath of relativePaths) {
       const absolutePath = path.join(rootPath, relativePath);
 
       if (!fs.existsSync(absolutePath)) {
-        return undefined;
+        continue;
       }
 
-      return `build:${relativePath}\n${readString(absolutePath)}`;
-    }),
-    ...CORE_STATIC_FILES.map((relativePath) => {
-      const absolutePath = path.join(rootPath, relativePath);
+      const normalizedPath = path.posix.join(...relativePath.split(path.sep));
+      updateFileEntry(hash, type, normalizedPath, absolutePath);
+    }
+  }
 
-      if (!fs.existsSync(absolutePath)) {
-        return undefined;
-      }
+  for (const absolutePath of collectJsonDataFiles(path.join(rootPath, "data"))) {
+    const normalizedPath = path.posix.join(...path.relative(rootPath, absolutePath).split(path.sep));
+    updateFileEntry(hash, "data", normalizedPath, absolutePath);
+  }
 
-      return `runtime:${path.posix.join(...relativePath.split(path.sep))}\n${readString(absolutePath)}`;
-    }),
-    ...runtimeModulePaths.map((relativePath) => {
-      const absolutePath = path.join(rootPath, relativePath);
-      return `runtime:${relativePath}\n${readString(absolutePath)}`;
-    }),
-    ...collectJsonDataFiles(path.join(rootPath, "data")).map((absolutePath) => {
-      const normalizedPath = path.posix.join(...path.relative(rootPath, absolutePath).split(path.sep));
-      return `data:${normalizedPath}\n${readString(absolutePath)}`;
-    })
-  ].filter(Boolean);
-
-  const digest = createHash("sha256")
-    .update(payload.join("\n"))
-    .digest("hex")
-    .slice(0, HASH_LENGTH);
+  const digest = hash.digest("hex").slice(0, HASH_LENGTH);
 
   return `${packageVersion}-${digest}`;
 }

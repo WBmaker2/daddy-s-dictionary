@@ -90,14 +90,11 @@ const pronunciationController = createPronunciationController({
   logError: console.error
 });
 
-async function fetchDictionaryFile(path, { optional = false } = {}) {
+async function fetchDictionaryFile(path) {
   const response = await fetch(path);
 
   if (!response.ok) {
-    if (optional && response.status === 404) {
-      return null;
-    }
-    throw new Error("사전 데이터를 불러오지 못했습니다.");
+    throw new Error(`사전 데이터를 불러오지 못했습니다. (${response.status})`);
   }
 
   return response.json();
@@ -226,6 +223,7 @@ function renderList(result, rawQuery) {
     });
 
     card.dataset.wordId = String(word.id);
+    card.tabIndex = -1;
     refs.results.append(fragment);
   }
 }
@@ -304,9 +302,16 @@ function bindEvents() {
   });
 
   refs.loadMoreButton.addEventListener("click", () => {
+    const previouslyShown = state.searchResult?.shown ?? 0;
     searchViewState.showMore();
     render();
-    refs.loadMoreButton.focus();
+
+    if (state.searchResult.hasMore) {
+      refs.loadMoreButton.focus();
+      return;
+    }
+
+    refs.results.querySelectorAll(".result-card")[previouslyShown]?.focus();
   });
 
   window.addEventListener("online", () => {

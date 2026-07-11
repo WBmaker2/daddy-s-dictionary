@@ -320,6 +320,24 @@ test("cache version changes when a precached static asset changes", () => {
   assert.notEqual(generateCacheVersion(tempRoot), initialVersion);
 });
 
+test("cache version distinguishes invalid UTF-8 bytes in precached binary assets", () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "cache-version-"));
+  createFixtureProject(tempRoot);
+  const fontPath = path.join(tempRoot, "assets/fonts/noto-serif-kr-korean-wght-normal.woff2");
+
+  // Both bytes decode to the replacement character, which previously produced the same digest input.
+  fs.writeFileSync(fontPath, Buffer.from([0x80]));
+  const initialVersion = generateCacheVersion(tempRoot);
+  assert.equal(fs.readFileSync(fontPath, "utf8"), "\uFFFD");
+
+  fs.writeFileSync(fontPath, Buffer.from([0x81]));
+  assert.equal(fs.readFileSync(fontPath, "utf8"), "\uFFFD");
+  const changedVersion = generateCacheVersion(tempRoot);
+
+  assert.notEqual(changedVersion, initialVersion);
+  assert.equal(generateCacheVersion(tempRoot), changedVersion);
+});
+
 test("cache version tracks build transformation inputs and remains deterministic when unchanged", () => {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "cache-version-"));
   createFixtureProject(tempRoot);

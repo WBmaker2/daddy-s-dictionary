@@ -58,6 +58,58 @@ test("keeps the search-first dictionary flow accessible", async ({ page }) => {
   await expect(searchInput).toHaveCSS("outline-style", "solid");
 });
 
+test("warns but keeps six base cards when an optional dictionary returns 404", async ({ page }) => {
+  await page.route(/\/data\/supplemental-words\.json(?:\?.*)?$/, (route) =>
+    route.fulfill({
+      status: 404,
+      contentType: "text/plain; charset=utf-8",
+      body: "Not found"
+    })
+  );
+
+  await page.goto("/");
+
+  await expect(page.locator(".result-card")).toHaveCount(6);
+  await expect(page.locator("#data-warning")).toHaveText(
+    "일부 확장 자료를 불러오지 못했지만 기본 영단어 검색은 사용할 수 있습니다."
+  );
+  await expect(page.locator(".load-failure")).toHaveCount(0);
+});
+
+test("warns without showing fatal recovery when optional JSON has an invalid shape", async ({ page }) => {
+  await page.route(/\/data\/textbook-expressions\.json(?:\?.*)?$/, (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json; charset=utf-8",
+      body: JSON.stringify({ stats: {}, words: null })
+    })
+  );
+
+  await page.goto("/");
+
+  await expect(page.locator(".result-card")).toHaveCount(6);
+  await expect(page.locator("#data-warning")).toHaveText(
+    "일부 확장 자료를 불러오지 못했지만 기본 영단어 검색은 사용할 수 있습니다."
+  );
+  await expect(page.locator(".load-failure")).toHaveCount(0);
+});
+
+test("moves focus to the first newly revealed card after the final load-more page", async ({ page }) => {
+  await waitForDictionary(page);
+
+  const searchInput = page.getByLabel("검색어");
+  await searchInput.fill("kn");
+  await expect(page.locator(".result-card")).toHaveCount(6);
+
+  const loadMoreButton = page.getByRole("button", { name: "결과 12개 더 보기" });
+  await loadMoreButton.focus();
+  await page.keyboard.press("Enter");
+
+  await expect(page.locator(".result-card")).toHaveCount(11);
+  await expect(loadMoreButton).toBeHidden();
+  await expect(page.locator(".result-card").nth(6)).toBeFocused();
+});
+
 test("keeps the mobile first screen compact without horizontal overflow", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "mobile", "Mobile-only layout contract");
 

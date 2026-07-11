@@ -1,5 +1,7 @@
 # Interface Contracts
 
+> Release target: v1.1.0 RC
+
 ## 1. Page Inventory
 | Page | Route | Purpose | Requires Data | Notes |
 |------|-------|---------|---------------|------|
@@ -11,17 +13,18 @@
 - Empty:
   - 검색어 없음: 검색 안내 문구 노출
   - 검색 결과 없음: 철자/카테고리 재확인 안내
-- Error: 데이터 fetch 실패 시 전역 상태 텍스트에 오류 노출, 이전 캐시가 있으면 cached shell 유지
+- Warning: 선택 데이터의 load, parse, payload shape, merge/apply 실패는 전용 한국어 경고를 표시하고 기본 3,000단어 검색으로 fallback
+- Error: 필수 `words.json`의 load 또는 payload shape 실패는 재시도 가능한 전역 오류 화면으로 표시, 이전 캐시가 있으면 cached shell 유지
 - Success: 검색 결과 카드 렌더링, 결과 수 갱신, 선택된 카테고리 기준 상태 문구 노출
 - Permission denied: 마이크 권한 거부 시 카드 피드백과 상단 배너에 권한 필요 문구 노출
 
 ## 3. Frontend to Backend Contracts
 | Flow | Trigger | Request Shape | Response Shape | Error Shape |
 |------|---------|---------------|----------------|-------------|
-| Core dictionary bootstrap | 앱 초기 로드 | `GET ./data/words.json` | `{ generatedAt, sources, stats, words[] }` | `Error("사전 데이터를 불러오지 못했습니다.")` |
-| Supplemental dictionary bootstrap | 앱 초기 로드 | `GET ./data/supplemental-words.json` | `null` 또는 `{ generatedAt, sources, stats, words[] }` | `404`는 허용, 그 외는 bootstrap 실패 |
-| Textbook expressions bootstrap | 앱 초기 로드 | `GET ./data/textbook-expressions.json` | `null` 또는 `{ generatedAt, sources, stats, words[] }` | `404`는 허용, 그 외는 bootstrap 실패 |
-| Example sentence bootstrap | 앱 초기 로드 | `GET ./data/example-sentences.json` | `null` 또는 `{ items: [{ id, exampleSentence }] }` | `404`는 허용, 그 외는 bootstrap 실패 |
+| Core dictionary bootstrap | 앱 초기 로드 | `GET ./data/words.json` | `{ generatedAt?, sources?, stats: {}, words: Word[] }` | load/parse/shape 실패는 fatal이며 재시도 가능 |
+| Supplemental dictionary bootstrap | 앱 초기 로드 | `GET ./data/supplemental-words.json` | `{ generatedAt?, sources?, stats: {}, words: Word[] }` | 모든 load/parse/shape/merge 실패는 경고 후 무시 |
+| Textbook expressions bootstrap | 앱 초기 로드 | `GET ./data/textbook-expressions.json` | `{ generatedAt?, sources?, stats: {}, words: Word[] }` | 모든 load/parse/shape/merge 실패는 경고 후 무시 |
+| Example sentence bootstrap | 앱 초기 로드 | `GET ./data/example-sentences.json` | `{ items: [{ id, exampleSentence }] }` | 모든 load/parse/shape/merge 실패는 경고 후 무시 |
 
 ### 3.1 Word Entry Shape
 ```json
@@ -64,7 +67,8 @@
   - 한국어는 연속 공백 정리
 - Server validation: 없음
 - Success behavior:
-  - 결과 목록 최대 60개까지 정렬 후 표시
+  - 검색 결과는 최초 6개를 표시하고, `결과 12개 더 보기`로 12개씩 전체 결과가 소진될 때까지 표시
+  - 60개 결과 상한은 없으며, `result-count`에는 전체 수와 현재 표시 수를 함께 표시
   - `result-count`와 상태 텍스트 갱신
 - Failure behavior:
   - 결과 없음 안내 또는 bootstrap 오류 상태 표시
