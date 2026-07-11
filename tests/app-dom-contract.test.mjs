@@ -127,3 +127,9 @@ test("result count supports total and shown result copy", () => {
 
   assert.match(indexHtml, /id="result-count"[^>]*>총 0개 중 0개 표시</);
 });
+
+test("hidden controls stay hidden when component styles set a display value", () => {
+  const styles = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+
+  assert.match(styles, /\[hidden\]\s*\{[^}]*display:\s*none\s*!important\s*;/s);
+});

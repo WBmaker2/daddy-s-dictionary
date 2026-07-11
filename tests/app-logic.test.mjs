@@ -172,6 +172,33 @@ test("loadDictionaryData tolerates optional files returning null", async () => {
   assert.deepEqual(dictionary.words.map((word) => word.id), [1]);
 });
 
+test("loadDictionaryData ignores loader exceptions for optional source files", async () => {
+  const baseDictionary = {
+    generatedAt: "2026-01-01T00:00:00Z",
+    sources: ["base"],
+    stats: { elementary: 1 },
+    words: [createWord({ id: 1, word: "Apple" })]
+  };
+  const optionalErrors = new Map([
+    ["./data/supplemental-words.json", new Error("network unavailable")],
+    ["./data/textbook-expressions.json", new Error("server returned 500")],
+    ["./data/example-sentences.json", new SyntaxError("malformed JSON")]
+  ]);
+
+  const dictionary = await loadDictionaryData({
+    files: DICTIONARY_FILES,
+    loadFile: async (path) => {
+      if (path === "./data/words.json") {
+        return baseDictionary;
+      }
+
+      throw optionalErrors.get(path);
+    }
+  });
+
+  assert.deepEqual(dictionary, baseDictionary);
+});
+
 test("loadDictionaryData forwards custom paths and optional flags from the file manifest", async () => {
   const seen = [];
   const customFiles = {
