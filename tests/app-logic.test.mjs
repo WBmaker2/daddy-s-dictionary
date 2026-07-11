@@ -12,6 +12,7 @@ import {
   normalizeKorean,
   searchWords
 } from "../lib/dictionary-logic.js";
+import * as dictionaryLogic from "../lib/dictionary-logic.js";
 
 function createWord(overrides = {}) {
   const id = overrides.id ?? 1;
@@ -40,6 +41,26 @@ test("normalization helpers keep search inputs consistent", () => {
   assert.equal(normalizeEnglish("  HeLLo  ’World`  "), "hello 'world'");
   assert.equal(normalizeKorean("  뜻   풀이  "), "뜻 풀이");
   assert.equal(normalizeDisplayForm(" What's, up?! "), "what's up");
+});
+
+test("detail heading describes expressions, words, and entries without examples", () => {
+  const getDetailHeading = dictionaryLogic.getDetailHeading;
+
+  assert.equal(getDetailHeading?.({
+    category: "elementary-expressions",
+    word: "How are you?",
+    exampleSentence: "How are you today?"
+  }), "활용 예문");
+  assert.equal(getDetailHeading?.({
+    category: "elementary",
+    word: "bank",
+    exampleSentence: "She deposited her allowance in the bank."
+  }), "예시 문장");
+  assert.equal(getDetailHeading?.({
+    category: "elementary-expressions",
+    word: "How are you?",
+    exampleSentence: ""
+  }), "설명");
 });
 
 test("merge helpers preserve base data when optional payloads are missing", () => {

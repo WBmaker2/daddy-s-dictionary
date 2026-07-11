@@ -1,5 +1,6 @@
 import {
   comparePronunciation,
+  getDetailHeading,
   loadDictionaryData,
   normalizeDisplayForm,
   searchWords
@@ -103,10 +104,6 @@ async function loadDictionary() {
   });
 }
 
-function isExpressionEntry(word) {
-  return word.category.endsWith("expressions") || !/^[A-Za-z-]+$/.test(word.word);
-}
-
 function prefersCompactResultLayout() {
   return window.matchMedia?.(MOBILE_COMPACT_MEDIA).matches ?? false;
 }
@@ -158,11 +155,7 @@ function renderList(result, rawQuery) {
     forms.textContent = alternativeForms.length > 0 ? `같이 찾기: ${alternativeForms.join(", ")}` : "";
     badge.textContent = word.categoryLabel;
     badge.dataset.category = word.category;
-    detailHeading.textContent = showExampleSentence
-      ? isExpressionEntry(word)
-        ? "활용 예문"
-        : "예시 문장"
-      : "설명";
+    detailHeading.textContent = getDetailHeading(word);
 
     for (const gloss of word.koreanGlosses.slice(0, glossLimit)) {
       const item = document.createElement("li");

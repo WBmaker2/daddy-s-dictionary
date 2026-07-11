@@ -63,6 +63,21 @@ test("golden query: textbook expressions include a usable example", () => {
   assert.equal(helloExpression?.exampleSentence, "Hello, I'm Minjun.");
 });
 
+test("golden query: formerly incomplete expressions have complete examples", () => {
+  const expectedExamples = {
+    "too ... to": "The box is too heavy to carry.",
+    "It goes without saying that ...": "It goes without saying that practice is important.",
+    "not ... at all": "This homework is not difficult at all.",
+    "cannot ... without doing": "You cannot improve without practicing every day.",
+    "cannot ... too": "You cannot be too careful when crossing the street."
+  };
+
+  for (const [expression, exampleSentence] of Object.entries(expectedExamples)) {
+    const entry = committedWords.find((word) => word.word === expression);
+    assert.equal(entry?.exampleSentence, exampleSentence);
+  }
+});
+
 test("golden query: bank should return bank first", () => {
   assert.equal(search("bank")[0]?.word, "bank");
 });

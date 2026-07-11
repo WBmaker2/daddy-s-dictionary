@@ -58,6 +58,13 @@ test("committed corpus keeps normalized template use at or below 20 percent", ()
   assert.ok(dominantCount / items.length <= 0.2, `dominant template ratio was ${dominantCount / items.length}`);
 });
 
+test("committed corpus contains no placeholder ellipses", () => {
+  const { items } = loadCommittedCorpus();
+  const placeholderExamples = items.filter((item) => /\.\.\.|…/.test(item.exampleSentence));
+
+  assert.deepEqual(placeholderExamples, []);
+});
+
 test("quality helpers normalize target words and validate complete corpora", () => {
   assert.ok(qualityModule, "scripts/example-quality.mjs must export quality helpers");
   assert.equal(
@@ -73,6 +80,17 @@ test("quality helpers normalize target words and validate complete corpora", () 
   });
 
   assert.equal(result.ok, true, result.errors.join("\n"));
+});
+
+test("quality helper rejects placeholder ellipses in an otherwise complete corpus", () => {
+  const result = qualityModule.validateExampleQuality({
+    words: [{ id: 1, word: "too ... to" }],
+    items: [{ id: 1, exampleSentence: "The bag is too ... to carry." }],
+    maxTemplateRatio: 1
+  });
+
+  assert.equal(result.ok, false);
+  assert(result.errors.some((error) => error.includes("placeholder ellipsis")));
 });
 
 test("committed corpus preserves curated classroom examples", () => {

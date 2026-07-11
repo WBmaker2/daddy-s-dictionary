@@ -18,6 +18,10 @@ function createTargetPattern(word) {
   return new RegExp(`${prefix}${escapedWord}${suffix}`, "gi");
 }
 
+function hasPlaceholderEllipsis(value) {
+  return /\.\.\.|…/.test(value);
+}
+
 export function normalizeExampleTemplate(word, sentence) {
   const targetWord = typeof word === "string" ? word.trim() : "";
   const exampleSentence = typeof sentence === "string" ? sentence.trim() : "";
@@ -77,6 +81,10 @@ export function validateExampleQuality({ items, words, maxTemplateRatio = 0.2 })
     if (typeof item.exampleSentence !== "string" || item.exampleSentence.trim().length === 0) {
       errors.push(`example id ${item.id} must have a non-empty sentence`);
       continue;
+    }
+
+    if (hasPlaceholderEllipsis(item.exampleSentence)) {
+      errors.push(`example id ${item.id} contains a placeholder ellipsis`);
     }
 
     nonEmptyExamples += 1;

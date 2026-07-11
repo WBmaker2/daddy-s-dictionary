@@ -176,6 +176,11 @@ const EXPRESSION_COMPLETIONS = {
   "I'd like to exchange ...": "I'd like to exchange this shirt.",
   "I'd like to get a refund ...": "I'd like to get a refund for this item.",
   "I suggest you ...": "I suggest you check the answer again.",
+  "too ... to": "The box is too heavy to carry.",
+  "It goes without saying that ...": "It goes without saying that practice is important.",
+  "not ... at all": "This homework is not difficult at all.",
+  "cannot ... without doing": "You cannot improve without practicing every day.",
+  "cannot ... too": "You cannot be too careful when crossing the street.",
   "go with ...": "Go with the blue shirt."
 };
 
@@ -340,6 +345,10 @@ function buildFallbackSentence(entry, templates) {
 function buildExpressionSentence(entry) {
   if (EXPRESSION_COMPLETIONS[entry.word]) {
     return EXPRESSION_COMPLETIONS[entry.word];
+  }
+
+  if (/\.\.\.|…/.test(entry.word)) {
+    throw new Error(`Missing completion for expression placeholder: ${entry.word}`);
   }
 
   const ending = /[.!?]$/.test(entry.word) ? "" : ".";
