@@ -325,15 +325,15 @@ git commit -m "Improve example quality and coverage"
 
 - [ ] **Step 1: Write failing optional-error and retry tests**
 
-Test that a thrown supplemental loader error calls `onOptionalError`, returns the base dictionary, and does not reject. Test that a base loader error still rejects. Test that `renderLoadFailure` creates Korean recovery copy and a `다시 시도` button whose click invokes `onRetry` once.
+The previous task already proved optional loader exceptions return the base dictionary. Add a new failing test that the same failure calls `onOptionalError` with `{ path, error }`, while the existing required-base rejection test stays green. Test that `renderLoadFailure` creates Korean recovery copy and a `다시 시도` button whose click invokes `onRetry` once.
 
 - [ ] **Step 2: Run focused tests and verify RED**
 
 Run: `node --test tests/app-logic.test.mjs tests/load-recovery.test.mjs`
 
-Expected: FAIL because optional exceptions propagate and the recovery helper does not exist.
+Expected: FAIL because optional errors are not reported through a callback and the recovery helper does not exist.
 
-- [ ] **Step 3: Isolate optional loader failures**
+- [ ] **Step 3: Report isolated optional loader failures**
 
 Wrap each manifest entry with:
 
