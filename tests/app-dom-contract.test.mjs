@@ -22,6 +22,10 @@ test("DOM contract exposes the load-more button", () => {
   assert.equal(TOP_LEVEL_SELECTORS.loadMoreButton, "#load-more-button");
 });
 
+test("DOM contract exposes the dedicated data warning status region", () => {
+  assert.equal(TOP_LEVEL_SELECTORS.dataWarning, "#data-warning");
+});
+
 function createNode(label) {
   return { label };
 }
@@ -126,6 +130,12 @@ test("result count supports total and shown result copy", () => {
   const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
 
   assert.match(indexHtml, /id="result-count"[^>]*>총 0개 중 0개 표시</);
+});
+
+test("only the compact load failure view uses a live status region", () => {
+  const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+
+  assert.doesNotMatch(indexHtml, /id="results"[^>]*aria-live=/);
 });
 
 test("hidden controls stay hidden when component styles set a display value", () => {

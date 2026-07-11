@@ -7,28 +7,15 @@ import vm from "node:vm";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { generateCacheVersion } from "../scripts/generate-cache-version.mjs";
+import { collectRuntimeModulePaths } from "../scripts/runtime-module-graph.mjs";
 
 const TEST_DIR = fileURLToPath(new URL(".", import.meta.url));
 const ROOT = path.resolve(TEST_DIR, "..");
 const BUILD_SCRIPT_SOURCE = fs.readFileSync(path.join(ROOT, "scripts", "build-pages.mjs"), "utf8");
 const SERVICE_WORKER_SOURCE = fs.readFileSync(path.join(ROOT, "sw.js"), "utf8");
 const APP_SOURCE = fs.readFileSync(path.join(ROOT, "app.js"), "utf8");
-
-function readRelativeModuleImports(source) {
-  const modulePaths = new Set();
-
-  for (const match of source.matchAll(/\bfrom\s+["'](\.\/[^"']+)["']/g)) {
-    modulePaths.add(match[1].replace(/^\.\//, ""));
-  }
-
-  for (const match of source.matchAll(/\bimportScripts\(\s*["'](\.\/[^"']+)["']\s*\)/g)) {
-    modulePaths.add(match[1].replace(/^\.\//, ""));
-  }
-
-  return [...modulePaths].sort((left, right) => left.localeCompare(right));
-}
-
-const REQUIRED_RUNTIME_MODULES = readRelativeModuleImports(`${APP_SOURCE}\n${SERVICE_WORKER_SOURCE}`);
+const RUNTIME_MODULES = collectRuntimeModulePaths({ rootDirectory: ROOT });
+const PRECACHE_RUNTIME_MODULES = RUNTIME_MODULES.filter((modulePath) => modulePath !== "sw.js");
 
 function writeFile(rootDir, relativePath, contents) {
   const filePath = path.join(rootDir, relativePath);
@@ -42,6 +29,11 @@ function createFixtureProject(rootDir) {
     rootDir,
     "scripts/generate-cache-version.mjs",
     fs.readFileSync(path.join(ROOT, "scripts", "generate-cache-version.mjs"), "utf8")
+  );
+  writeFile(
+    rootDir,
+    "scripts/runtime-module-graph.mjs",
+    fs.readFileSync(path.join(ROOT, "scripts", "runtime-module-graph.mjs"), "utf8")
   );
   writeFile(rootDir, "package.json", JSON.stringify({ name: "fixture", version: "1.0.7" }));
   writeFile(rootDir, "index.html", "<!doctype html><title>fixture</title>");
@@ -57,7 +49,10 @@ function createFixtureProject(rootDir) {
   writeFile(rootDir, "data/supplemental-words.json", '{"words":[]}');
   writeFile(rootDir, "data/textbook-expressions.json", '{"words":[]}');
   writeFile(rootDir, "data/example-sentences.json", '{"items":[]}');
-  for (const modulePath of REQUIRED_RUNTIME_MODULES) {
+  for (const modulePath of RUNTIME_MODULES) {
+    if (modulePath === "app.js" || modulePath === "sw.js") {
+      continue;
+    }
     const source = modulePath === "lib/service-worker-routing.js"
       ? fs.readFileSync(path.join(ROOT, modulePath), "utf8")
       : "export const fixtureModule = true;";
@@ -155,7 +150,7 @@ test("build-pages copies the service worker helper and built sw.js can import it
   assert.equal(fs.existsSync(builtHelperPath), true);
   assert.equal(fs.existsSync(builtSwPath), true);
 
-  for (const modulePath of REQUIRED_RUNTIME_MODULES) {
+  for (const modulePath of PRECACHE_RUNTIME_MODULES) {
     assert.equal(fs.existsSync(path.join(tempRoot, "dist-pages", modulePath)), true);
     assert.match(fs.readFileSync(builtSwPath, "utf8"), new RegExp(JSON.stringify(`./${modulePath}`)));
   }
@@ -201,12 +196,15 @@ test("cache version changes when a precached static asset changes", () => {
   assert.notEqual(generateCacheVersion(tempRoot), initialVersion);
 });
 
-test("cache version changes when the load recovery module changes", () => {
+test("cache version changes when a transitive runtime module changes", () => {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "cache-version-"));
   createFixtureProject(tempRoot);
+  writeFile(tempRoot, "app.js", `${APP_SOURCE}\nimport "./lib/runtime-parent.js";`);
+  writeFile(tempRoot, "lib/runtime-parent.js", 'import "./transitive-runtime.js";');
+  writeFile(tempRoot, "lib/transitive-runtime.js", "export const fixtureModule = true;");
 
   const initialVersion = generateCacheVersion(tempRoot);
-  writeFile(tempRoot, "lib/load-recovery.js", "export const fixtureModule = 'updated';");
+  writeFile(tempRoot, "lib/transitive-runtime.js", "export const fixtureModule = 'updated';");
 
   assert.notEqual(generateCacheVersion(tempRoot), initialVersion);
 });

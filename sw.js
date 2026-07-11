@@ -19,6 +19,7 @@ const REQUIRED_ASSETS = [
   "./lib/pronunciation-controls.js",
   "./lib/search-view-state.js",
   "./lib/service-worker-routing.js",
+  "./lib/status-regions.js",
   "./data/words.json"
 ];
 const OPTIONAL_ASSETS = [

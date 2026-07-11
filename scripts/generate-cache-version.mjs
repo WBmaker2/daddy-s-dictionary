@@ -1,24 +1,17 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { collectRuntimeModulePaths } from "./runtime-module-graph.mjs";
 
 const HASH_LENGTH = 12;
 const DATA_FILE_SUFFIX = ".json";
-const CORE_RUNTIME_FILES = [
+const CORE_STATIC_FILES = [
   "index.html",
-  "app.js",
   "styles.css",
-  "sw.js",
   "manifest.webmanifest",
   "assets/icon.svg",
   "assets/icon-192.png",
-  "assets/icon-512.png",
-  "lib/dom-contract.js",
-  "lib/service-worker-routing.js",
-  "lib/dictionary-logic.js",
-  "lib/load-recovery.js",
-  "lib/pronunciation-controls.js",
-  "lib/search-view-state.js"
+  "assets/icon-512.png"
 ];
 
 function readJson(filePath) {
@@ -49,10 +42,11 @@ export function generateCacheVersion(rootDirectory = process.cwd()) {
     ? readJson(packageJsonPath)
     : { version: "0.0.0" };
   const packageVersion = packageJson.version || "0.0.0";
+  const runtimeModulePaths = collectRuntimeModulePaths({ rootDirectory: rootPath });
 
   const payload = [
     `package-version:${packageVersion}`,
-    ...CORE_RUNTIME_FILES.map((relativePath) => {
+    ...CORE_STATIC_FILES.map((relativePath) => {
       const absolutePath = path.join(rootPath, relativePath);
 
       if (!fs.existsSync(absolutePath)) {
@@ -60,6 +54,10 @@ export function generateCacheVersion(rootDirectory = process.cwd()) {
       }
 
       return `runtime:${path.posix.join(...relativePath.split(path.sep))}\n${readString(absolutePath)}`;
+    }),
+    ...runtimeModulePaths.map((relativePath) => {
+      const absolutePath = path.join(rootPath, relativePath);
+      return `runtime:${relativePath}\n${readString(absolutePath)}`;
     }),
     ...collectJsonDataFiles(path.join(rootPath, "data")).map((absolutePath) => {
       const normalizedPath = path.posix.join(...path.relative(rootPath, absolutePath).split(path.sep));

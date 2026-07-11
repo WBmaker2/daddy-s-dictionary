@@ -9,6 +9,7 @@ import { createPronunciationController } from "./lib/pronunciation-controls.js";
 import { createDomRefs } from "./lib/dom-contract.js";
 import { createSearchViewState } from "./lib/search-view-state.js";
 import { renderLoadFailure } from "./lib/load-recovery.js";
+import { renderDataWarning, updateBanner } from "./lib/status-regions.js";
 
 const state = {
   dictionary: null,
@@ -60,24 +61,9 @@ function updateStatus(text) {
   refs.statusText.textContent = text;
 }
 
-function updateBanner(text, tone = "default", source = "system") {
-  if (!text) {
-    refs.banner.hidden = true;
-    refs.banner.textContent = "";
-    refs.banner.dataset.tone = "";
-    refs.banner.dataset.source = "";
-    return;
-  }
-
-  refs.banner.hidden = false;
-  refs.banner.textContent = text;
-  refs.banner.dataset.tone = tone;
-  refs.banner.dataset.source = source;
-}
-
 function clearPronunciationBanner() {
   if (refs.banner.dataset.source === "pronunciation") {
-    updateBanner("");
+    updateBanner({ container: refs.banner, text: "" });
   }
 }
 
@@ -85,7 +71,7 @@ const pronunciationController = createPronunciationController({
   browserWindow: window,
   comparePronunciation,
   createUtterance: (text) => new SpeechSynthesisUtterance(text),
-  updateBanner,
+  updateBanner: (text, tone, source) => updateBanner({ container: refs.banner, text, tone, source }),
   logError: console.error
 });
 
@@ -120,9 +106,10 @@ function setSearchControlsDisabled(disabled) {
 }
 
 function renderOptionalDataWarning(optionalErrors) {
-  if (optionalErrors.length > 0) {
-    updateBanner(OPTIONAL_DATA_WARNING, "warning", "data");
-  }
+  renderDataWarning({
+    container: refs.dataWarning,
+    message: optionalErrors.length > 0 ? OPTIONAL_DATA_WARNING : ""
+  });
 }
 
 async function retryDictionaryLoad() {
@@ -305,11 +292,21 @@ function bindEvents() {
   });
 
   window.addEventListener("online", () => {
-    updateBanner("인터넷이 연결되었습니다. 음성 인식 정확도가 더 좋아질 수 있습니다.", "default");
+    updateBanner({
+      container: refs.banner,
+      text: "인터넷이 연결되었습니다. 음성 인식 정확도가 더 좋아질 수 있습니다.",
+      tone: "default",
+      source: "network"
+    });
   });
 
   window.addEventListener("offline", () => {
-    updateBanner("오프라인 상태입니다. 검색과 발음 듣기는 계속 사용할 수 있습니다.", "warning");
+    updateBanner({
+      container: refs.banner,
+      text: "오프라인 상태입니다. 검색과 발음 듣기는 계속 사용할 수 있습니다.",
+      tone: "warning",
+      source: "network"
+    });
   });
 
   const compactLayoutMedia = window.matchMedia?.(MOBILE_COMPACT_MEDIA);
@@ -355,7 +352,12 @@ async function bootstrap() {
     renderOptionalDataWarning(optionalErrors);
 
     if (optionalErrors.length === 0 && !navigator.onLine) {
-      updateBanner("오프라인 상태입니다. 캐시된 데이터로 검색할 수 있습니다.", "warning");
+      updateBanner({
+        container: refs.banner,
+        text: "오프라인 상태입니다. 캐시된 데이터로 검색할 수 있습니다.",
+        tone: "warning",
+        source: "network"
+      });
     }
 
     registerServiceWorker();

@@ -4,26 +4,12 @@ import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
+import { collectRuntimeModulePaths } from "../scripts/runtime-module-graph.mjs";
 
 const TEST_DIR = fileURLToPath(new URL(".", import.meta.url));
 const ROOT = path.resolve(TEST_DIR, "..");
 const ROUTING_MODULE_PATH = path.join(ROOT, "lib", "service-worker-routing.js");
 const SERVICE_WORKER_ENTRY_PATH = path.join(ROOT, "sw.js");
-
-function readRelativeModuleImports(entryPath) {
-  const source = fs.readFileSync(entryPath, "utf8");
-  const modulePaths = new Set();
-
-  for (const match of source.matchAll(/\bfrom\s+["'](\.\/[^"']+)["']/g)) {
-    modulePaths.add(match[1]);
-  }
-
-  for (const match of source.matchAll(/\bimportScripts\(\s*["'](\.\/[^"']+)["']\s*\)/g)) {
-    modulePaths.add(match[1]);
-  }
-
-  return [...modulePaths].sort((left, right) => left.localeCompare(right));
-}
 
 function loadRoutingModule() {
   const source = fs.readFileSync(ROUTING_MODULE_PATH, "utf8");
@@ -200,13 +186,12 @@ async function dispatchFetch(harness, request) {
   return responsePromise;
 }
 
-test("sw.js precaches runtime modules imported by app.js", () => {
+test("sw.js precaches the complete runtime module closure", () => {
   const source = fs.readFileSync(SERVICE_WORKER_ENTRY_PATH, "utf8");
   const requiredAssets = readServiceWorkerAssetList(source, "REQUIRED_ASSETS");
-  const requiredModules = [
-    ...readRelativeModuleImports(path.join(ROOT, "app.js")),
-    ...readRelativeModuleImports(SERVICE_WORKER_ENTRY_PATH)
-  ];
+  const requiredModules = collectRuntimeModulePaths({ rootDirectory: ROOT })
+    .filter((modulePath) => modulePath !== "sw.js")
+    .map((modulePath) => `./${modulePath}`);
 
   for (const modulePath of requiredModules) {
     assert.equal(
