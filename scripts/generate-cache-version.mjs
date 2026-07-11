@@ -5,6 +5,11 @@ import { collectRuntimeModulePaths } from "./runtime-module-graph.mjs";
 
 const HASH_LENGTH = 12;
 const DATA_FILE_SUFFIX = ".json";
+const BUILD_VERSION_INPUTS = [
+  "scripts/build-pages.mjs",
+  "scripts/generate-cache-version.mjs",
+  "scripts/runtime-module-graph.mjs"
+];
 const CORE_STATIC_FILES = [
   "index.html",
   "styles.css",
@@ -54,6 +59,15 @@ export function generateCacheVersion(rootDirectory = process.cwd()) {
 
   const payload = [
     `package-version:${packageVersion}`,
+    ...BUILD_VERSION_INPUTS.map((relativePath) => {
+      const absolutePath = path.join(rootPath, relativePath);
+
+      if (!fs.existsSync(absolutePath)) {
+        return undefined;
+      }
+
+      return `build:${relativePath}\n${readString(absolutePath)}`;
+    }),
     ...CORE_STATIC_FILES.map((relativePath) => {
       const absolutePath = path.join(rootPath, relativePath);
 

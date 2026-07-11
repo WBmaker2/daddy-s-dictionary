@@ -4,8 +4,8 @@
 - Project name: 선생님의 영단어 사전
 - One-line summary: 2022 개정교육과정 기준 영단어와 교과서형 표현을 학교급별로 검색하고, 발음 듣기와 말하기 점검까지 제공하는 오프라인 우선 학습용 사전 웹앱
 - Delivery type: Hybrid educational PWA
-- Current stage: `v1.1.0` 기준 Cloudflare Pages에서 운영 중인 단일 페이지 웹앱
-- Next milestone: `v1.1.0` 안정화와 배포 관찰을 마친 뒤 `v1.1.x` 핫픽스 또는 `v1.2` 기능 범위를 결정
+- Current stage: `v1.1.0` release candidate가 merge, Cloudflare Pages 배포, 프로덕션 스모크를 기다리고 있다. 현재 라이브는 이전 `main` 배포를 유지하며, 이 문서에서는 그 정확한 라이브 버전을 단정하지 않는다.
+- Next milestone: RC의 merge/deploy/production smoke를 완료한 뒤 `v1.1.x` 안정화 또는 `v1.2` 기능 범위를 결정
 - Primary contact / decision owner: 저장소 소유자 / 제품 결정권자
 
 ## 2. Business Goal

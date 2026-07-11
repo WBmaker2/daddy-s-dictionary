@@ -253,6 +253,8 @@ test("built sw.js precaches exact versioned shell requests", async () => {
     "app.js",
     "styles.css",
     "lib/live-announcer.js",
+    "assets/icon-192.png",
+    "assets/icon-512.png",
     "assets/fonts/noto-serif-kr-korean-wght-normal.woff2",
     "data/words.json"
   ]) {

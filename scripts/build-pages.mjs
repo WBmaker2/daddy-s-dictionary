@@ -124,18 +124,19 @@ function pinRelativeSpecifiers(source, importerPath, version, versionedPaths) {
 }
 
 function pinServiceWorkerImports(source, version, versionedPaths) {
-  return source.replace(
-    /(importScripts\s*\(\s*["'])(\.{1,2}\/[^"']+)(["'])/g,
-    (match, start, specifier, end) => {
+  return source.replace(/importScripts\s*\(([\s\S]*?)\)/g, (call, argumentsSource) => {
+    const pinnedArguments = argumentsSource.replace(/(["'])(\.{1,2}\/[^"']+)\1/g, (match, quote, specifier) => {
       const resolvedPath = resolveVersionedPath("sw.js", specifier, versionedPaths);
 
       if (!resolvedPath || !versionedPaths.has(resolvedPath)) {
         return match;
       }
 
-      return `${start}${appendVersion(specifier, version)}${end}`;
-    }
-  );
+      return `${quote}${appendVersion(specifier, version)}${quote}`;
+    });
+
+    return call.replace(argumentsSource, pinnedArguments);
+  });
 }
 
 function replaceBuildPlaceholders(source, version) {
@@ -158,7 +159,7 @@ function pinReleaseAssets(outputDirectory, version) {
     ...versionedRuntimeModules,
     ...collectJsonDataPaths(path.join(ROOT, "data"), ROOT)
   ]);
-  const filesToRewrite = ["index.html", "styles.css", ...runtimeModules];
+  const filesToRewrite = ["index.html", "styles.css", "manifest.webmanifest", ...runtimeModules];
 
   for (const relativePath of filesToRewrite) {
     const outputPath = path.join(outputDirectory, relativePath);

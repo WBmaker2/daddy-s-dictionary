@@ -44,7 +44,17 @@ function createFixtureProject(rootDir) {
   writeFile(rootDir, "app.js", APP_SOURCE);
   writeFile(rootDir, "styles.css", '@font-face{src:url("./assets/fonts/noto-serif-kr-korean-wght-normal.woff2")}');
   writeFile(rootDir, "sw.js", SERVICE_WORKER_SOURCE);
-  writeFile(rootDir, "manifest.webmanifest", "{}");
+  writeFile(
+    rootDir,
+    "manifest.webmanifest",
+    JSON.stringify({
+      start_url: "./",
+      icons: [
+        { src: "./assets/icon-192.png", sizes: "192x192", type: "image/png" },
+        { src: "./assets/icon-512.png", sizes: "512x512", type: "image/png" }
+      ]
+    })
+  );
   writeFile(rootDir, "README.md", "# fixture");
   writeFile(rootDir, "assets/icon.svg", "<svg></svg>");
   writeFile(rootDir, "assets/icon-192.png", "icon");
@@ -259,6 +269,8 @@ test("build-pages pins every built shell reference to one generated release vers
   const builtApp = fs.readFileSync(path.join(outputRoot, "app.js"), "utf8");
   const builtOfflineStatus = fs.readFileSync(path.join(outputRoot, "lib", "offline-status.js"), "utf8");
   const builtSw = fs.readFileSync(path.join(outputRoot, "sw.js"), "utf8");
+  const builtManifestSource = fs.readFileSync(path.join(outputRoot, "manifest.webmanifest"), "utf8");
+  const builtManifest = JSON.parse(builtManifestSource);
 
   assert.match(builtIndex, new RegExp(escapeRegExp(`./styles.css?v=${version}`)));
   assert.match(builtIndex, new RegExp(escapeRegExp(`./app.js?v=${version}`)));
@@ -270,6 +282,16 @@ test("build-pages pins every built shell reference to one generated release vers
   assert.match(builtApp, new RegExp(escapeRegExp(`./data/words.json?v=${version}`)));
   assert.match(builtOfflineStatus, /serviceWorker\.register\("\.\/sw\.js"\)/);
   assert.doesNotMatch(builtOfflineStatus, /sw\.js\?v=/);
+  assert.equal(builtManifest.start_url, "./");
+  assert.deepEqual(
+    builtManifest.icons.map((icon) => icon.src),
+    [
+      `./assets/icon-192.png?v=${version}`,
+      `./assets/icon-512.png?v=${version}`
+    ]
+  );
+  assert.equal(builtManifestSource.includes("__ASSET_VERSION__"), false);
+  assert.equal(builtManifestSource.includes("__CACHE_VERSION__"), false);
   assert.equal(builtSw.includes("__ASSET_VERSION__"), false);
   assert.equal(builtSw.includes("__CACHE_VERSION__"), false);
 
@@ -296,6 +318,54 @@ test("cache version changes when a precached static asset changes", () => {
   writeFile(tempRoot, "assets/icon.svg", "<svg><title>updated</title></svg>");
 
   assert.notEqual(generateCacheVersion(tempRoot), initialVersion);
+});
+
+test("cache version tracks build transformation inputs and remains deterministic when unchanged", () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "cache-version-"));
+  createFixtureProject(tempRoot);
+
+  const initialVersion = generateCacheVersion(tempRoot);
+  assert.equal(generateCacheVersion(tempRoot), initialVersion);
+
+  execFileSync("node", ["scripts/build-pages.mjs"], {
+    cwd: tempRoot,
+    encoding: "utf8"
+  });
+  const firstBuild = fs.readFileSync(path.join(tempRoot, "dist-pages", "sw.js"), "utf8");
+
+  execFileSync("node", ["scripts/build-pages.mjs"], {
+    cwd: tempRoot,
+    encoding: "utf8"
+  });
+  assert.equal(fs.readFileSync(path.join(tempRoot, "dist-pages", "sw.js"), "utf8"), firstBuild);
+
+  const buildScriptPath = path.join(tempRoot, "scripts", "build-pages.mjs");
+  fs.appendFileSync(buildScriptPath, "\n// changed release transformation\n");
+
+  assert.notEqual(generateCacheVersion(tempRoot), initialVersion);
+});
+
+test("build-pages versions every relative importScripts literal while preserving external literals", () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "build-pages-"));
+  createFixtureProject(tempRoot);
+  writeFile(
+    tempRoot,
+    "sw.js",
+    'importScripts("./lib/service-worker-routing.js", "./lib/extra-worker.js", "https://cdn.example.com/worker.js");'
+  );
+  writeFile(tempRoot, "lib/extra-worker.js", "self.extraWorker = true;");
+
+  execFileSync("node", ["scripts/build-pages.mjs"], {
+    cwd: tempRoot,
+    encoding: "utf8"
+  });
+
+  const version = generateCacheVersion(tempRoot);
+  const builtSw = fs.readFileSync(path.join(tempRoot, "dist-pages", "sw.js"), "utf8");
+
+  assert.match(builtSw, new RegExp(escapeRegExp(`./lib/service-worker-routing.js?v=${version}`)));
+  assert.match(builtSw, new RegExp(escapeRegExp(`./lib/extra-worker.js?v=${version}`)));
+  assert.match(builtSw, /https:\/\/cdn\.example\.com\/worker\.js/);
 });
 
 test("cache version changes when a transitive runtime module changes", () => {

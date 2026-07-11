@@ -2,8 +2,8 @@
 
 ## Project Summary
 - Project name: 선생님의 영단어 사전
-- Delivery goal: `v1.1.0` 검색·데이터·접근성·오프라인 품질 개선을 완료하고, 다음 안정화 마일스톤을 위한 운영 handoff를 남긴다.
-- Launch target: `v1.1.0` 완료. 다음 목표는 `v1.1.x` 안정화 또는 `v1.2` 범위 확정이며, Cloudflare Pages 운영 배포를 유지한다.
+- Delivery goal: `v1.1.0` 검색·데이터·접근성·오프라인 품질 개선 RC를 merge/deploy/production smoke까지 완료하고, 다음 안정화 마일스톤을 위한 운영 handoff를 남긴다.
+- Launch target: `v1.1.0` release candidate. merge와 Cloudflare Pages 배포, 프로덕션 스모크 후 `v1.1.x` 안정화 또는 `v1.2` 범위를 확정한다.
 - Decision owner: 저장소 소유자 / 제품 책임자
 
 ## Acceptance Checks
@@ -11,7 +11,8 @@
 - [x] 정적 데이터 로드 계약과 브라우저 기능 경계가 문서화되었다
 - [x] 프론트엔드와 데이터/백엔드 역할 경계가 분리되었다
 - [x] 디자인 워커 산출물이 실제 레이아웃 검토를 통과했다 (390x844 검색 패널 위치, 카드 액션, 키보드 포커스 확인)
-- [x] QA와 릴리즈 기준이 최신 빌드 기준으로 검증되었다 (`npm run verify`, 데스크톱/모바일 Playwright, legacy 서비스워커 업그레이드와 오프라인 재로드)
+- [x] 로컬 QA와 릴리즈 기준이 최신 빌드 기준으로 검증되었다 (`npm run verify`, 데스크톱/모바일 Playwright, legacy 서비스워커 업그레이드와 오프라인 재로드)
+- [ ] `main` merge 후 Cloudflare Pages 프로덕션 배포와 운영 URL 스모크가 완료되었다
 
 ## Delivery Phases
 ### Phase 1. Brief and Scope
