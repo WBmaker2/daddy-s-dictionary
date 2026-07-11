@@ -14,7 +14,15 @@
   --radius-md: 18px;
   --radius-sm: 12px;
   --font-body: "Pretendard Variable", "Pretendard", "SUIT Variable", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-  --font-title: "MaruBuri", "Georgia", serif;
+  --font-title: "Noto Serif KR", "MaruBuri", "Georgia", serif;
+}
+
+@font-face {
+  font-family: "Noto Serif KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./assets/fonts/noto-serif-kr-korean-wght-normal.woff2") format("woff2");
 }
 
 * {
@@ -43,8 +51,20 @@ select {
 }
 
 :where(input, select, button, summary):focus-visible {
-  outline: 3px solid rgba(15, 124, 115, 0.32);
+  outline: 3px solid #0b665e;
   outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .page-shell {
@@ -123,8 +143,8 @@ select {
 
 .hero-text {
   margin: 0;
-  max-width: none;
-  font-size: 1.02rem;
+  max-width: 72ch;
+  font-size: max(1rem, 1.02rem);
   color: var(--muted);
   line-height: 1.5;
 }
@@ -181,6 +201,13 @@ select {
   gap: 20px;
 }
 
+.section-heading {
+  margin: 0 0 14px;
+  color: var(--accent-strong);
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+
 .search-panel {
   padding: 20px;
   border-radius: var(--radius-lg);
@@ -203,6 +230,15 @@ select {
   border: 1px solid rgba(32, 49, 53, 0.08);
 }
 
+.info-summary::after {
+  content: "⌄";
+  color: var(--accent-strong);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
 .info-summary::-webkit-details-marker {
   display: none;
 }
@@ -221,6 +257,10 @@ select {
 .info-details[open] .info-summary {
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
+}
+
+.info-details[open] .info-summary::after {
+  transform: rotate(180deg);
 }
 
 .info-panel {
@@ -262,7 +302,7 @@ select {
 
 .field input:focus-visible,
 .field select:focus-visible {
-  outline: 3px solid rgba(15, 124, 115, 0.32);
+  outline: 3px solid #0b665e;
   outline-offset: 3px;
   box-shadow: 0 0 0 4px rgba(15, 124, 115, 0.14);
 }
@@ -468,6 +508,36 @@ select {
   text-align: center;
 }
 
+.category-badge[data-category="elementary"] {
+  background: #e0f1e8;
+  color: #195d46;
+}
+
+.category-badge[data-category="middle"] {
+  background: #e1eff7;
+  color: #24566d;
+}
+
+.category-badge[data-category="high"] {
+  background: #f6e9d8;
+  color: #7a471c;
+}
+
+.category-badge[data-category="elementary-expressions"] {
+  background: #f3e4eb;
+  color: #7b3659;
+}
+
+.category-badge[data-category="middle-expressions"] {
+  background: #e9e4f5;
+  color: #574178;
+}
+
+.category-badge[data-category="supplemental"] {
+  background: #ecebe4;
+  color: #4b5143;
+}
+
 .meaning-group {
   margin-top: 18px;
 }
@@ -546,21 +616,6 @@ select {
   font-weight: 700;
 }
 
-@media (max-width: 1080px) {
-  .hero-text {
-    max-width: 44ch;
-    white-space: normal;
-  }
-}
-
-@media (min-width: 1100px) {
-  .hero-text {
-    white-space: nowrap;
-    font-size: clamp(0.76rem, 0.18vw + 0.66rem, 0.92rem);
-    letter-spacing: -0.01em;
-  }
-}
-
 @media (max-width: 900px) {
   .results {
     grid-template-columns: 1fr;
@@ -613,12 +668,20 @@ select {
   }
 
   .hero {
-    padding: 16px;
+    padding: 12px 14px;
     border-radius: 28px;
   }
 
+  .hero-copy {
+    gap: 8px;
+  }
+
+  .eyebrow {
+    font-size: 0.7rem;
+  }
+
   .hero h1 {
-    font-size: clamp(2rem, 12vw, 2.9rem);
+    font-size: clamp(1.85rem, 10vw, 2.65rem);
   }
 
   .title-row h1 {
@@ -635,16 +698,17 @@ select {
   }
 
   .hero-text {
-    font-size: 0.92rem;
+    font-size: 0.88rem;
+    line-height: 1.42;
   }
 
   .hero-chip-row {
-    gap: 8px;
+    gap: 6px;
   }
 
   .hero-chip {
-    padding: 9px 12px;
-    font-size: 0.82rem;
+    padding: 7px 10px;
+    font-size: 0.76rem;
   }
 
   .hint-grid {
@@ -725,5 +789,16 @@ select {
   .card-actions {
     display: grid;
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

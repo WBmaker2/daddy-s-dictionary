@@ -12,6 +12,7 @@ import { renderLoadFailure } from "./lib/load-recovery.js";
 import { renderDataWarning, updateBanner } from "./lib/status-regions.js";
 import { trackOfflineReadiness } from "./lib/offline-status.js";
 import { createAppStartup } from "./lib/app-startup.js";
+import { createLiveAnnouncer } from "./lib/live-announcer.js";
 
 const state = {
   dictionary: null,
@@ -56,6 +57,11 @@ const searchViewState = createSearchViewState({ initialLimit: 6, pageSize: 12 })
 const refs = createDomRefs();
 let eventsBound = false;
 let isRetrying = false;
+const announceSearchStatus = createLiveAnnouncer({
+  onAnnounce: (message) => {
+    refs.searchAnnouncer.textContent = message;
+  }
+});
 
 function escapeHtml(value) {
   return value
@@ -67,6 +73,7 @@ function escapeHtml(value) {
 
 function updateStatus(text) {
   refs.statusText.textContent = text;
+  announceSearchStatus(text);
 }
 
 function clearPronunciationBanner() {
@@ -187,6 +194,9 @@ function renderList(result, rawQuery) {
     forms.textContent = alternativeForms.length > 0 ? `같이 찾기: ${alternativeForms.join(", ")}` : "";
     badge.textContent = word.categoryLabel;
     badge.dataset.category = word.category;
+    feedback.setAttribute("role", "status");
+    feedback.setAttribute("aria-live", "polite");
+    feedback.setAttribute("aria-atomic", "true");
     detailHeading.textContent = getDetailHeading(word);
 
     for (const gloss of word.koreanGlosses.slice(0, glossLimit)) {

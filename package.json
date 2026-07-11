@@ -1,6 +1,6 @@
 {
   "name": "daddys-dictionary",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,9 +12,14 @@
     "check:data": "node scripts/check-data.mjs",
     "check:data:strict": "node scripts/check-data.mjs --strict",
     "check:data:partial": "node scripts/check-data.mjs --partial",
-    "test:data": "node --test"
+    "test:data": "node --test",
+    "test:e2e": "playwright test",
+    "verify": "npm run test:data && npm run check:data && npm run build:pages && npm run test:e2e"
   },
   "dependencies": {
     "pdf-parse": "^1.1.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1"
   }
 }

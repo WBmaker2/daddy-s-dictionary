@@ -35,7 +35,7 @@ function createFixtureProject(rootDir) {
     "scripts/runtime-module-graph.mjs",
     fs.readFileSync(path.join(ROOT, "scripts", "runtime-module-graph.mjs"), "utf8")
   );
-  writeFile(rootDir, "package.json", JSON.stringify({ name: "fixture", version: "1.0.7" }));
+  writeFile(rootDir, "package.json", JSON.stringify({ name: "fixture", version: "1.1.0" }));
   writeFile(rootDir, "index.html", "<!doctype html><title>fixture</title>");
   writeFile(rootDir, "app.js", APP_SOURCE);
   writeFile(rootDir, "styles.css", "body{}");

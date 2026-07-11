@@ -209,6 +209,24 @@ test("sw.js requires the offline readiness module during precache", () => {
   assert.equal(requiredAssets.includes("./lib/offline-status.js"), true);
 });
 
+test("sw.js precaches the title font and every runtime module", () => {
+  const source = fs.readFileSync(SERVICE_WORKER_ENTRY_PATH, "utf8");
+  const requiredAssets = readServiceWorkerAssetList(source, "REQUIRED_ASSETS");
+  const requiredModules = collectRuntimeModulePaths({ rootDirectory: ROOT })
+    .filter((modulePath) => modulePath !== "sw.js")
+    .map((modulePath) => `./${modulePath}`);
+
+  assert.equal(
+    requiredAssets.includes("./assets/fonts/noto-serif-kr-korean-wght-normal.woff2"),
+    true
+  );
+  assert.equal(requiredAssets.includes("./lib/live-announcer.js"), true);
+
+  for (const modulePath of requiredModules) {
+    assert.equal(requiredAssets.includes(modulePath), true, `${modulePath} must be precached`);
+  }
+});
+
 test("service worker routing classifies document navigations with app-shell fallback", () => {
   const routing = loadRoutingModule();
   const assetPaths = routing.buildAssetPathSet(["./", "./index.html", "./app.js"], "https://example.com");

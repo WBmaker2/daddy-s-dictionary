@@ -21,7 +21,7 @@
           <div class="title-row">
             <h1>
               <span class="title-text">선생님의 영단어 사전</span>
-              <span class="title-tail"><span class="app-version" aria-label="앱 버전">v1.0.7</span></span>
+              <span class="title-tail"><span class="app-version" aria-label="앱 버전">v1.1.0</span></span>
             </h1>
           </div>
           <p class="hero-text">학교급별 영단어와 교과서형 표현을 빠르게 찾고, 뜻과 발음, 말하기 점검까지 한 번에 확인하세요.</p>
@@ -34,7 +34,8 @@
       </header>
 
       <main class="content">
-        <section class="search-panel">
+        <section class="search-panel" aria-labelledby="search-heading">
+          <h2 id="search-heading" class="section-heading">단어 검색</h2>
           <div class="search-row">
             <label class="field field-wide">
               <span>검색어</span>
@@ -63,10 +64,11 @@
 
           <div class="search-actions">
             <button id="clear-button" class="ghost-button" type="button">검색 초기화</button>
-            <p id="status-text" class="status-text" role="status" aria-live="polite" aria-atomic="true">
+            <p id="status-text" class="status-text">
               사전 데이터를 불러오는 중입니다.
             </p>
           </div>
+          <p id="search-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
 
           <details class="info-details">
             <summary class="info-summary">
@@ -123,7 +125,8 @@
           </details>
         </section>
 
-        <section class="results-panel">
+        <section class="results-panel" aria-labelledby="results-heading">
+          <h2 id="results-heading" class="section-heading">검색 결과</h2>
           <div
             id="pronunciation-banner"
             class="pronunciation-banner"
@@ -133,7 +136,7 @@
             hidden
           ></div>
           <div id="data-warning" class="data-warning" role="status" aria-live="polite" aria-atomic="true" hidden></div>
-          <div id="results" class="results" aria-label="검색 결과"></div>
+          <div id="results" class="results" aria-labelledby="results-heading"></div>
           <button id="load-more-button" class="load-more-button" type="button" hidden>
             결과 12개 더 보기
           </button>
@@ -169,7 +172,7 @@
           <button class="check-button" type="button">말하기 점검</button>
         </div>
 
-        <p class="feedback-text"></p>
+        <p class="feedback-text" role="status" aria-live="polite" aria-atomic="true"></p>
       </article>
     </template>
 

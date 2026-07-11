@@ -1,67 +1,44 @@
-# 선생님의 영단어 사전
+# 선생님의 영단어 사전 v1.1.0
 
-2022 개정교육과정 기준 영어 기본 어휘 3,000개를 학교급별로 검색하고, 한국어 뜻과 발음 듣기, 말하기 점검을 제공하는 오프라인 우선 웹앱입니다.
+2022 개정교육과정 영어 기본 어휘와 교과서형 표현을 검색하고, 한국어 뜻, 활용 예문, 발음 듣기, 말하기 점검을 제공하는 정적 오프라인 우선 PWA입니다.
 
-## 주요 기능
+## 검색과 데이터
 
-- `초등학교 필수 영단어`, `중학교 필수 영단어`, `고등학교 필수 영단어`, `전체 영단어` 카테고리 검색
-- 영어 검색과 한국어 검색 동시 지원
-- 브라우저 `speechSynthesis` 기반 영어 발음 듣기
-- 브라우저 `SpeechRecognition` 기반 말하기 점검
-- 서비스 워커 기반 오프라인 캐시
+- 영어/한국어 양방향 검색은 정확한 표제어·대체 표기·한국어 뜻을 접두/포함 일치보다 먼저 정렬합니다.
+- 첫 화면과 새 검색은 6개만 표시하며, `결과 12개 더 보기`로 18개, 30개처럼 늘립니다. 화면에는 항상 전체 결과와 현재 표시 수를 함께 보여줍니다.
+- 데이터는 총 3,489개(기본 3,000, 확장 407, 교과서 표현 82)이며, 예문은 3,489/3,489개를 제공합니다.
+- strict 데이터 검증은 기본·확장·교과서 표현 예문 커버리지를 모두 `1.0`으로 요구합니다.
+- `supplemental`, `textbook-expressions`, `example-sentences`는 선택 데이터입니다. 로드에 실패해도 기본 3,000개 검색은 유지되며, 필수 데이터 로드 실패 화면에서는 `다시 시도`할 수 있습니다.
 
-## 실행 방법
-
-1. 데이터 생성
+## 실행과 검증
 
 ```bash
 npm install
-npm run generate:data
+npm run verify
 ```
 
-2. 로컬 서버 실행
+`npm run verify`는 데이터 테스트, strict 데이터 검사, Cloudflare Pages 빌드, Playwright 브라우저 검사를 순서대로 실행합니다. 브라우저 검사는 데스크톱과 `390x844` 모바일에서 초기 카드, 정확 검색 순위, 페이지네이션, 키보드 포커스, 가로 넘침, 첫 화면 높이를 확인합니다.
 
-```bash
-python3 -m http.server 4173
-```
-
-3. 브라우저에서 `http://127.0.0.1:4173` 열기
-
-4. 데이터 검증
-
-- `npm run check:data:strict`
-- strict 모드에서는 예문 커버리지를 `base: 1.0`, `supplemental: 0.5`, `textbookExpressions: 0`으로 강제합니다.
-- `npm run check:data:partial`
-- partial 모드에서는 optional 파일이 없어도 `summary.exampleCoverage`를 보고하고 실패하지 않습니다.
-- `npm run test:data`는 CLI 검증과 단위 테스트를 함께 실행합니다.
-
-## 릴리스 게이트
+개별 명령은 다음과 같습니다.
 
 ```bash
 npm run test:data
 npm run check:data
 npm run build:pages
-node --check app.js
-node --check sw.js
+npm run test:e2e
 ```
 
-이미 생성된 `data/words.json`을 그대로 쓸 경우 1단계를 건너뛸 수 있습니다.
+`dist-pages/` 빌드는 데이터 JSON을 축소해 원본 3,860,414바이트를 2,648,684바이트로 줄이며, 현재 측정 기준 31.39% 감소합니다.
+
+## 오프라인과 접근성
+
+- 오프라인 준비 칩은 `오프라인 준비 중`, `오프라인 사용 준비됨`, `온라인에서 사용 가능`, `오프라인 준비 실패` 상태를 표시합니다.
+- 앱 셸, 제목용 로컬 한글 폰트, 런타임 모듈과 데이터는 서비스워커가 프리캐시합니다. 캐시 버전은 런타임 의존성 그래프를 재귀적으로 추적해 빌드 시 생성됩니다.
+- 검색 결과 안내는 화면에 즉시 갱신하고, 스크린리더 전용 라이브 영역은 250ms 디바운스로 갱신합니다. 발음·말하기 피드백, 네트워크/발음 배너, 선택 데이터 경고는 독립 상태 영역으로 유지합니다.
+- 발음 듣기는 브라우저 `speechSynthesis`를 사용합니다. 말하기 점검은 `SpeechRecognition` 또는 `webkitSpeechRecognition` 지원, 권한, 네트워크 상태에 따라 제한될 수 있습니다.
 
 ## 데이터 출처
 
-- `kice-word-lister-guide.pdf`
-  - 2022 개정 교육과정에 따른 `KICE Word Lister` 자료집
-  - 학교급 표기 기준 추출에 사용
-- `krdict-reader-master/dict.entries.in`
-  - 공개 영한 사전 원본
-  - 한국어 뜻과 설명 추출에 사용
-- `curriculum-wordbook.pdf`
-  - 한국어 간단 뜻과 IPA 보강용 보조 자료
-
-생성 결과는 `data/words.json`, `data/supplemental-words.json`, `data/textbook-expressions.json`, `data/example-sentences.json`입니다.
-앱 실행 자체에는 `data/words.json`만 있으면 되지만, `supplemental`, `textbook-expressions`, `example-sentences` 파일이 있으면 카테고리 확장과 예문 검색이 완성됩니다.
-
-## 오프라인 관련 메모
-
-- 검색과 발음 듣기는 앱과 데이터가 캐시된 뒤 오프라인에서도 계속 사용할 수 있습니다.
-- 말하기 점검은 브라우저와 기기 정책에 따라 오프라인에서 제한될 수 있습니다.
+- `kice-word-lister-guide.pdf`: 2022 개정 교육과정 KICE Word Lister 자료집
+- `krdict-reader-master/dict.entries.in`: 공개 영한 사전 원본
+- `curriculum-wordbook.pdf`: 한국어 간단 뜻과 IPA 보강용 보조 자료
