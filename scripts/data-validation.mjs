@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { normalizeEnglish, normalizeKorean } from "../lib/dictionary-logic.js";
+import { validateExampleQuality } from "./example-quality.mjs";
 
 const DATA_DIR = "data";
 
@@ -43,13 +44,31 @@ export const DEFAULT_EXPECTED_STATS = {
     elementary: 800,
     middle: 1200,
     high: 1000
+  },
+  supplemental: {
+    total: 407,
+    supplemental: 407
+  },
+  textbookExpressions: {
+    total: 82,
+    "elementary-expressions": 50,
+    "middle-expressions": 32
+  },
+  exampleSentences: {
+    total: 3489,
+    elementary: 800,
+    middle: 1200,
+    high: 1000,
+    supplemental: 407,
+    "elementary-expressions": 50,
+    "middle-expressions": 32
   }
 };
 
 export const DEFAULT_EXAMPLE_COVERAGE_THRESHOLDS = {
   base: 1.0,
-  supplemental: 0.5,
-  textbookExpressions: 0
+  supplemental: 1.0,
+  textbookExpressions: 1.0
 };
 
 function normalizeMode(mode = "strict") {
@@ -677,6 +696,15 @@ export function validateDataSet(dataSet, options = {}) {
 
   if (mode === "strict") {
     validateExampleCoverage(exampleCoverage, exampleCoverageThresholds, errors);
+
+    if (exampleSentences) {
+      const exampleQuality = validateExampleQuality({
+        items: exampleSentences.items,
+        words: mergedWords,
+        maxTemplateRatio: 0.2
+      });
+      errors.push(...exampleQuality.errors);
+    }
   }
 
   return {

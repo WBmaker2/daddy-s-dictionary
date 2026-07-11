@@ -6,6 +6,7 @@ const ROOT = process.cwd();
 const WORDBOOK_PDF = path.join(ROOT, "curriculum-wordbook.pdf");
 const BASE_DATA_FILE = path.join(ROOT, "data", "words.json");
 const SUPPLEMENTAL_DATA_FILE = path.join(ROOT, "data", "supplemental-words.json");
+const TEXTBOOK_EXPRESSIONS_DATA_FILE = path.join(ROOT, "data", "textbook-expressions.json");
 const OUTPUT_FILE = path.join(ROOT, "data", "example-sentences.json");
 
 const COMMON_ADVERBS = new Set([
@@ -151,6 +152,60 @@ const POS_OVERRIDES = {
   alright: "adj"
 };
 
+const CURATED_EXAMPLES = {
+  do: "I do my homework after dinner.",
+  bank: "She deposited her allowance in the bank.",
+  version: "This is the latest version of the school guide.",
+  zoo: "Our class saw giraffes at the zoo.",
+  young: "The young bird is learning to fly."
+};
+
+const EXPRESSION_COMPLETIONS = {
+  "Hello, I'm ...": "Hello, I'm Minjun.",
+  "How often do you ...?": "How often do you exercise?",
+  "Why don't you ...?": "Why don't you take a short break?",
+  "I'd like to ...": "I'd like to order lunch.",
+  "I'm curious about ...": "I'm curious about this experiment.",
+  "I'm looking for ...": "I'm looking for the library.",
+  "What are you going to do ...?": "What are you going to do this weekend?",
+  "Do you have any plans for ...?": "Do you have any plans for summer vacation?",
+  "I'd like to buy ...": "I'd like to buy this notebook.",
+  "I'm going to have ...": "I'm going to have the salad.",
+  "I'm interested in ...": "I'm interested in science.",
+  "It is likely that ...": "It is likely that it will rain.",
+  "I'd like to exchange ...": "I'd like to exchange this shirt.",
+  "I'd like to get a refund ...": "I'd like to get a refund for this item.",
+  "I suggest you ...": "I suggest you check the answer again.",
+  "go with ...": "Go with the blue shirt."
+};
+
+const NOUN_FALLBACKS = [
+  'The word "{word}" appeared in today\'s reading.',
+  'Our class discussed how to use "{word}".',
+  'The teacher wrote "{word}" on the board.',
+  'We looked up the meaning of "{word}".',
+  'A student used "{word}" in a sentence.',
+  'The lesson included the word "{word}".',
+  'We compared "{word}" with a related word.',
+  'Our group made a sentence with "{word}".'
+];
+
+const VERB_FALLBACKS = [
+  'We practiced using the verb "{word}" in class.',
+  'The teacher showed us how "{word}" works in a sentence.',
+  'A student wrote a sentence with the verb "{word}".',
+  'Our group checked how to use "{word}" correctly.',
+  'The lesson compared "{word}" with a related verb.',
+  'We found the verb "{word}" in today\'s reading.'
+];
+
+const ADJECTIVE_FALLBACKS = [
+  'We practiced using the adjective "{word}" in class.',
+  'The teacher used "{word}" to describe something.',
+  'A student wrote a sentence with the adjective "{word}".',
+  'Our group checked the meaning of "{word}".'
+];
+
 function normalizeEnglish(value) {
   return String(value)
     .toLowerCase()
@@ -259,13 +314,6 @@ function inferPos(entry, wordbookIndex) {
   return "n";
 }
 
-function likelyIntransitive(entry) {
-  const firstGloss = entry.koreanGlosses?.[0] ?? "";
-  return /(가다|오다|떠나다|도착하다|존재하다|변하다|흐르다|자라다|살다|웃다|울다|앉다|서다|멈추다|일어나다)/.test(
-    firstGloss
-  );
-}
-
 function isStateLikeVerb(entry) {
   const firstGloss = entry.koreanGlosses?.[0] ?? "";
   return /(많다|풍부하다|없다|있다|같다|늘다|줄다|남다)/.test(firstGloss);
@@ -285,6 +333,19 @@ function firstGloss(entry) {
   return entry.koreanGlosses?.[0] ?? "";
 }
 
+function buildFallbackSentence(entry, templates) {
+  return templates[entry.id % templates.length].replace("{word}", entry.word);
+}
+
+function buildExpressionSentence(entry) {
+  if (EXPRESSION_COMPLETIONS[entry.word]) {
+    return EXPRESSION_COMPLETIONS[entry.word];
+  }
+
+  const ending = /[.!?]$/.test(entry.word) ? "" : ".";
+  return `During class, a student said, “${entry.word}${ending}”`;
+}
+
 function chooseArticle(word) {
   const normalized = normalizeEnglish(word);
   return /^(a|e|i|o|u)/.test(normalized) && !/^(one|uni|use|user|euro)/.test(normalized) ? "an" : "a";
@@ -296,7 +357,7 @@ function isAbstractNounGloss(gloss) {
   );
 }
 
-function buildNounSentence(entry, level) {
+function buildNounSentence(entry) {
   const { word } = entry;
   const gloss = firstGloss(entry);
 
@@ -410,10 +471,10 @@ function buildNounSentence(entry, level) {
     return `We talked about ${word} in class today.`;
   }
 
-  return `I saw the ${word} in a picture today.`;
+  return buildFallbackSentence(entry, NOUN_FALLBACKS);
 }
 
-function buildVerbSentence(entry, level) {
+function buildVerbSentence(entry) {
   const { word } = entry;
   const gloss = firstGloss(entry);
 
@@ -640,26 +701,11 @@ function buildVerbSentence(entry, level) {
     return `Please ${word} carefully to the announcement.`;
   }
 
-  if (likelyIntransitive(entry)) {
-    if (level === "elementary") {
-      return `Things can ${word} quickly.`;
-    }
-    if (level === "middle") {
-      return `Many changes can ${word} over time.`;
-    }
-    return `Some situations can ${word} without warning.`;
-  }
-
-  if (level === "elementary") {
-    return `We can ${word} together after class.`;
-  }
-  if (level === "middle") {
-    return `Students may ${word} during the activity.`;
-  }
-  return `People may ${word} in different ways.`;
+  return buildFallbackSentence(entry, VERB_FALLBACKS);
 }
 
-function buildAdjectiveSentence(word, level) {
+function buildAdjectiveSentence(entry) {
+  const { word } = entry;
   const normalized = normalizeEnglish(word);
 
   if (normalized === "able") {
@@ -696,13 +742,7 @@ function buildAdjectiveSentence(word, level) {
     return "Everything is alright now.";
   }
 
-  if (level === "elementary") {
-    return `That looks ${word} to me.`;
-  }
-  if (level === "middle") {
-    return `That seems ${word} in this case.`;
-  }
-  return `That seems ${word} in this situation.`;
+  return buildFallbackSentence(entry, ADJECTIVE_FALLBACKS);
 }
 
 function buildAdverbSentence(word, level) {
@@ -730,14 +770,24 @@ function buildFunctionSentence(word, level) {
 }
 
 function buildExampleSentence(entry, wordbookIndex) {
+  const curatedExample = CURATED_EXAMPLES[normalizeEnglish(entry.word)];
+
+  if (curatedExample) {
+    return curatedExample;
+  }
+
+  if (isExpressionEntry(entry)) {
+    return buildExpressionSentence(entry);
+  }
+
   const level = pickLevel(entry.category);
   const pos = inferPos(entry, wordbookIndex);
 
   if (pos === "n") {
-    return buildNounSentence(entry, level);
+    return buildNounSentence(entry);
   }
   if (pos === "adj") {
-    return buildAdjectiveSentence(entry.word, level);
+    return buildAdjectiveSentence(entry);
   }
   if (pos === "adv") {
     return buildAdverbSentence(entry.word, level);
@@ -753,7 +803,7 @@ function buildExampleSentence(entry, wordbookIndex) {
       return buildFunctionSentence(entry.word, level);
     }
 
-    return buildVerbSentence(entry, level);
+    return buildVerbSentence(entry);
   }
   return buildFunctionSentence(entry.word, level);
 }
@@ -764,7 +814,8 @@ async function main() {
   const wordbookIndex = parseWordbookEntries(wordbook.text);
   const basePayload = loadJson(BASE_DATA_FILE);
   const supplementalPayload = loadJson(SUPPLEMENTAL_DATA_FILE);
-  const targets = [...basePayload.words, ...supplementalPayload.words].filter((entry) => !isExpressionEntry(entry));
+  const textbookExpressionsPayload = loadJson(TEXTBOOK_EXPRESSIONS_DATA_FILE);
+  const targets = [...basePayload.words, ...supplementalPayload.words, ...textbookExpressionsPayload.words];
   const items = targets.map((entry) => ({
     id: entry.id,
     exampleSentence: buildExampleSentence(entry, wordbookIndex)

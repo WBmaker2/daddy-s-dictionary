@@ -58,6 +58,11 @@ test("golden query: elementary expressions are discoverable in committed data", 
   assert.equal(includesElementaryExpression, true);
 });
 
+test("golden query: textbook expressions include a usable example", () => {
+  const helloExpression = committedWords.find((word) => word.word === "Hello, I'm ...");
+  assert.equal(helloExpression?.exampleSentence, "Hello, I'm Minjun.");
+});
+
 test("golden query: bank should return bank first", () => {
   assert.equal(search("bank")[0]?.word, "bank");
 });

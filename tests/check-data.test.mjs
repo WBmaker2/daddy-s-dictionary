@@ -4,7 +4,11 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-import { loadRepositoryData, validateDataSet } from "../scripts/data-validation.mjs";
+import {
+  DEFAULT_EXAMPLE_COVERAGE_THRESHOLDS,
+  loadRepositoryData,
+  validateDataSet
+} from "../scripts/data-validation.mjs";
 
 function createWord(overrides = {}) {
   const id = overrides.id ?? 1;
@@ -244,6 +248,14 @@ test("validateDataSet enforces search keyword invariants on merged words", () =>
   );
 });
 
+test("strict mode requires complete example coverage for every committed source", () => {
+  assert.deepEqual(DEFAULT_EXAMPLE_COVERAGE_THRESHOLDS, {
+    base: 1,
+    supplemental: 1,
+    textbookExpressions: 1
+  });
+});
+
 test("validateDataSet applies default strict example coverage thresholds", () => {
   const baseWords = [
     createWord({ id: 1, category: "elementary" }),
@@ -278,17 +290,20 @@ test("validateDataSet applies default strict example coverage thresholds", () =>
     }),
     exampleSentences: createExamplePayload(
       [
-        { id: 1, exampleSentence: "base example" },
-        { id: 2, exampleSentence: "base example" },
-        { id: 3, exampleSentence: "base example" },
-        { id: 3001, exampleSentence: "supplemental example" }
+        { id: 1, exampleSentence: "word-1 is first." },
+        { id: 2, exampleSentence: "word-2 is second." },
+        { id: 3, exampleSentence: "word-3 is third." },
+        { id: 3001, exampleSentence: "word-3001 is fourth." },
+        { id: 3002, exampleSentence: "word-3002 is fifth." },
+        { id: 3408, exampleSentence: "word-3408 is sixth." }
       ],
       {
-        total: 4,
+        total: 6,
         elementary: 1,
         middle: 1,
         high: 1,
-        supplemental: 1
+        supplemental: 2,
+        "elementary-expressions": 1
       }
     )
   });
@@ -296,8 +311,8 @@ test("validateDataSet applies default strict example coverage thresholds", () =>
   assert.equal(result.ok, true);
   assert.deepEqual(result.errors, []);
   assert.equal(result.summary.exampleCoverage.base.ratio, 1);
-  assert.equal(result.summary.exampleCoverage.supplemental.ratio, 0.5);
-  assert.equal(result.summary.exampleCoverage.textbookExpressions.ratio, 0);
+  assert.equal(result.summary.exampleCoverage.supplemental.ratio, 1);
+  assert.equal(result.summary.exampleCoverage.textbookExpressions.ratio, 1);
 });
 
 test("validateDataSet does not enforce example coverage in partial mode when optional files are missing", () => {
