@@ -50,7 +50,7 @@
             <label class="field">
               <span>카테고리</span>
               <select id="category-select">
-                <option value="all">전체 영단어</option>
+                <option value="all">전체 단어·표현</option>
                 <option value="elementary">초등학교 필수 영단어</option>
                 <option value="middle">중학교 필수 영단어</option>
                 <option value="high">고등학교 필수 영단어</option>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="summary-chip">
                   <span>현재 결과</span>
-                  <strong id="result-count">0개</strong>
+                  <strong id="result-count">총 0개 중 0개 표시</strong>
                 </div>
               </section>
             </div>
@@ -133,6 +133,9 @@
             hidden
           ></div>
           <div id="results" class="results" aria-label="검색 결과"></div>
+          <button id="load-more-button" class="load-more-button" type="button" hidden>
+            결과 12개 더 보기
+          </button>
         </section>
       </main>
     </div>

@@ -13,6 +13,7 @@ const REQUIRED_RUNTIME_MODULES = [
   "./lib/dom-contract.js",
   "./lib/dictionary-logic.js",
   "./lib/pronunciation-controls.js",
+  "./lib/search-view-state.js",
   "./lib/service-worker-routing.js"
 ];
 

@@ -1,5 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import {
   TEMPLATE_SELECTORS,
@@ -7,10 +10,17 @@ import {
   createDomRefs
 } from "../lib/dom-contract.js";
 
+const TEST_DIR = fileURLToPath(new URL(".", import.meta.url));
+const ROOT = path.resolve(TEST_DIR, "..");
+
 const REQUIRED_TOP_LEVEL_SELECTORS = Object.values(TOP_LEVEL_SELECTORS).filter(
   (selector) => !["#hero-total-chip", "#info-summary-text"].includes(selector)
 );
 const REQUIRED_TEMPLATE_SELECTORS = Object.values(TEMPLATE_SELECTORS);
+
+test("DOM contract exposes the load-more button", () => {
+  assert.equal(TOP_LEVEL_SELECTORS.loadMoreButton, "#load-more-button");
+});
 
 function createNode(label) {
   return { label };
@@ -110,4 +120,10 @@ test("createDomRefs keeps optional refs optional when missing", () => {
 
   assert.equal(refs.heroTotalChip, null);
   assert.equal(refs.infoSummaryText, null);
+});
+
+test("result count supports total and shown result copy", () => {
+  const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+
+  assert.match(indexHtml, /id="result-count"[^>]*>총 0개 중 0개 표시</);
 });

@@ -16,6 +16,7 @@ const REQUIRED_ASSETS = [
   "./lib/dom-contract.js",
   "./lib/dictionary-logic.js",
   "./lib/pronunciation-controls.js",
+  "./lib/search-view-state.js",
   "./lib/service-worker-routing.js",
   "./data/words.json"
 ];

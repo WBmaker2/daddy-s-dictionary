@@ -146,7 +146,6 @@ select {
 .hero-stat,
 .search-panel,
 .summary-bar,
-.result-card,
 .pronunciation-banner {
   background: var(--paper);
   border: 1px solid rgba(255, 255, 255, 0.72);
@@ -273,7 +272,8 @@ select {
 
 .ghost-button,
 .speak-button,
-.check-button {
+.check-button,
+.load-more-button {
   border: 0;
   border-radius: 999px;
   padding: 12px 18px;
@@ -300,13 +300,15 @@ select {
 
 .ghost-button:hover,
 .speak-button:hover,
-.check-button:hover {
+.check-button:hover,
+.load-more-button:hover {
   transform: translateY(-1px);
 }
 
 .ghost-button:focus-visible,
 .speak-button:focus-visible,
 .check-button:focus-visible,
+.load-more-button:focus-visible,
 .info-summary:focus-visible {
   box-shadow: 0 0 0 4px rgba(15, 124, 115, 0.16);
 }
@@ -408,6 +410,9 @@ select {
 .result-card {
   padding: 20px;
   border-radius: var(--radius-lg);
+  background: var(--paper-strong);
+  border: 1px solid rgba(32, 49, 53, 0.08);
+  box-shadow: 0 12px 32px rgba(21, 52, 47, 0.08);
 }
 
 .card-head {
@@ -480,6 +485,14 @@ select {
   margin: 12px 0 0;
   color: var(--accent-strong);
   font-weight: 600;
+}
+
+.load-more-button {
+  display: block;
+  margin: 4px auto 0;
+  background: rgba(15, 124, 115, 0.1);
+  color: var(--accent-strong);
+  font-weight: 700;
 }
 
 .empty-state {
@@ -652,14 +665,24 @@ select {
     margin-top: 14px;
   }
 
+  .ghost-button,
+  .speak-button,
+  .check-button,
+  .load-more-button {
+    width: 100%;
+  }
+}
+
+@media (min-width: 340px) and (max-width: 540px) {
+  .card-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 339px) {
   .card-actions {
     display: grid;
     grid-template-columns: 1fr;
-  }
-
-  .ghost-button,
-  .speak-button,
-  .check-button {
-    width: 100%;
   }
 }

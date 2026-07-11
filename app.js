@@ -1,16 +1,17 @@
 import {
   comparePronunciation,
-  filterWords as filterDictionaryWords,
   loadDictionaryData,
-  normalizeDisplayForm
+  normalizeDisplayForm,
+  searchWords
 } from "./lib/dictionary-logic.js";
 import { createPronunciationController } from "./lib/pronunciation-controls.js";
 import { createDomRefs } from "./lib/dom-contract.js";
+import { createSearchViewState } from "./lib/search-view-state.js";
 
 const state = {
   dictionary: null,
   words: [],
-  filteredWords: []
+  searchResult: null
 };
 
 const CATEGORY_ORDER = [
@@ -22,7 +23,7 @@ const CATEGORY_ORDER = [
   "supplemental"
 ];
 const CATEGORY_LABELS = {
-  all: "전체 영단어",
+  all: "전체 단어·표현",
   elementary: "초등학교 필수 영단어",
   middle: "중학교 필수 영단어",
   high: "고등학교 필수 영단어",
@@ -37,6 +38,7 @@ const DICTIONARY_FILES = {
   exampleSentences: { path: "./data/example-sentences.json", optional: true }
 };
 const MOBILE_COMPACT_MEDIA = "(max-width: 540px)";
+const searchViewState = createSearchViewState({ initialLimit: 6, pageSize: 12 });
 
 const refs = createDomRefs();
 
@@ -109,9 +111,13 @@ function prefersCompactResultLayout() {
   return window.matchMedia?.(MOBILE_COMPACT_MEDIA).matches ?? false;
 }
 
-function renderList(items, rawQuery) {
+function renderList(result, rawQuery) {
+  const { items, total, shown, hasMore } = result;
+
   refs.results.innerHTML = "";
-  refs.resultCount.textContent = `${items.length}개`;
+  refs.resultCount.textContent = `총 ${total.toLocaleString("ko-KR")}개 중 ${shown.toLocaleString("ko-KR")}개 표시`;
+  refs.loadMoreButton.hidden = !hasMore;
+  refs.loadMoreButton.textContent = "결과 12개 더 보기";
 
   if (items.length === 0) {
     const empty = document.createElement("div");
@@ -148,9 +154,10 @@ function renderList(items, rawQuery) {
 
     title.textContent = word.word;
     ipa.textContent = word.pronunciationIpa ? `/${word.pronunciationIpa}/` : "브라우저 음성으로 발음 듣기";
-    forms.textContent =
-      alternativeForms.length > 0 ? `같이 찾기: ${alternativeForms.join(", ")}` : word.categoryDescription;
+    forms.hidden = alternativeForms.length === 0;
+    forms.textContent = alternativeForms.length > 0 ? `같이 찾기: ${alternativeForms.join(", ")}` : "";
     badge.textContent = word.categoryLabel;
+    badge.dataset.category = word.category;
     detailHeading.textContent = showExampleSentence ? "예시 문장" : "설명";
 
     for (const gloss of word.koreanGlosses.slice(0, glossLimit)) {
@@ -186,12 +193,14 @@ function renderList(items, rawQuery) {
 
 function render() {
   const rawQuery = refs.input.value.trim();
-  state.filteredWords = filterDictionaryWords({
+  state.searchResult = searchWords({
     words: state.words,
     rawQuery,
-    category: refs.category.value
+    category: refs.category.value,
+    offset: 0,
+    limit: searchViewState.limit
   });
-  renderList(state.filteredWords, rawQuery);
+  renderList(state.searchResult, rawQuery);
   updateInfoSummary();
 
   if (!rawQuery) {
@@ -200,7 +209,7 @@ function render() {
   }
 
   updateStatus(
-    `"${rawQuery}" 검색 결과 ${state.filteredWords.length}개를 표시합니다.`
+    `“${rawQuery}” 검색 결과 총 ${state.searchResult.total.toLocaleString("ko-KR")}개 중 ${state.searchResult.shown.toLocaleString("ko-KR")}개를 표시합니다.`
   );
 }
 
@@ -221,7 +230,7 @@ function updateInfoSummary() {
   }
 
   if (refs.infoSummaryText) {
-    refs.infoSummaryText.textContent = `검색 방식 · 음성 기능 · 결과 ${state.filteredWords.length}개`;
+    refs.infoSummaryText.textContent = `검색 방식 · 음성 기능 · 결과 ${state.searchResult?.shown ?? 0}개`;
   }
 }
 
@@ -229,12 +238,14 @@ function bindEvents() {
   refs.input.addEventListener("input", () => {
     pronunciationController.stopPronunciationCheck();
     clearPronunciationBanner();
+    searchViewState.reset();
     render();
   });
 
   refs.category.addEventListener("change", () => {
     pronunciationController.stopPronunciationCheck();
     clearPronunciationBanner();
+    searchViewState.reset();
     render();
   });
 
@@ -243,8 +254,15 @@ function bindEvents() {
     refs.category.value = "all";
     pronunciationController.stopPronunciationCheck();
     clearPronunciationBanner();
+    searchViewState.reset();
     render();
     refs.input.focus();
+  });
+
+  refs.loadMoreButton.addEventListener("click", () => {
+    searchViewState.showMore();
+    render();
+    refs.loadMoreButton.focus();
   });
 
   window.addEventListener("online", () => {
