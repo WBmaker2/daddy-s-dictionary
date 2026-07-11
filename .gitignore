@@ -7,4 +7,7 @@ curriculum-wordbook.pdf
 kice-word-lister-guide.pdf
 krdict-reader-master/
 dist-pages/
+test-results/
+playwright-report/
+blob-report/
 .superpowers/

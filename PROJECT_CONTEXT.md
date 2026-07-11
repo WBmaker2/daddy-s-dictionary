@@ -38,6 +38,28 @@ npm run verify
 - 서비스워커 필수 프리캐시는 앱 셸, 데이터, 로컬 제목 폰트, 런타임 모듈을 포함한다.
 - 캐시 버전은 수동으로 올리지 않는다. `scripts/generate-cache-version.mjs`가 앱/서비스워커의 재귀 런타임 모듈 폐쇄와 프리캐시 정적 자산을 바탕으로 빌드 시 생성한다.
 
+## 로컬 운영
+
+```bash
+npm install
+npm run generate:data
+npm run import:data:supplemental -- path/to/wordbook.xls
+npm run check:data
+npm run build:pages
+python3 -m http.server 4173 --directory dist-pages
+```
+
+- 로컬 스모크 URL: `http://127.0.0.1:4173/`
+- 운영 스모크 URL: `https://daddy-s-dictionary.pages.dev/`
+- 데이터가 이미 커밋되어 있으면 전체 데이터 생성은 생략할 수 있다. 데이터 변경 뒤에는 `npm run check:data`와 `npm run verify`를 실행한다.
+- 현재 앱과 Cloudflare Pages 배포에는 환경 변수가 필요하지 않다.
+
+## 배포와 롤백
+
+- `main` 브랜치로 푸시하면 연결된 Cloudflare Pages가 자동 배포한다.
+- 배포 후 운영 URL에서 첫 6개 카드, `유산 -> asset`, 검색·오프라인 상태 칩을 스모크 확인한다.
+- 문제가 생기면 Cloudflare Pages의 이전 성공 배포로 롤백하거나, 이전 정상 Git 커밋을 되돌려 `main`에 푸시해 다시 배포한다.
+
 ## 주요 파일
 - `lib/dictionary-logic.js`: 검색 순위와 데이터 병합
 - `lib/search-view-state.js`: 6개 초기 표시와 12개 추가 페이지네이션

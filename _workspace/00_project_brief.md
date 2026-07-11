@@ -5,7 +5,7 @@
 - One-line summary: 2022 개정교육과정 기준 영단어와 교과서형 표현을 학교급별로 검색하고, 발음 듣기와 말하기 점검까지 제공하는 오프라인 우선 학습용 사전 웹앱
 - Delivery type: Hybrid educational PWA
 - Current stage: `v1.1.0` 기준 Cloudflare Pages에서 운영 중인 단일 페이지 웹앱
-- Next milestone: 하네스 기반으로 디자인, 데이터 품질, QA, 배포 문서를 정렬한 `v1.1` 준비
+- Next milestone: `v1.1.0` 안정화와 배포 관찰을 마친 뒤 `v1.1.x` 핫픽스 또는 `v1.2` 기능 범위를 결정
 - Primary contact / decision owner: 저장소 소유자 / 제품 결정권자
 
 ## 2. Business Goal

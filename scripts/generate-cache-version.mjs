@@ -11,7 +11,8 @@ const CORE_STATIC_FILES = [
   "manifest.webmanifest",
   "assets/icon.svg",
   "assets/icon-192.png",
-  "assets/icon-512.png"
+  "assets/icon-512.png",
+  "assets/fonts/noto-serif-kr-korean-wght-normal.woff2"
 ];
 
 function readJson(filePath) {

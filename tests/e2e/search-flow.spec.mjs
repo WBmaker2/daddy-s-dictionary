@@ -1,9 +1,41 @@
 import { expect, test } from "@playwright/test";
 
-async function waitForDictionary(page) {
-  await page.goto("/");
+async function waitForDictionary(page, url = "/") {
+  await page.goto(url);
   await expect(page.locator(".result-card")).toHaveCount(6);
 }
+
+test("upgrades from a legacy cache-first controller without a second reload", async ({ page, context }) => {
+  await page.goto("/__test__/release/legacy-install.html");
+  const legacyScriptUrl = await page.evaluate(async () => {
+    const registration = await navigator.serviceWorker.register("legacy-cache-sw.js", { scope: "./" });
+    await navigator.serviceWorker.ready;
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    return registration.active?.scriptURL;
+  });
+  expect(legacyScriptUrl).toContain("legacy-cache-sw.js");
+  await page.goto("/__test__/release/legacy-install.html?controlled=1");
+  await expect.poll(() => page.evaluate(() => navigator.serviceWorker.controller?.scriptURL ?? "")).toContain(
+    "legacy-cache-sw.js"
+  );
+
+  await waitForDictionary(page, "/__test__/release/");
+  await expect(page.locator("body")).not.toHaveAttribute("data-legacy-app", "true");
+  await expect(page.locator(".category-badge").first()).toHaveAttribute("data-category", /.+/);
+  await expect(page.locator(".title-text")).toHaveCSS("font-family", /Noto Serif KR/);
+  await expect(page.locator('link[rel="stylesheet"]')).toHaveAttribute("href", /[?&]v=/);
+  await expect(page.locator('script[type="module"]')).toHaveAttribute("src", /[?&]v=/);
+
+  await page.waitForFunction(() => {
+    const controllerUrl = navigator.serviceWorker.controller?.scriptURL;
+    return Boolean(controllerUrl && new URL(controllerUrl).pathname.endsWith("/sw.js") && !controllerUrl.includes("legacy"));
+  });
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.locator(".result-card")).toHaveCount(6);
+  await expect(page.getByRole("heading", { name: "검색 결과" })).toBeVisible();
+  await context.setOffline(false);
+});
 
 test("keeps the search-first dictionary flow accessible", async ({ page }) => {
   await waitForDictionary(page);

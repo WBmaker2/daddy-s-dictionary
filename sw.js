@@ -1,10 +1,11 @@
 importScripts("./lib/service-worker-routing.js");
 
 const CACHE_VERSION = "__CACHE_VERSION__";
+const ASSET_VERSION = "__ASSET_VERSION__";
 const CACHE_FALLBACK_VERSION = "dev";
 const IS_LOCAL_CACHE_VERSION = CACHE_VERSION.startsWith("__") && CACHE_VERSION.endsWith("__");
 const CACHE_NAME = `daddys-dictionary-${IS_LOCAL_CACHE_VERSION ? CACHE_FALLBACK_VERSION : CACHE_VERSION}`;
-const REQUIRED_ASSETS = [
+const REQUIRED_ASSET_PATHS = [
   "./",
   "./index.html",
   "./styles.css",
@@ -26,13 +27,19 @@ const REQUIRED_ASSETS = [
   "./lib/status-regions.js",
   "./data/words.json"
 ];
-const OPTIONAL_ASSETS = [
+const OPTIONAL_ASSET_SOURCE_PATHS = [
   "./data/supplemental-words.json",
   "./data/textbook-expressions.json",
   "./data/example-sentences.json"
 ];
+function versionAsset(pathname) {
+  return `${pathname}?v=${ASSET_VERSION}`;
+}
+
+const REQUIRED_ASSETS = REQUIRED_ASSET_PATHS.map(versionAsset);
+const OPTIONAL_ASSETS = OPTIONAL_ASSET_SOURCE_PATHS.map(versionAsset);
 const PRECACHE_ASSETS = [...REQUIRED_ASSETS, ...OPTIONAL_ASSETS];
-const OFFLINE_DOCUMENT = "./index.html";
+const OFFLINE_DOCUMENT = versionAsset("./index.html");
 const { buildAssetPathSet, resolveRequestStrategy, shouldCacheResponse } = self.ServiceWorkerRouting;
 const SCOPE_URL = self.registration?.scope || new URL("./", self.location.href).href;
 const ASSET_PATHS = buildAssetPathSet(PRECACHE_ASSETS, SCOPE_URL);

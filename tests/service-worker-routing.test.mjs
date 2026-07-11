@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
@@ -140,7 +141,7 @@ function createServiceWorkerHarness(entryPath, options = {}) {
   context.self.self = context.self;
   context.importScripts = (...scriptPaths) => {
     for (const scriptPath of scriptPaths) {
-      const importedPath = path.resolve(path.dirname(entryPath), scriptPath);
+      const importedPath = path.resolve(path.dirname(entryPath), scriptPath.split(/[?#]/, 1)[0]);
       const importedSource = fs.readFileSync(importedPath, "utf8");
       vm.runInNewContext(importedSource, context, { filename: importedPath });
     }
@@ -188,7 +189,7 @@ async function dispatchFetch(harness, request) {
 
 test("sw.js precaches the complete runtime module closure", () => {
   const source = fs.readFileSync(SERVICE_WORKER_ENTRY_PATH, "utf8");
-  const requiredAssets = readServiceWorkerAssetList(source, "REQUIRED_ASSETS");
+  const requiredAssets = readServiceWorkerAssetList(source, "REQUIRED_ASSET_PATHS");
   const requiredModules = collectRuntimeModulePaths({ rootDirectory: ROOT })
     .filter((modulePath) => modulePath !== "sw.js")
     .map((modulePath) => `./${modulePath}`);
@@ -204,14 +205,14 @@ test("sw.js precaches the complete runtime module closure", () => {
 
 test("sw.js requires the offline readiness module during precache", () => {
   const source = fs.readFileSync(SERVICE_WORKER_ENTRY_PATH, "utf8");
-  const requiredAssets = readServiceWorkerAssetList(source, "REQUIRED_ASSETS");
+  const requiredAssets = readServiceWorkerAssetList(source, "REQUIRED_ASSET_PATHS");
 
   assert.equal(requiredAssets.includes("./lib/offline-status.js"), true);
 });
 
 test("sw.js precaches the title font and every runtime module", () => {
   const source = fs.readFileSync(SERVICE_WORKER_ENTRY_PATH, "utf8");
-  const requiredAssets = readServiceWorkerAssetList(source, "REQUIRED_ASSETS");
+  const requiredAssets = readServiceWorkerAssetList(source, "REQUIRED_ASSET_PATHS");
   const requiredModules = collectRuntimeModulePaths({ rootDirectory: ROOT })
     .filter((modulePath) => modulePath !== "sw.js")
     .map((modulePath) => `./${modulePath}`);
@@ -224,6 +225,42 @@ test("sw.js precaches the title font and every runtime module", () => {
 
   for (const modulePath of requiredModules) {
     assert.equal(requiredAssets.includes(modulePath), true, `${modulePath} must be precached`);
+  }
+});
+
+test("built sw.js precaches exact versioned shell requests", async () => {
+  const outputRoot = fs.mkdtempSync(path.join(os.tmpdir(), "versioned-sw-"));
+  const source = fs.readFileSync(SERVICE_WORKER_ENTRY_PATH, "utf8")
+    .replaceAll("__CACHE_VERSION__", "test-release")
+    .replaceAll("__ASSET_VERSION__", "test-release");
+  const entryPath = path.join(outputRoot, "sw.js");
+  const helperPath = path.join(outputRoot, "lib", "service-worker-routing.js");
+  fs.mkdirSync(path.dirname(helperPath), { recursive: true });
+  fs.writeFileSync(entryPath, source, "utf8");
+  fs.writeFileSync(helperPath, fs.readFileSync(ROUTING_MODULE_PATH, "utf8"), "utf8");
+
+  const requestedUrls = [];
+  const harness = createServiceWorkerHarness(entryPath, {
+    fetch(url) {
+      requestedUrls.push(url);
+      return Promise.resolve(createBasicResponse("ok"));
+    }
+  });
+
+  await dispatchInstall(harness);
+
+  for (const assetPath of [
+    "app.js",
+    "styles.css",
+    "lib/live-announcer.js",
+    "assets/fonts/noto-serif-kr-korean-wght-normal.woff2",
+    "data/words.json"
+  ]) {
+    assert.equal(
+      requestedUrls.includes(`https://example.com/${assetPath}?v=test-release`),
+      true,
+      `${assetPath} must be precached with the exact release version`
+    );
   }
 });
 
@@ -462,7 +499,7 @@ test("sw.js install continues when an optional precache asset fails", async () =
   const harness = createServiceWorkerHarness(SERVICE_WORKER_ENTRY_PATH, {
     console: { error: console.error, info: console.info, log: console.log, warn() {} },
     fetch(url) {
-      if (url.endsWith("/data/supplemental-words.json")) {
+      if (new URL(url).pathname.endsWith("/data/supplemental-words.json")) {
         return new Response("missing", { status: 404 });
       }
 
@@ -476,7 +513,7 @@ test("sw.js install continues when an optional precache asset fails", async () =
 test("sw.js install fails when a required precache asset fails", async () => {
   const harness = createServiceWorkerHarness(SERVICE_WORKER_ENTRY_PATH, {
     fetch(url) {
-      if (url.endsWith("/app.js")) {
+      if (new URL(url).pathname.endsWith("/app.js")) {
         return new Response("missing", { status: 404 });
       }
 

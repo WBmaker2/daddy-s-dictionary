@@ -43,11 +43,13 @@ function toRelativeRuntimePath(rootDirectory, absolutePath) {
 }
 
 function resolveRelativeModulePath(rootDirectory, importerPath, specifier) {
-  if (!RELATIVE_SPECIFIER_PATTERN.test(specifier)) {
+  const pathname = specifier.split(/[?#]/, 1)[0];
+
+  if (!RELATIVE_SPECIFIER_PATTERN.test(pathname)) {
     return null;
   }
 
-  return toRelativeRuntimePath(rootDirectory, path.resolve(path.dirname(importerPath), specifier));
+  return toRelativeRuntimePath(rootDirectory, path.resolve(path.dirname(importerPath), pathname));
 }
 
 export function collectRuntimeModulePaths({

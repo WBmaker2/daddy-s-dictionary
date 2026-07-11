@@ -21,7 +21,7 @@ test("collectRuntimeModulePaths follows transitive static, side-effect, re-expor
       'import "./side-effect.js";',
       'import { label } from "./nested/reexport.js";',
       'export { label as exportedLabel } from "./exported.js";',
-      'void import("./lazy.js");'
+      'void import("./lazy.js?v=release-123#module");'
     ].join("\n")
   );
   writeFile(rootDir, "side-effect.js", "export const sideEffect = true;");
@@ -29,8 +29,8 @@ test("collectRuntimeModulePaths follows transitive static, side-effect, re-expor
   writeFile(rootDir, "nested/transitive.js", "export const label = 'nested';");
   writeFile(rootDir, "exported.js", "export const label = 'exported';");
   writeFile(rootDir, "lazy.js", "export const lazy = true;");
-  writeFile(rootDir, "sw.js", 'importScripts("./worker/first.js", "./worker/second.js");');
-  writeFile(rootDir, "worker/first.js", 'import "../shared.js";');
+  writeFile(rootDir, "sw.js", 'importScripts("./worker/first.js?v=release-123", "./worker/second.js#worker");');
+  writeFile(rootDir, "worker/first.js", 'import "../shared.js?v=release-123#shared";');
   writeFile(rootDir, "worker/second.js", "self.second = true;");
   writeFile(rootDir, "shared.js", "export const shared = true;");
 

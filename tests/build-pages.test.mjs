@@ -36,15 +36,20 @@ function createFixtureProject(rootDir) {
     fs.readFileSync(path.join(ROOT, "scripts", "runtime-module-graph.mjs"), "utf8")
   );
   writeFile(rootDir, "package.json", JSON.stringify({ name: "fixture", version: "1.1.0" }));
-  writeFile(rootDir, "index.html", "<!doctype html><title>fixture</title>");
+  writeFile(
+    rootDir,
+    "index.html",
+    '<!doctype html><link rel="stylesheet" href="./styles.css"><script type="module" src="./app.js"></script>'
+  );
   writeFile(rootDir, "app.js", APP_SOURCE);
-  writeFile(rootDir, "styles.css", "body{}");
+  writeFile(rootDir, "styles.css", '@font-face{src:url("./assets/fonts/noto-serif-kr-korean-wght-normal.woff2")}');
   writeFile(rootDir, "sw.js", SERVICE_WORKER_SOURCE);
   writeFile(rootDir, "manifest.webmanifest", "{}");
   writeFile(rootDir, "README.md", "# fixture");
   writeFile(rootDir, "assets/icon.svg", "<svg></svg>");
   writeFile(rootDir, "assets/icon-192.png", "icon");
   writeFile(rootDir, "assets/icon-512.png", "icon");
+  writeFile(rootDir, "assets/fonts/noto-serif-kr-korean-wght-normal.woff2", "font");
   writeFile(rootDir, "data/words.json", '{\n  "words": []\n}\n');
   writeFile(rootDir, "data/supplemental-words.json", '{\n  "words": []\n}\n');
   writeFile(rootDir, "data/textbook-expressions.json", '{\n  "words": []\n}\n');
@@ -56,7 +61,7 @@ function createFixtureProject(rootDir) {
     if (modulePath === "app.js" || modulePath === "sw.js") {
       continue;
     }
-    const source = modulePath === "lib/service-worker-routing.js"
+    const source = ["lib/service-worker-routing.js", "lib/offline-status.js"].includes(modulePath)
       ? fs.readFileSync(path.join(ROOT, modulePath), "utf8")
       : "export const fixtureModule = true;";
     writeFile(rootDir, modulePath, source);
@@ -157,7 +162,7 @@ function evaluateBuiltServiceWorker(entryPath) {
   context.self.globalThis = context;
   context.importScripts = (...scriptPaths) => {
     for (const scriptPath of scriptPaths) {
-      const importedPath = path.resolve(path.dirname(entryPath), scriptPath);
+      const importedPath = path.resolve(path.dirname(entryPath), scriptPath.split(/[?#]/, 1)[0]);
       const importedSource = fs.readFileSync(importedPath, "utf8");
       vm.runInNewContext(importedSource, context, { filename: importedPath });
     }
@@ -236,6 +241,51 @@ test("build-pages injects deterministic cache version into dist service worker",
   await dispatchInstall(evaluatedServiceWorker);
 
   assert.equal(evaluatedServiceWorker.openedCaches.includes(`daddys-dictionary-${expectedVersion}`), true);
+});
+
+test("build-pages pins every built shell reference to one generated release version", () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "build-pages-"));
+  createFixtureProject(tempRoot);
+
+  execFileSync("node", ["scripts/build-pages.mjs"], {
+    cwd: tempRoot,
+    encoding: "utf8"
+  });
+
+  const version = generateCacheVersion(tempRoot);
+  const outputRoot = path.join(tempRoot, "dist-pages");
+  const builtIndex = fs.readFileSync(path.join(outputRoot, "index.html"), "utf8");
+  const builtStyles = fs.readFileSync(path.join(outputRoot, "styles.css"), "utf8");
+  const builtApp = fs.readFileSync(path.join(outputRoot, "app.js"), "utf8");
+  const builtOfflineStatus = fs.readFileSync(path.join(outputRoot, "lib", "offline-status.js"), "utf8");
+  const builtSw = fs.readFileSync(path.join(outputRoot, "sw.js"), "utf8");
+
+  assert.match(builtIndex, new RegExp(escapeRegExp(`./styles.css?v=${version}`)));
+  assert.match(builtIndex, new RegExp(escapeRegExp(`./app.js?v=${version}`)));
+  assert.match(
+    builtStyles,
+    new RegExp(escapeRegExp(`./assets/fonts/noto-serif-kr-korean-wght-normal.woff2?v=${version}`))
+  );
+  assert.match(builtApp, new RegExp(escapeRegExp(`./lib/dictionary-logic.js?v=${version}`)));
+  assert.match(builtApp, new RegExp(escapeRegExp(`./data/words.json?v=${version}`)));
+  assert.match(builtOfflineStatus, /serviceWorker\.register\("\.\/sw\.js"\)/);
+  assert.doesNotMatch(builtOfflineStatus, /sw\.js\?v=/);
+  assert.equal(builtSw.includes("__ASSET_VERSION__"), false);
+  assert.equal(builtSw.includes("__CACHE_VERSION__"), false);
+
+  const pinnedVersions = new Set();
+  for (const relativePath of [
+    "index.html",
+    "styles.css",
+    ...PRECACHE_RUNTIME_MODULES.filter((modulePath) => modulePath !== "sw.js")
+  ]) {
+    const source = fs.readFileSync(path.join(outputRoot, relativePath), "utf8");
+    for (const match of source.matchAll(/[?&]v=([^"'\s)#]+)/g)) {
+      pinnedVersions.add(match[1]);
+    }
+  }
+
+  assert.deepEqual([...pinnedVersions], [version]);
 });
 
 test("cache version changes when a precached static asset changes", () => {
