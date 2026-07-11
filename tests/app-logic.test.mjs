@@ -9,7 +9,8 @@ import {
   mergeExampleSentences,
   normalizeDisplayForm,
   normalizeEnglish,
-  normalizeKorean
+  normalizeKorean,
+  searchWords
 } from "../lib/dictionary-logic.js";
 
 function createWord(overrides = {}) {
@@ -256,6 +257,33 @@ test("filterWords keeps default ordering and ranks exact matches above partial m
     filterWords({ words, rawQuery: "방과", category: "supplemental" }).map((word) => word.id),
     [40]
   );
+});
+
+test("searchWords returns paginated result metadata", () => {
+  const words = [
+    createWord({
+      id: 3,
+      word: "abort",
+      searchKeywords: { english: ["abort"], korean: ["유산하다"] }
+    }),
+    createWord({
+      id: 2,
+      word: "asset",
+      searchKeywords: { english: ["asset"], korean: ["유산"] }
+    }),
+    createWord({
+      id: 1,
+      word: "heritage",
+      searchKeywords: { english: ["heritage"], korean: ["유산"] }
+    })
+  ];
+
+  assert.deepEqual(searchWords({ words, rawQuery: "", category: "all", offset: 1, limit: 1 }), {
+    items: [words[1]],
+    total: 3,
+    shown: 2,
+    hasMore: true
+  });
 });
 
 test("comparePronunciation returns graduated feedback based on transcript similarity", () => {

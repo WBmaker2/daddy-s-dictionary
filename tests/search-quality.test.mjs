@@ -7,7 +7,8 @@ import { fileURLToPath } from "node:url";
 import {
   filterWords,
   mergeDictionaries,
-  mergeExampleSentences
+  mergeExampleSentences,
+  searchWords
 } from "../lib/dictionary-logic.js";
 
 const TEST_DIR = path.dirname(fileURLToPath(import.meta.url));
@@ -59,4 +60,51 @@ test("golden query: elementary expressions are discoverable in committed data", 
 
 test("golden query: bank should return bank first", () => {
   assert.equal(search("bank")[0]?.word, "bank");
+});
+
+test("searchWords ranks exact Korean keyword matches and reports pagination metadata", () => {
+  const result = searchWords({
+    words: committedWords,
+    rawQuery: "유산",
+    category: "all",
+    offset: 0,
+    limit: 2
+  });
+
+  assert.equal(result.items[0].word, "asset");
+  assert.equal(result.total, 3);
+  assert.equal(result.shown, 2);
+  assert.equal(result.hasMore, true);
+});
+
+test("searchWords counts all matches before limiting results", () => {
+  const result = searchWords({
+    words: committedWords,
+    rawQuery: "a",
+    category: "all",
+    offset: 0,
+    limit: 6
+  });
+
+  assert(result.total > 60);
+  assert.equal(result.items.length, 6);
+});
+
+test("searchWords ranks exact alternate English forms above prefix-only matches", () => {
+  for (const [query, expectedWord] of [
+    ["data", "datum"],
+    ["lab", "laboratory"],
+    ["media", "medium"],
+    ["mom", "mother"]
+  ]) {
+    const result = searchWords({
+      words: committedWords,
+      rawQuery: query,
+      category: "all",
+      offset: 0,
+      limit: 6
+    });
+
+    assert.equal(result.items[0]?.word, expectedWord, query);
+  }
 });
