@@ -45,10 +45,11 @@ function createFixtureProject(rootDir) {
   writeFile(rootDir, "assets/icon.svg", "<svg></svg>");
   writeFile(rootDir, "assets/icon-192.png", "icon");
   writeFile(rootDir, "assets/icon-512.png", "icon");
-  writeFile(rootDir, "data/words.json", '{"words":[]}');
-  writeFile(rootDir, "data/supplemental-words.json", '{"words":[]}');
-  writeFile(rootDir, "data/textbook-expressions.json", '{"words":[]}');
-  writeFile(rootDir, "data/example-sentences.json", '{"items":[]}');
+  writeFile(rootDir, "data/words.json", '{\n  "words": []\n}\n');
+  writeFile(rootDir, "data/supplemental-words.json", '{\n  "words": []\n}\n');
+  writeFile(rootDir, "data/textbook-expressions.json", '{\n  "words": []\n}\n');
+  writeFile(rootDir, "data/example-sentences.json", '{\n  "items": []\n}\n');
+  writeFile(rootDir, "data/notes.txt", "keep this asset byte-for-byte\n");
   for (const modulePath of RUNTIME_MODULES) {
     if (modulePath === "app.js" || modulePath === "sw.js") {
       continue;
@@ -59,6 +60,36 @@ function createFixtureProject(rootDir) {
     writeFile(rootDir, modulePath, source);
   }
 }
+
+test("build-pages minifies deployment data JSON without changing payloads or other assets", () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "build-pages-"));
+  createFixtureProject(tempRoot);
+
+  execFileSync("node", ["scripts/build-pages.mjs"], {
+    cwd: tempRoot,
+    encoding: "utf8"
+  });
+
+  for (const relativePath of [
+    "data/words.json",
+    "data/supplemental-words.json",
+    "data/textbook-expressions.json",
+    "data/example-sentences.json"
+  ]) {
+    const source = fs.readFileSync(path.join(tempRoot, relativePath), "utf8");
+    const built = fs.readFileSync(path.join(tempRoot, "dist-pages", relativePath), "utf8");
+
+    assert.deepEqual(JSON.parse(built), JSON.parse(source));
+    assert.equal(built.includes("\n"), false);
+    assert.equal(built.includes("  "), false);
+    assert.ok(Buffer.byteLength(built) < Buffer.byteLength(source));
+  }
+
+  assert.deepEqual(
+    fs.readFileSync(path.join(tempRoot, "dist-pages", "data", "notes.txt")),
+    fs.readFileSync(path.join(tempRoot, "data", "notes.txt"))
+  );
+});
 
 function evaluateBuiltServiceWorker(entryPath) {
   const listeners = new Map();
@@ -205,6 +236,17 @@ test("cache version changes when a transitive runtime module changes", () => {
 
   const initialVersion = generateCacheVersion(tempRoot);
   writeFile(tempRoot, "lib/transitive-runtime.js", "export const fixtureModule = 'updated';");
+
+  assert.notEqual(generateCacheVersion(tempRoot), initialVersion);
+});
+
+test("cache version tracks the offline readiness module through the runtime closure", () => {
+  assert.equal(RUNTIME_MODULES.includes("lib/offline-status.js"), true);
+
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "cache-version-"));
+  createFixtureProject(tempRoot);
+  const initialVersion = generateCacheVersion(tempRoot);
+  writeFile(tempRoot, "lib/offline-status.js", "export const status = 'updated';");
 
   assert.notEqual(generateCacheVersion(tempRoot), initialVersion);
 });

@@ -10,6 +10,7 @@ import { createDomRefs } from "./lib/dom-contract.js";
 import { createSearchViewState } from "./lib/search-view-state.js";
 import { renderLoadFailure } from "./lib/load-recovery.js";
 import { renderDataWarning, updateBanner } from "./lib/status-regions.js";
+import { trackOfflineReadiness } from "./lib/offline-status.js";
 
 const state = {
   dictionary: null,
@@ -43,11 +44,18 @@ const DICTIONARY_FILES = {
 const MOBILE_COMPACT_MEDIA = "(max-width: 540px)";
 const OPTIONAL_DATA_WARNING = "일부 확장 자료를 불러오지 못했지만 기본 영단어 검색은 사용할 수 있습니다.";
 const LOAD_FAILURE_MESSAGE = "사전 데이터를 불러오지 못했습니다. 연결 상태를 확인한 뒤 다시 시도해 주세요.";
+const OFFLINE_STATUS_LABELS = {
+  preparing: "오프라인 준비 중",
+  ready: "오프라인 사용 준비됨",
+  unsupported: "온라인에서 사용 가능",
+  failed: "오프라인 준비 실패"
+};
 const searchViewState = createSearchViewState({ initialLimit: 6, pageSize: 12 });
 
 const refs = createDomRefs();
 let eventsBound = false;
 let isRetrying = false;
+let offlineReadinessStarted = false;
 
 function escapeHtml(value) {
   return value
@@ -320,20 +328,23 @@ function bindEvents() {
   }
 }
 
-async function registerServiceWorker() {
-  if (!("serviceWorker" in navigator)) {
+function startOfflineReadiness() {
+  if (offlineReadinessStarted) {
     return;
   }
 
-  try {
-    await navigator.serviceWorker.register("./sw.js");
-  } catch (error) {
-    console.error(error);
-  }
+  offlineReadinessStarted = true;
+  void trackOfflineReadiness({
+    navigatorObject: navigator,
+    onStatus: (status) => {
+      refs.offlineStatusChip.textContent = OFFLINE_STATUS_LABELS[status];
+    }
+  });
 }
 
 async function bootstrap() {
   try {
+    startOfflineReadiness();
     updateStatus("사전 데이터를 불러오는 중입니다.");
     const { dictionary, optionalErrors } = await loadDictionary();
     state.dictionary = dictionary;
@@ -359,8 +370,6 @@ async function bootstrap() {
         source: "network"
       });
     }
-
-    registerServiceWorker();
   } catch (error) {
     refs.loadMoreButton.hidden = true;
     renderLoadFailure({

@@ -202,6 +202,13 @@ test("sw.js precaches the complete runtime module closure", () => {
   }
 });
 
+test("sw.js requires the offline readiness module during precache", () => {
+  const source = fs.readFileSync(SERVICE_WORKER_ENTRY_PATH, "utf8");
+  const requiredAssets = readServiceWorkerAssetList(source, "REQUIRED_ASSETS");
+
+  assert.equal(requiredAssets.includes("./lib/offline-status.js"), true);
+});
+
 test("service worker routing classifies document navigations with app-shell fallback", () => {
   const routing = loadRoutingModule();
   const assetPaths = routing.buildAssetPathSet(["./", "./index.html", "./app.js"], "https://example.com");

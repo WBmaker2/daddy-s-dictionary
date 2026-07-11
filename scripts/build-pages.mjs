@@ -22,7 +22,12 @@ function copyFile(from, to) {
   fs.copyFileSync(from, to);
 }
 
-function copyDirectory(from, to) {
+function copyJsonFile(from, to) {
+  fs.mkdirSync(path.dirname(to), { recursive: true });
+  fs.writeFileSync(to, JSON.stringify(JSON.parse(fs.readFileSync(from, "utf8"))), "utf8");
+}
+
+function copyDirectory(from, to, { minifyJson = false } = {}) {
   fs.mkdirSync(to, { recursive: true });
 
   for (const entry of fs.readdirSync(from, { withFileTypes: true })) {
@@ -30,9 +35,13 @@ function copyDirectory(from, to) {
     const targetPath = path.join(to, entry.name);
 
     if (entry.isDirectory()) {
-      copyDirectory(sourcePath, targetPath);
+      copyDirectory(sourcePath, targetPath, { minifyJson });
     } else if (entry.isFile()) {
-      copyFile(sourcePath, targetPath);
+      if (minifyJson && entry.name.endsWith(".json")) {
+        copyJsonFile(sourcePath, targetPath);
+      } else {
+        copyFile(sourcePath, targetPath);
+      }
     }
   }
 }
@@ -65,7 +74,9 @@ function main() {
   }
 
   for (const directory of DIRECTORIES) {
-    copyDirectory(path.join(ROOT, directory), path.join(OUTPUT_DIR, directory));
+    copyDirectory(path.join(ROOT, directory), path.join(OUTPUT_DIR, directory), {
+      minifyJson: directory === "data"
+    });
   }
 
   replaceServiceWorkerCacheVersion(OUTPUT_DIR);

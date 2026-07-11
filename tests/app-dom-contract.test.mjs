@@ -26,6 +26,28 @@ test("DOM contract exposes the dedicated data warning status region", () => {
   assert.equal(TOP_LEVEL_SELECTORS.dataWarning, "#data-warning");
 });
 
+test("offline readiness chip announces status changes with the expected Korean labels", () => {
+  const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+
+  assert.match(
+    indexHtml,
+    /id="offline-status-chip"[^>]*role="status"[^>]*aria-live="polite"[^>]*>오프라인 준비 중</
+  );
+});
+
+test("app starts one offline readiness registration before dictionary loading without awaiting it", () => {
+  const appSource = fs.readFileSync(path.join(ROOT, "app.js"), "utf8");
+  const trackingCall = "trackOfflineReadiness({";
+  const dictionaryLoad = "const { dictionary, optionalErrors } = await loadDictionary();";
+
+  assert.match(appSource, /import\s+\{\s*trackOfflineReadiness\s*\}\s+from\s+"\.\/lib\/offline-status\.js";/);
+  assert.equal((appSource.match(/trackOfflineReadiness\(\{/g) ?? []).length, 1);
+  assert.equal(appSource.includes("navigator.serviceWorker.register"), false);
+  assert.ok(appSource.indexOf(trackingCall) >= 0);
+  assert.ok(appSource.indexOf(trackingCall) < appSource.indexOf(dictionaryLoad));
+  assert.doesNotMatch(appSource, /await\s+trackOfflineReadiness/);
+});
+
 function createNode(label) {
   return { label };
 }

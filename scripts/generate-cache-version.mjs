@@ -30,8 +30,15 @@ function collectJsonDataFiles(dataDirectoryPath) {
 
   return fs
     .readdirSync(dataDirectoryPath, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && entry.name.endsWith(DATA_FILE_SUFFIX))
-    .map((entry) => path.join(dataDirectoryPath, entry.name))
+    .flatMap((entry) => {
+      const entryPath = path.join(dataDirectoryPath, entry.name);
+
+      if (entry.isDirectory()) {
+        return collectJsonDataFiles(entryPath);
+      }
+
+      return entry.isFile() && entry.name.endsWith(DATA_FILE_SUFFIX) ? [entryPath] : [];
+    })
     .sort((a, b) => a.localeCompare(b));
 }
 
