@@ -16,6 +16,7 @@ const CORE_RUNTIME_FILES = [
   "lib/dom-contract.js",
   "lib/service-worker-routing.js",
   "lib/dictionary-logic.js",
+  "lib/load-recovery.js",
   "lib/pronunciation-controls.js",
   "lib/search-view-state.js"
 ];

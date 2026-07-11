@@ -12,13 +12,23 @@ const TEST_DIR = fileURLToPath(new URL(".", import.meta.url));
 const ROOT = path.resolve(TEST_DIR, "..");
 const BUILD_SCRIPT_SOURCE = fs.readFileSync(path.join(ROOT, "scripts", "build-pages.mjs"), "utf8");
 const SERVICE_WORKER_SOURCE = fs.readFileSync(path.join(ROOT, "sw.js"), "utf8");
-const REQUIRED_RUNTIME_MODULES = [
-  "lib/dom-contract.js",
-  "lib/dictionary-logic.js",
-  "lib/pronunciation-controls.js",
-  "lib/search-view-state.js",
-  "lib/service-worker-routing.js"
-];
+const APP_SOURCE = fs.readFileSync(path.join(ROOT, "app.js"), "utf8");
+
+function readRelativeModuleImports(source) {
+  const modulePaths = new Set();
+
+  for (const match of source.matchAll(/\bfrom\s+["'](\.\/[^"']+)["']/g)) {
+    modulePaths.add(match[1].replace(/^\.\//, ""));
+  }
+
+  for (const match of source.matchAll(/\bimportScripts\(\s*["'](\.\/[^"']+)["']\s*\)/g)) {
+    modulePaths.add(match[1].replace(/^\.\//, ""));
+  }
+
+  return [...modulePaths].sort((left, right) => left.localeCompare(right));
+}
+
+const REQUIRED_RUNTIME_MODULES = readRelativeModuleImports(`${APP_SOURCE}\n${SERVICE_WORKER_SOURCE}`);
 
 function writeFile(rootDir, relativePath, contents) {
   const filePath = path.join(rootDir, relativePath);
@@ -35,7 +45,7 @@ function createFixtureProject(rootDir) {
   );
   writeFile(rootDir, "package.json", JSON.stringify({ name: "fixture", version: "1.0.7" }));
   writeFile(rootDir, "index.html", "<!doctype html><title>fixture</title>");
-  writeFile(rootDir, "app.js", "console.log('app');");
+  writeFile(rootDir, "app.js", APP_SOURCE);
   writeFile(rootDir, "styles.css", "body{}");
   writeFile(rootDir, "sw.js", SERVICE_WORKER_SOURCE);
   writeFile(rootDir, "manifest.webmanifest", "{}");
@@ -47,15 +57,12 @@ function createFixtureProject(rootDir) {
   writeFile(rootDir, "data/supplemental-words.json", '{"words":[]}');
   writeFile(rootDir, "data/textbook-expressions.json", '{"words":[]}');
   writeFile(rootDir, "data/example-sentences.json", '{"items":[]}');
-  writeFile(
-    rootDir,
-    "lib/service-worker-routing.js",
-    fs.readFileSync(path.join(ROOT, "lib", "service-worker-routing.js"), "utf8")
-  );
-  writeFile(rootDir, "lib/dom-contract.js", "export const fixtureDomContract = true;");
-  writeFile(rootDir, "lib/dictionary-logic.js", "export const fixtureDictionaryLogic = true;");
-  writeFile(rootDir, "lib/pronunciation-controls.js", "export const fixturePronunciationControls = true;");
-  writeFile(rootDir, "lib/search-view-state.js", "export const fixtureSearchViewState = true;");
+  for (const modulePath of REQUIRED_RUNTIME_MODULES) {
+    const source = modulePath === "lib/service-worker-routing.js"
+      ? fs.readFileSync(path.join(ROOT, modulePath), "utf8")
+      : "export const fixtureModule = true;";
+    writeFile(rootDir, modulePath, source);
+  }
 }
 
 function evaluateBuiltServiceWorker(entryPath) {
@@ -190,6 +197,16 @@ test("cache version changes when a precached static asset changes", () => {
 
   const initialVersion = generateCacheVersion(tempRoot);
   writeFile(tempRoot, "assets/icon.svg", "<svg><title>updated</title></svg>");
+
+  assert.notEqual(generateCacheVersion(tempRoot), initialVersion);
+});
+
+test("cache version changes when the load recovery module changes", () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "cache-version-"));
+  createFixtureProject(tempRoot);
+
+  const initialVersion = generateCacheVersion(tempRoot);
+  writeFile(tempRoot, "lib/load-recovery.js", "export const fixtureModule = 'updated';");
 
   assert.notEqual(generateCacheVersion(tempRoot), initialVersion);
 });

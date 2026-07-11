@@ -8,6 +8,7 @@ import {
 import { createPronunciationController } from "./lib/pronunciation-controls.js";
 import { createDomRefs } from "./lib/dom-contract.js";
 import { createSearchViewState } from "./lib/search-view-state.js";
+import { renderLoadFailure } from "./lib/load-recovery.js";
 
 const state = {
   dictionary: null,
@@ -39,9 +40,13 @@ const DICTIONARY_FILES = {
   exampleSentences: { path: "./data/example-sentences.json", optional: true }
 };
 const MOBILE_COMPACT_MEDIA = "(max-width: 540px)";
+const OPTIONAL_DATA_WARNING = "일부 확장 자료를 불러오지 못했지만 기본 영단어 검색은 사용할 수 있습니다.";
+const LOAD_FAILURE_MESSAGE = "사전 데이터를 불러오지 못했습니다. 연결 상태를 확인한 뒤 다시 시도해 주세요.";
 const searchViewState = createSearchViewState({ initialLimit: 6, pageSize: 12 });
 
 const refs = createDomRefs();
+let eventsBound = false;
+let isRetrying = false;
 
 function escapeHtml(value) {
   return value
@@ -98,10 +103,42 @@ async function fetchDictionaryFile(path, { optional = false } = {}) {
 }
 
 async function loadDictionary() {
-  return loadDictionaryData({
+  const optionalErrors = [];
+  const dictionary = await loadDictionaryData({
     files: DICTIONARY_FILES,
-    loadFile: fetchDictionaryFile
+    loadFile: fetchDictionaryFile,
+    onOptionalError: (warning) => optionalErrors.push(warning)
   });
+
+  return { dictionary, optionalErrors };
+}
+
+function setSearchControlsDisabled(disabled) {
+  for (const control of [refs.input, refs.category, refs.clearButton, refs.loadMoreButton]) {
+    control.disabled = disabled;
+  }
+}
+
+function renderOptionalDataWarning(optionalErrors) {
+  if (optionalErrors.length > 0) {
+    updateBanner(OPTIONAL_DATA_WARNING, "warning", "data");
+  }
+}
+
+async function retryDictionaryLoad() {
+  if (isRetrying) {
+    return;
+  }
+
+  isRetrying = true;
+  setSearchControlsDisabled(true);
+
+  try {
+    await bootstrap();
+  } finally {
+    setSearchControlsDisabled(false);
+    isRetrying = false;
+  }
 }
 
 function prefersCompactResultLayout() {
@@ -232,6 +269,11 @@ function updateInfoSummary() {
 }
 
 function bindEvents() {
+  if (eventsBound) {
+    return;
+  }
+
+  eventsBound = true;
   refs.input.addEventListener("input", () => {
     pronunciationController.stopPronunciationCheck();
     clearPronunciationBanner();
@@ -296,7 +338,7 @@ async function registerServiceWorker() {
 async function bootstrap() {
   try {
     updateStatus("사전 데이터를 불러오는 중입니다.");
-    const dictionary = await loadDictionary();
+    const { dictionary, optionalErrors } = await loadDictionary();
     state.dictionary = dictionary;
     state.words = dictionary.words;
 
@@ -310,16 +352,21 @@ async function bootstrap() {
 
     bindEvents();
     render();
+    renderOptionalDataWarning(optionalErrors);
 
-    if (!navigator.onLine) {
+    if (optionalErrors.length === 0 && !navigator.onLine) {
       updateBanner("오프라인 상태입니다. 캐시된 데이터로 검색할 수 있습니다.", "warning");
     }
 
     registerServiceWorker();
   } catch (error) {
-    refs.results.innerHTML =
-      '<div class="empty-state">사전 데이터를 준비하지 못했습니다. <code>npm run generate:data</code>를 다시 실행해 주세요.</div>';
-    updateStatus(error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.");
+    refs.loadMoreButton.hidden = true;
+    renderLoadFailure({
+      container: refs.results,
+      message: LOAD_FAILURE_MESSAGE,
+      onRetry: retryDictionaryLoad
+    });
+    updateStatus(LOAD_FAILURE_MESSAGE);
   }
 }
 

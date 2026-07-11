@@ -15,6 +15,7 @@ const REQUIRED_ASSETS = [
   "./assets/icon-512.png",
   "./lib/dom-contract.js",
   "./lib/dictionary-logic.js",
+  "./lib/load-recovery.js",
   "./lib/pronunciation-controls.js",
   "./lib/search-view-state.js",
   "./lib/service-worker-routing.js",

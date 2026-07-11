@@ -220,6 +220,41 @@ test("loadDictionaryData ignores loader exceptions for optional source files", a
   assert.deepEqual(dictionary, baseDictionary);
 });
 
+test("loadDictionaryData reports optional loader exceptions while returning the base dictionary", async () => {
+  const baseDictionary = {
+    generatedAt: "2026-01-01T00:00:00Z",
+    sources: ["base"],
+    stats: { elementary: 1 },
+    words: [createWord({ id: 1, word: "Apple" })]
+  };
+  const supplementalError = new Error("network unavailable");
+  const reportedErrors = [];
+
+  const dictionary = await loadDictionaryData({
+    files: DICTIONARY_FILES,
+    loadFile: async (path) => {
+      if (path === "./data/words.json") {
+        return baseDictionary;
+      }
+
+      if (path === "./data/supplemental-words.json") {
+        throw supplementalError;
+      }
+
+      return null;
+    },
+    onOptionalError: (report) => reportedErrors.push(report)
+  });
+
+  assert.equal(dictionary, baseDictionary);
+  assert.deepEqual(reportedErrors, [
+    {
+      path: "./data/supplemental-words.json",
+      error: supplementalError
+    }
+  ]);
+});
+
 test("loadDictionaryData forwards custom paths and optional flags from the file manifest", async () => {
   const seen = [];
   const customFiles = {

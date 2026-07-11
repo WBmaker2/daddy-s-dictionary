@@ -509,6 +509,35 @@ select {
   color: var(--muted);
 }
 
+.load-failure {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  grid-column: 1 / -1;
+  padding: 42px 20px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 252, 245, 0.74);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  text-align: center;
+}
+
+.load-failure p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.load-failure button {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 18px;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent), #159e8a);
+  color: white;
+  font: inherit;
+  font-weight: 700;
+}
+
 @media (max-width: 1080px) {
   .hero-text {
     max-width: 44ch;
