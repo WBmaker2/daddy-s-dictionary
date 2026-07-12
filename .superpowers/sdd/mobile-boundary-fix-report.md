@@ -26,3 +26,15 @@
 - `npm run build:pages`: passed.
 - Playwright: 13 passed, 1 intentional desktop skip.
 - `git diff --check`: passed before the implementation commit.
+
+## Second Pass: Classic Scrollbar Content Width
+- Base: `40563d66c6442cb78aff709ba917dc4578fe478e`
+- Implementation commit: `707f5e7699f6021cd1915afffdba4a3bcc936929` (`Cover classic scrollbar mobile width`)
+- Added `375px` to the mobile browser loop, matching a 390px browser viewport with a 15px classic vertical scrollbar and `documentElement.clientWidth=375`.
+- Reduced the shared mobile hero reservation from `52px` to `35px` and removed the now-unnecessary 360px `40px` override. The 35px value preserves the focused/open summary clearance while returning enough space to the first-screen search contract.
+- Updated the DOM CSS contract and README to describe `360`·`375`·`390`·`540`px mobile checks. The existing update-history copy was unchanged.
+
+### RED-GREEN Evidence
+- RED: after adding the 375px case, `npm run test:e2e -- tests/e2e/search-flow.spec.mjs --project=mobile` reported 6 passing and 1 failing test: `375px search panel top` was `333.59375px`, above the 320px limit.
+- GREEN: after the 35px reservation adjustment, focused DOM contract tests reported 39 passing and focused mobile Playwright reported 7 passing, including 360px, 375px, 390px, and 540px.
+- Final: `npm run verify` passed with 138 Node tests, strict data validation, Pages build, and Playwright reporting 13 passed with 1 intentional desktop mobile-only skip.
