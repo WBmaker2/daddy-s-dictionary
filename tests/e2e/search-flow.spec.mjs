@@ -138,7 +138,7 @@ test("keeps the mobile first screen compact without horizontal overflow", async 
   const updateSummary = updateHistory.locator("summary");
   await expect(updateSummary).toBeVisible();
 
-  for (const width of [360, 390, 540]) {
+  for (const width of [360, 375, 390, 540]) {
     await page.setViewportSize({ width, height: 844 });
     await updateSummary.focus();
     const layout = await page.evaluate(() => ({

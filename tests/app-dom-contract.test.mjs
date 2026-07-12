@@ -53,7 +53,7 @@ test("update history CSS reserves mobile hero space and keeps the overlay inside
   assert.match(styles, /\.update-history-panel\s*\{[^}]*max-height:\s*calc\(100dvh\s*-\s*28px\)\s*;/s);
   assert.match(
     styles,
-    /@media\s*\(max-width:\s*540px\)\s*\{[\s\S]*?\.hero-copy\s*\{[^}]*padding-top:\s*52px\s*;/
+    /@media\s*\(max-width:\s*540px\)\s*\{[\s\S]*?\.hero-copy\s*\{[^}]*padding-top:\s*35px\s*;/
   );
   assert.match(
     styles,

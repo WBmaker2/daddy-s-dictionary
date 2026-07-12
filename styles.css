@@ -800,7 +800,7 @@ select {
 
   .hero-copy {
     gap: 8px;
-    padding-top: 52px;
+    padding-top: 35px;
   }
 
   .eyebrow {
@@ -920,10 +920,6 @@ select {
 }
 
 @media (max-width: 360px) {
-  .hero-copy {
-    padding-top: 40px;
-  }
-
   .eyebrow {
     max-width: calc(100% - 64px);
   }
