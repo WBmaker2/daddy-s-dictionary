@@ -137,31 +137,43 @@ test("keeps the mobile first screen compact without horizontal overflow", async 
   const updateHistory = page.locator("#update-history");
   const updateSummary = updateHistory.locator("summary");
   await expect(updateSummary).toBeVisible();
-  const layout = await page.evaluate(() => ({
-    documentHeight: document.documentElement.scrollHeight,
-    horizontalOverflow: document.documentElement.scrollWidth > window.innerWidth,
-    searchTop: document.querySelector(".search-panel").getBoundingClientRect().top
-  }));
 
-  expect(layout.horizontalOverflow).toBe(false);
-  expect(layout.searchTop).toBeLessThanOrEqual(320);
-  expect(layout.documentHeight).toBeLessThan(5000);
+  for (const width of [360, 390, 540]) {
+    await page.setViewportSize({ width, height: 844 });
+    await updateSummary.focus();
+    const layout = await page.evaluate(() => ({
+      clientWidth: document.documentElement.clientWidth,
+      documentHeight: document.documentElement.scrollHeight,
+      horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      searchTop: document.querySelector(".search-panel").getBoundingClientRect().top,
+      summary: document.querySelector(".update-history-summary").getBoundingClientRect(),
+      eyebrow: document.querySelector(".eyebrow").getBoundingClientRect(),
+      title: document.querySelector(".hero h1").getBoundingClientRect()
+    }));
 
-  await updateSummary.click();
-  const overlay = await page.locator(".update-history-panel").evaluate((panel) => {
-    const rect = panel.getBoundingClientRect();
-    return {
-      bottom: rect.bottom,
-      left: rect.left,
-      right: rect.right,
-      top: rect.top,
-      viewportHeight: window.innerHeight,
-      viewportWidth: window.innerWidth
-    };
-  });
+    expect(layout.horizontalOverflow, `${width}px horizontal overflow`).toBe(false);
+    expect(layout.searchTop, `${width}px search panel top`).toBeLessThanOrEqual(320);
+    expect(layout.documentHeight, `${width}px document height`).toBeLessThan(5000);
+    expect(layout.summary.bottom + 4, `${width}px focus ring and eyebrow`).toBeLessThanOrEqual(layout.eyebrow.top);
+    expect(layout.summary.bottom + 4, `${width}px focus ring and title`).toBeLessThanOrEqual(layout.title.top);
 
-  expect(overlay.top).toBeGreaterThanOrEqual(0);
-  expect(overlay.left).toBeGreaterThanOrEqual(0);
-  expect(overlay.right).toBeLessThanOrEqual(overlay.viewportWidth);
-  expect(overlay.bottom).toBeLessThanOrEqual(overlay.viewportHeight);
+    await updateSummary.click();
+    const overlay = await page.locator(".update-history-panel").evaluate((panel) => {
+      const rect = panel.getBoundingClientRect();
+      return {
+        bottom: rect.bottom,
+        clientHeight: document.documentElement.clientHeight,
+        clientWidth: document.documentElement.clientWidth,
+        left: rect.left,
+        right: rect.right,
+        top: rect.top
+      };
+    });
+
+    expect(overlay.top, `${width}px overlay top`).toBeGreaterThanOrEqual(0);
+    expect(overlay.left, `${width}px overlay left`).toBeGreaterThanOrEqual(0);
+    expect(overlay.right, `${width}px overlay right`).toBeLessThanOrEqual(overlay.clientWidth);
+    expect(overlay.bottom, `${width}px overlay bottom`).toBeLessThanOrEqual(overlay.clientHeight);
+    await updateSummary.click();
+  }
 });

@@ -791,15 +791,16 @@ select {
   }
 
   .update-history-panel {
-    right: 10px;
+    inset-inline: 10px;
     bottom: 10px;
-    width: calc(100vw - 20px);
+    width: auto;
     max-height: calc(100dvh - 20px);
     padding: 16px;
   }
 
   .hero-copy {
     gap: 8px;
+    padding-top: 52px;
   }
 
   .eyebrow {
@@ -919,6 +920,10 @@ select {
 }
 
 @media (max-width: 360px) {
+  .hero-copy {
+    padding-top: 40px;
+  }
+
   .eyebrow {
     max-width: calc(100% - 64px);
   }

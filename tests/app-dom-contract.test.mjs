@@ -46,11 +46,19 @@ test("update history is a native details control with dated v1.1.0 RC release no
   assert.match(indexHtml, /정확 검색·6\/\+12 페이지네이션, 3,489 예문/);
 });
 
-test("update history panel overlays the page and respects the viewport", () => {
+test("update history CSS reserves mobile hero space and keeps the overlay inside content bounds", () => {
   const styles = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
 
   assert.match(styles, /\.update-history-panel\s*\{[^}]*position:\s*fixed\s*;/s);
   assert.match(styles, /\.update-history-panel\s*\{[^}]*max-height:\s*calc\(100dvh\s*-\s*28px\)\s*;/s);
+  assert.match(
+    styles,
+    /@media\s*\(max-width:\s*540px\)\s*\{[\s\S]*?\.hero-copy\s*\{[^}]*padding-top:\s*52px\s*;/
+  );
+  assert.match(
+    styles,
+    /@media\s*\(max-width:\s*540px\)\s*\{[\s\S]*?\.update-history-panel\s*\{[^}]*inset-inline:\s*10px\s*;[^}]*width:\s*auto\s*;/
+  );
 });
 
 test("app wires bootstrap through the injected startup coordinator", () => {
