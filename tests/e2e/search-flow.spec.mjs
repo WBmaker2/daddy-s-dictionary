@@ -148,7 +148,27 @@ test("keeps the mobile first screen compact without horizontal overflow", async 
       searchTop: document.querySelector(".search-panel").getBoundingClientRect().top,
       summary: document.querySelector(".update-history-summary").getBoundingClientRect(),
       eyebrow: document.querySelector(".eyebrow").getBoundingClientRect(),
-      title: document.querySelector(".hero h1").getBoundingClientRect()
+      title: document.querySelector(".hero h1").getBoundingClientRect(),
+      titleLastWordLineCount: (() => {
+        const titleText = document.querySelector(".title-text");
+        const textNode = titleText.firstChild;
+        const lastWordStart = textNode.textContent.lastIndexOf("사전");
+        const range = document.createRange();
+
+        range.setStart(textNode, lastWordStart);
+        range.setEnd(textNode, lastWordStart + "사전".length);
+
+        return range.getClientRects().length;
+      })(),
+      titleLineCount: (() => {
+        const titleText = document.querySelector(".title-text");
+        const textNode = titleText.firstChild;
+        const range = document.createRange();
+
+        range.selectNodeContents(textNode);
+
+        return range.getClientRects().length;
+      })()
     }));
 
     expect(layout.horizontalOverflow, `${width}px horizontal overflow`).toBe(false);
@@ -156,6 +176,8 @@ test("keeps the mobile first screen compact without horizontal overflow", async 
     expect(layout.documentHeight, `${width}px document height`).toBeLessThan(5000);
     expect(layout.summary.bottom + 4, `${width}px focus ring and eyebrow`).toBeLessThanOrEqual(layout.eyebrow.top);
     expect(layout.summary.bottom + 4, `${width}px focus ring and title`).toBeLessThanOrEqual(layout.title.top);
+    expect(layout.titleLastWordLineCount, `${width}px title last word line count`).toBe(1);
+    expect(layout.titleLineCount, `${width}px title line count`).toBe(width <= 390 ? 2 : 1);
 
     await updateSummary.click();
     const overlay = await page.locator(".update-history-panel").evaluate((panel) => {

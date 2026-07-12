@@ -107,6 +107,7 @@ select {
 
 .title-text {
   display: inline;
+  word-break: keep-all;
 }
 
 .title-tail {

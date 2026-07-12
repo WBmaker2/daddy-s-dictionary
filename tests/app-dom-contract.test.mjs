@@ -61,6 +61,12 @@ test("update history CSS reserves mobile hero space and keeps the overlay inside
   );
 });
 
+test("title text preserves Korean word boundaries", () => {
+  const styles = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+
+  assert.match(styles, /\.title-text\s*\{[^}]*word-break:\s*keep-all\s*;/s);
+});
+
 test("app wires bootstrap through the injected startup coordinator", () => {
   const appSource = fs.readFileSync(path.join(ROOT, "app.js"), "utf8");
 
