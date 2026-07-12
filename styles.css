@@ -68,6 +68,7 @@ select {
 }
 
 .page-shell {
+  position: relative;
   width: min(1600px, calc(100% - 24px));
   margin: 0 auto;
   padding: 20px 0 40px;
@@ -75,6 +76,8 @@ select {
 
 .hero {
   display: block;
+  position: relative;
+  isolation: isolate;
   padding: 22px 24px;
   border-radius: 36px;
   background:
@@ -165,6 +168,100 @@ select {
   color: var(--accent-strong);
   font-size: 0.88rem;
   font-weight: 700;
+}
+
+.update-history {
+  position: absolute;
+  top: 38px;
+  right: 24px;
+  z-index: 4;
+}
+
+.update-history-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  cursor: pointer;
+  padding: 8px 11px;
+  border: 1px solid rgba(15, 124, 115, 0.24);
+  border-radius: 999px;
+  background: rgba(255, 253, 248, 0.9);
+  color: var(--accent-strong);
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1.2;
+  box-shadow: 0 8px 18px rgba(21, 52, 47, 0.08);
+}
+
+.update-history-summary::-webkit-details-marker {
+  display: none;
+}
+
+.update-history-summary::after {
+  content: "+";
+  font-size: 1rem;
+  line-height: 0.8;
+}
+
+.update-history[open] .update-history-summary {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 4px rgba(15, 124, 115, 0.14), 0 8px 18px rgba(21, 52, 47, 0.08);
+}
+
+.update-history[open] .update-history-summary::after {
+  content: "−";
+}
+
+.update-history-panel {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 10;
+  width: min(380px, calc(100vw - 28px));
+  max-height: calc(100dvh - 28px);
+  overflow: auto;
+  padding: 18px;
+  border: 1px solid rgba(15, 124, 115, 0.24);
+  border-radius: 20px;
+  background: rgba(255, 253, 248, 0.97);
+  color: var(--ink);
+  box-shadow: 0 24px 80px rgba(21, 52, 47, 0.24);
+}
+
+.update-history-release {
+  margin: 0;
+  color: var(--accent-strong);
+  font-size: 0.86rem;
+}
+
+.update-history-list {
+  display: grid;
+  gap: 14px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.update-history-list li {
+  display: grid;
+  gap: 5px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.update-history-list time {
+  color: var(--accent-strong);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.update-history-list p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
 }
 
 .hero-stat,
@@ -361,7 +458,8 @@ select {
 .speak-button:focus-visible,
 .check-button:focus-visible,
 .load-more-button:focus-visible,
-.info-summary:focus-visible {
+.info-summary:focus-visible,
+.update-history-summary:focus-visible {
   box-shadow: 0 0 0 4px rgba(15, 124, 115, 0.16);
 }
 
@@ -638,6 +736,10 @@ select {
   .result-card {
     padding: 18px;
   }
+
+  .update-history {
+    top: 32px;
+  }
 }
 
 @media (max-width: 760px) {
@@ -676,6 +778,24 @@ select {
   .hero {
     padding: 12px 14px;
     border-radius: 28px;
+  }
+
+  .update-history {
+    top: 22px;
+    right: 14px;
+  }
+
+  .update-history-summary {
+    padding: 7px 9px;
+    font-size: 0.7rem;
+  }
+
+  .update-history-panel {
+    right: 10px;
+    bottom: 10px;
+    width: calc(100vw - 20px);
+    max-height: calc(100dvh - 20px);
+    padding: 16px;
   }
 
   .hero-copy {
@@ -795,6 +915,21 @@ select {
   .card-actions {
     display: grid;
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 360px) {
+  .eyebrow {
+    max-width: calc(100% - 64px);
+  }
+
+  .update-history-summary span {
+    font-size: 0;
+  }
+
+  .update-history-summary span::before {
+    content: "기록";
+    font-size: 0.7rem;
   }
 }
 

@@ -35,6 +35,24 @@ test("offline readiness chip announces status changes with the expected Korean l
   );
 });
 
+test("update history is a native details control with dated v1.1.0 RC release notes", () => {
+  const indexHtml = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+
+  assert.match(indexHtml, /<details[^>]*id="update-history"[^>]*>/);
+  assert.match(indexHtml, /<summary[^>]*>\s*<span>업데이트 내역<\/span>/);
+  assert.match(indexHtml, /<time datetime="2026-03-14">2026\.03\.14<\/time>/);
+  assert.match(indexHtml, /<time datetime="2026-07-12">2026\.07\.12<\/time>/);
+  assert.match(indexHtml, /v1\.1\.0 개선/);
+  assert.match(indexHtml, /정확 검색·6\/\+12 페이지네이션, 3,489 예문/);
+});
+
+test("update history panel overlays the page and respects the viewport", () => {
+  const styles = fs.readFileSync(path.join(ROOT, "styles.css"), "utf8");
+
+  assert.match(styles, /\.update-history-panel\s*\{[^}]*position:\s*fixed\s*;/s);
+  assert.match(styles, /\.update-history-panel\s*\{[^}]*max-height:\s*calc\(100dvh\s*-\s*28px\)\s*;/s);
+});
+
 test("app wires bootstrap through the injected startup coordinator", () => {
   const appSource = fs.readFileSync(path.join(ROOT, "app.js"), "utf8");
 

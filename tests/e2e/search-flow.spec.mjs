@@ -58,6 +58,26 @@ test("keeps the search-first dictionary flow accessible", async ({ page }) => {
   await expect(searchInput).toHaveCSS("outline-style", "solid");
 });
 
+test("exposes the update history through an accessible native details control", async ({ page }) => {
+  await waitForDictionary(page);
+
+  const updateHistory = page.locator("#update-history");
+  const updateSummary = updateHistory.locator("summary");
+
+  await expect(updateSummary).toBeVisible();
+  await expect(updateHistory).not.toHaveAttribute("open");
+
+  await updateSummary.click();
+  await expect(updateHistory).toHaveAttribute("open", "");
+  await expect(updateHistory.getByText("v1.1.0 RC")).toBeVisible();
+  await expect(updateHistory.locator('time[datetime="2026-03-14"]')).toHaveText("2026.03.14");
+  await expect(updateHistory.locator('time[datetime="2026-07-12"]')).toHaveText("2026.07.12");
+
+  await updateSummary.focus();
+  await page.keyboard.press("Enter");
+  await expect(updateHistory).not.toHaveAttribute("open");
+});
+
 test("warns but keeps six base cards when an optional dictionary returns 404", async ({ page }) => {
   await page.route(/\/data\/supplemental-words\.json(?:\?.*)?$/, (route) =>
     route.fulfill({
@@ -114,6 +134,9 @@ test("keeps the mobile first screen compact without horizontal overflow", async 
   test.skip(testInfo.project.name !== "mobile", "Mobile-only layout contract");
 
   await waitForDictionary(page);
+  const updateHistory = page.locator("#update-history");
+  const updateSummary = updateHistory.locator("summary");
+  await expect(updateSummary).toBeVisible();
   const layout = await page.evaluate(() => ({
     documentHeight: document.documentElement.scrollHeight,
     horizontalOverflow: document.documentElement.scrollWidth > window.innerWidth,
@@ -123,4 +146,22 @@ test("keeps the mobile first screen compact without horizontal overflow", async 
   expect(layout.horizontalOverflow).toBe(false);
   expect(layout.searchTop).toBeLessThanOrEqual(320);
   expect(layout.documentHeight).toBeLessThan(5000);
+
+  await updateSummary.click();
+  const overlay = await page.locator(".update-history-panel").evaluate((panel) => {
+    const rect = panel.getBoundingClientRect();
+    return {
+      bottom: rect.bottom,
+      left: rect.left,
+      right: rect.right,
+      top: rect.top,
+      viewportHeight: window.innerHeight,
+      viewportWidth: window.innerWidth
+    };
+  });
+
+  expect(overlay.top).toBeGreaterThanOrEqual(0);
+  expect(overlay.left).toBeGreaterThanOrEqual(0);
+  expect(overlay.right).toBeLessThanOrEqual(overlay.viewportWidth);
+  expect(overlay.bottom).toBeLessThanOrEqual(overlay.viewportHeight);
 });
