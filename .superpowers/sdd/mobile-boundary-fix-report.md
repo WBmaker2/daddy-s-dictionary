@@ -38,3 +38,16 @@
 - RED: after adding the 375px case, `npm run test:e2e -- tests/e2e/search-flow.spec.mjs --project=mobile` reported 6 passing and 1 failing test: `375px search panel top` was `333.59375px`, above the 320px limit.
 - GREEN: after the 35px reservation adjustment, focused DOM contract tests reported 39 passing and focused mobile Playwright reported 7 passing, including 360px, 375px, 390px, and 540px.
 - Final: `npm run verify` passed with 138 Node tests, strict data validation, Pages build, and Playwright reporting 13 passed with 1 intentional desktop mobile-only skip.
+
+## Third Pass: Korean Title Orphan Fix
+- Base: `993fca58e15ff62861973a9c55ceb2c727ab3392`
+- Implementation commit: `5f6d0e2a36003506cc9fac8e52b6d9e658533465` (`Prevent orphaned Korean title character`)
+- Added `word-break: keep-all` to `.title-text`, so Korean words wrap between words instead of leaving the final `전` character alone.
+- The DOM contract locks the CSS rule. The mobile E2E additionally uses `Range#getClientRects()` for the actual `사전` text range, avoiding fragile absolute-pixel visual comparisons.
+- README and update-history copy were intentionally unchanged.
+
+### RED-GREEN Evidence
+- RED: `node --test tests/app-dom-contract.test.mjs` reported 39 passing and 1 failing test because `.title-text` did not yet declare `word-break: keep-all`.
+- RED: mobile Playwright reported 6 passing and 1 failing test because the `사전` range occupied 2 visual line rects at 360px.
+- GREEN: the DOM contract reported 40 passing. Mobile Playwright verified that `사전` occupies one visual line rect at 360px, 375px, 390px, and 540px; the title text remains two lines through 390px and one line at 540px.
+- Final: `npm run verify` passed with 139 Node tests, strict data validation, Pages build, and Playwright reporting 13 passed with 1 intentional desktop mobile-only skip. The existing focus clearance, `searchTop <= 320px`, horizontal overflow, and client-bound overlay checks remain in the same mobile loop.
